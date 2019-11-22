@@ -276,56 +276,6 @@ public class DAO {
         return true;
     }
 
-    public boolean insertRip(Docente doc, String titoloC) {
-        Connection conn1 = null;
-        try {
-            conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
-            String nomeDoc = doc.getNome();
-            int idDoc = 0;
-            Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("select distinct(idDoc) from docente where nome = '" + nomeDoc + "';");
-            while (rs.next()) {
-                idDoc = rs.getInt("idDoc");
-            }
-            PreparedStatement prepStat = conn1.prepareStatement("DELETE  FROM afferenza WHERE idDoc = ? and titoloC = ?;");
-            prepStat.setInt(1, idDoc);
-            prepStat.setString(2, titoloC);
-            prepStat.executeUpdate();
-            System.out.println("Ripetizione Aggiunta Correttamente");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    public boolean removeRip(Docente doc, String titoloC) {
-        Connection conn1 = null;
-        try {
-            conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
-            String nomeDoc = doc.getNome();
-            int idDoc = 0;
-            Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("select distinct(idDoc) from docente where nome = '" + nomeDoc + "';");
-            while (rs.next()) {
-                idDoc = rs.getInt("idDoc");
-            }
-            PreparedStatement prepStat = conn1.prepareStatement("DELETE  FROM ripetizione WHERE idDoc = ? and titoloC = ?;");
-            prepStat.setInt(1, idDoc);
-            prepStat.setString(2, titoloC);
-            prepStat.executeUpdate();
-            System.out.println("Ripetizione Rimossa Correttamente");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
     public boolean insertPren(Docente doc, String titoloC, String account, int beginTime, int endTime, String date) {
         Connection conn1 = null;
         try {
