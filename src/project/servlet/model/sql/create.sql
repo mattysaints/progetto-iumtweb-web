@@ -28,6 +28,21 @@ CREATE TABLE insegnamento (
     CONSTRAINT fk_corso FOREIGN KEY (corso) REFERENCES corso(titolo) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE prenotazione (
+    docente char(36),
+    corso varchar(30),
+    utente varchar(30),
+    --OraInizio
+    --OraFine
+    --Giorno
+    CONSTRAINT pk_prenotazione PRIMARY KEY (docente,corso,utente),
+    CONSTRAINT fk_docente FOREIGN KEY (docente) REFERENCES docente(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_corso FOREIGN KEY (corso) REFERENCES corso(titolo) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_utente FOREIGN KEY (utente) REFERENCES utente(account) ON DELETE CASCADE ON UPDATE CASCADE,
+);
+
+
+
 
 
 -- TODO finire
