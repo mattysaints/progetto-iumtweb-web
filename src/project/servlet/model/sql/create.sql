@@ -1,50 +1,71 @@
-BEGIN;
+START TRANSACTION ;
+SET autocommit = 0;
 
 CREATE TABLE utente (
-    account varchar(30),
-    password varchar(30) NOT NULL,
-    admin bool NOT NULL,
+    account VARCHAR(30),
+    password VARCHAR(30) NOT NULL,
+    admin BOOL NOT NULL,
     CONSTRAINT pk_utente PRIMARY KEY (account)
 );
 
 CREATE TABLE corso (
-    titolo varchar(30),
+    titolo VARCHAR(30),
     CONSTRAINT pk_corso PRIMARY KEY (titolo)
 );
 
 CREATE TABLE docente (
-    id char(36), -- NOTA: 36 caratteri perchè cosi possiamo utilizzare UUID.randomUUID() per generare un id univoco
-    nome varchar(30) NOT NULL,
-    cognome varchar(30) NOT NULL,
+    id CHAR(36), -- NOTA: 36 caratteri perchè cosi possiamo utilizzare UUID.randomUUID() per generare un id univoco
+    nome VARCHAR(30) NOT NULL,
+    cognome VARCHAR(30) NOT NULL,
     CONSTRAINT pk_docente PRIMARY KEY (id),
-    CONSTRAINT u_ UNIQUE (nome, cognome)
+    CONSTRAINT un_docente UNIQUE (nome, cognome)
 );
 
 CREATE TABLE insegnamento (
-    docente char(36),
-    corso varchar(30),
+    docente CHAR(36),
+    corso VARCHAR(30),
     CONSTRAINT pk_insegnamento PRIMARY KEY (docente, corso),
-    CONSTRAINT fk_docente FOREIGN KEY (docente) REFERENCES docente(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_corso FOREIGN KEY (corso) REFERENCES corso(titolo) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_insegnamento_docente FOREIGN KEY (docente) REFERENCES docente(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_insegnamento_corso FOREIGN KEY (corso) REFERENCES corso(titolo) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- creata per facilitare le query
+CREATE TABLE slot (
+    ora SMALLINT,
+    CONSTRAINT pk_slot PRIMARY KEY (ora),
+    CONSTRAINT ck_slot CHECK (ora >= 15 AND ora < 19)
+);
+INSERT INTO slot VALUES (15);
+INSERT INTO slot VALUES (16);
+INSERT INTO slot VALUES (17);
+INSERT INTO slot VALUES (18);
+
+-- creata per facilitare le query
+CREATE TABLE giorno (
+    giorno CHAR(3),
+    CONSTRAINT pk_giorno PRIMARY KEY (giorno)
+);
+INSERT INTO giorno VALUES ('lun');
+INSERT INTO giorno VALUES ('mar');
+INSERT INTO giorno VALUES ('mer');
+INSERT INTO giorno VALUES ('gio');
+INSERT INTO giorno VALUES ('ven');
 
 CREATE TABLE prenotazione (
-    docente char(36),
-    corso varchar(30),
-    utente varchar(30),
-    ora enum ('slot1', 'slot2', 'slot3', 'slot4') NOT NULL,
-    giorno enum ('lun', 'mar', 'mer', 'gio', 'ven') NOT NULL,
-    CONSTRAINT pk_prenotazione PRIMARY KEY (docente,corso,utente),
-    CONSTRAINT fk_docente FOREIGN KEY (docente) REFERENCES docente(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_corso FOREIGN KEY (corso) REFERENCES corso(titolo) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_utente FOREIGN KEY (utente) REFERENCES utente(account) ON DELETE CASCADE ON UPDATE CASCADE,
+    id CHAR(36),
+    docente CHAR(36),
+    corso VARCHAR(30),
+    utente VARCHAR(30),
+    ora SMALLINT NOT NULL,
+    giorno CHAR(3) NOT NULL,
+    stato ENUM ('attiva', 'effettuata', 'disdetta') NOT NULL DEFAULT 'attiva',
+    CONSTRAINT pk_prenotazione PRIMARY KEY (id),
+    CONSTRAINT fk_prenotazione_insegnamento FOREIGN KEY (docente, corso) REFERENCES insegnamento(docente, corso) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_prenotazione_utente FOREIGN KEY (utente) REFERENCES utente(account) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_prenotazione_ora FOREIGN KEY (ora) REFERENCES slot(ora) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT fk_prenotazione_giorno FOREIGN KEY (giorno) REFERENCES giorno(giorno) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
-
-
-
-
--- TODO finire
-
+COMMIT;
 
 

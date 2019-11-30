@@ -1,0 +1,21 @@
+START TRANSACTION;
+SET autocommit = 0;
+DELETE FROM prenotazione;
+DELETE FROM insegnamento;
+DELETE FROM giorno;
+DELETE FROM utente;
+DELETE FROM slot;
+DELETE FROM docente;
+DELETE FROM corso;
+COMMIT;
+
+START TRANSACTION;
+SET autocommit = 0;
+DROP TABLE IF EXISTS prenotazione;
+DROP TABLE IF EXISTS insegnamento;
+DROP TABLE IF EXISTS giorno;
+DROP TABLE IF EXISTS utente;
+DROP TABLE IF EXISTS slot;
+DROP TABLE IF EXISTS docente;
+DROP TABLE IF EXISTS corso;
+COMMIT;
