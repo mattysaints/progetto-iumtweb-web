@@ -123,6 +123,25 @@ public class DAO {
         return true;
     }
 
+    public boolean removeInse(Docente docente, Corso corso) {
+        Connection conn1 = null;
+        try {
+            conn1 = DriverManager.getConnection(url, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database test");
+            }
+            PreparedStatement prepStat = conn1.prepareStatement("DELETE  FROM afferenza WHERE idDoc = ? and titoloC = ?;;");
+            prepStat.setInt(1, docente.getId());
+            prepStat.setString(2, corso.getTitoloC());
+            prepStat.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+
+
 
 
 }
