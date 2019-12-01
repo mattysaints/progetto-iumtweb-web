@@ -2,7 +2,7 @@
 Cose da fare
 ## Modello
 ### Database schema
-- utenti (nome, password, admin)
+- utenti (nome, password, ruolo)
 - docenti (nome, cognome)
 - corsi (titolo)
 - storico prenotazioni (docente, utente, corso, giorno, ora)
