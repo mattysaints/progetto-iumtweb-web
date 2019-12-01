@@ -1,13 +1,14 @@
 package project.servlet.model;
 
 import java.time.DayOfWeek;
+import java.util.UUID;
 
 enum Giorno {
-    Lun,
-    Mar,
-    Merc,
-    Giovedì,
-    Venerdì
+    LUN,
+    MAR,
+    MERC,
+    GIO,
+    VEN
 }
 
 enum SLOT{
@@ -24,30 +25,55 @@ enum SLOT{
     public int getValue() { return value; }
 }
 
+enum Stato {
+    EFFETTUATA,
+    ATTIVA,
+    DISDETTA
+}
+
 public class Prenotazione {
 
-    private int idDoc;
-    private String idCorso;
-    private String idUtente;
+    private int id;
+    private Docente docente;
+    private Corso corso;
+    private Utente utente;
     private SLOT slot;
     private Giorno giorno;
+    private Stato stato;
 
-    public Prenotazione(int idDoc, String idCorso, String idUtente, SLOT slot, Giorno giorno) {
-        this.idDoc = idDoc;
-        this.idCorso = idCorso;
-        this.idUtente = idUtente;
+    public Prenotazione(Docente docente, Corso corso, Utente utente, SLOT slot, Giorno giorno, Stato stato) {
+        this.docente = docente;
+        this.corso = corso;
+        this.utente = utente;
         this.slot = slot;
         this.giorno = giorno;
+        this.stato = stato;
+        this.id = Integer.parseInt(UUID.randomUUID().toString());
     }
+
+    public Docente getDocente() { return docente; }
+
+    public Corso getCorso() { return corso; }
+
+    public Utente getUtente() { return utente; }
+
+    public SLOT getSlot() { return slot; }
+
+    public Giorno getGiorno() { return giorno; }
+
+    public Stato getStato() { return stato; }
+
+    public int getId() { return id; }
 
     @Override
     public String toString() {
         return "Prenotazione{" +
-                "idDoc=" + idDoc +
-                ", idCorso='" + idCorso + '\'' +
-                ", idUtente='" + idUtente + '\'' +
+                "docente=" + docente +
+                ", corso=" + corso +
+                ", utente=" + utente +
                 ", slot=" + slot +
                 ", giorno=" + giorno +
+                ", stato=" + stato +
                 '}';
     }
 }

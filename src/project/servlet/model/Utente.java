@@ -36,10 +36,4 @@ public class Utente {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        Utente o = (Utente)obj;
-        return this.account.equals(o.getAccount()) && this.password.equals(o.getPassword()) && this.ruolo.equals(o.getRuolo());
-    }
-
 }

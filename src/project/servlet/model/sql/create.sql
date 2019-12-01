@@ -57,7 +57,7 @@ CREATE TABLE prenotazione (
     corso VARCHAR(30),
     utente VARCHAR(30),
     ora SMALLINT NOT NULL,
-    giorno CHAR(3) NOT NULL,
+    giorno CHAR(5) NOT NULL,
     stato ENUM ('attiva', 'effettuata', 'disdetta') NOT NULL DEFAULT 'attiva',
     CONSTRAINT pk_prenotazione PRIMARY KEY (id),
     CONSTRAINT fk_prenotazione_insegnamento FOREIGN KEY (docente, corso) REFERENCES insegnamento(docente, corso) ON DELETE SET NULL ON UPDATE CASCADE,

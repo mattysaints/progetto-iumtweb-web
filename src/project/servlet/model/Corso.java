@@ -7,4 +7,15 @@ public class Corso {
     public Corso(String titoloC) {
         this.titoloC = titoloC;
     }
+
+    @Override
+    public String toString() {
+        return "Corso{" +
+                "titoloC='" + titoloC + '\'' +
+                '}';
+    }
+
+    public String getTitoloC() {
+        return titoloC;
+    }
 }
