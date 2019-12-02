@@ -97,8 +97,7 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
             }
-            PreparedStatement prepStat = conn1.prepareStatement("DELETE  FROM docente WHERE id = ? ;");
-            prepStat.setInt(1, docente.getId());
+            PreparedStatement prepStat = conn1.prepareStatement("DELETE  FROM docente WHERE nome = "+docente.getNome()+" and cognome="+docente.getCognome()+";");
             prepStat.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

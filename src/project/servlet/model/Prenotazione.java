@@ -4,8 +4,6 @@ import java.time.DayOfWeek;
 import java.util.UUID;
 
 public class Prenotazione {
-
-    private int id;
     private Docente docente;
     private Corso corso;
     private Utente utente;
@@ -20,7 +18,6 @@ public class Prenotazione {
         this.slot = slot;
         this.giorno = giorno;
         this.stato = stato;
-        this.id = Integer.parseInt(UUID.randomUUID().toString());
     }
 
     public Docente getDocente() { return docente; }
@@ -34,8 +31,6 @@ public class Prenotazione {
     public Giorno getGiorno() { return giorno; }
 
     public Stato getStato() { return stato; }
-
-    public int getId() { return id; }
 
     @Override
     public String toString() {

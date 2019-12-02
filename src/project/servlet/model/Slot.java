@@ -5,14 +5,14 @@ enum Slot{
     //es. Slot.SLOT1.name --> LUN
     //Mentre per visualizzare il risultato nell'interfaccia grafica useremo il metodo toString
 
-    SLOT1("15-16"),
-    SLOT2("16-17"),
-    SLOT3("17-18"),
-    SLOT4("18-19");
+    SLOT1(15),
+    SLOT2(16),
+    SLOT3(17),
+    SLOT4(18);
 
-    private final String value;
+    private final int value;
 
-    Slot(String newValue) {
+    Slot(int newValue) {
         value = newValue;
     }
 
