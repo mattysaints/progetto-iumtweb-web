@@ -1,19 +1,19 @@
 START TRANSACTION ;
 SET autocommit = 0;
 
-CREATE TABLE utente (
+CREATE TABLE ripetizioni.utente (
     account VARCHAR(30),
     password VARCHAR(30) NOT NULL,
     admin BOOL NOT NULL,
     CONSTRAINT pk_utente PRIMARY KEY (account)
 );
 
-CREATE TABLE corso (
+CREATE TABLE ripetizioni.corso (
     titolo VARCHAR(30),
     CONSTRAINT pk_corso PRIMARY KEY (titolo)
 );
 
-CREATE TABLE docente (
+CREATE TABLE ripetizioni.docente (
     id CHAR(36), -- NOTA: 36 caratteri perchè cosi possiamo utilizzare UUID.randomUUID() per generare un id univoco
     nome VARCHAR(30) NOT NULL,
     cognome VARCHAR(30) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE docente (
     CONSTRAINT un_docente UNIQUE (nome, cognome)
 );
 
-CREATE TABLE insegnamento (
+CREATE TABLE ripetizioni.insegnamento (
     docente CHAR(36),
     corso VARCHAR(30),
     CONSTRAINT pk_insegnamento PRIMARY KEY (docente, corso),
@@ -30,7 +30,7 @@ CREATE TABLE insegnamento (
 );
 
 -- creata per facilitare le query
-CREATE TABLE slot (
+CREATE TABLE ripetizioni.slot (
     ora SMALLINT,
     CONSTRAINT pk_slot PRIMARY KEY (ora),
     CONSTRAINT ck_slot CHECK (ora >= 15 AND ora < 19)
@@ -41,7 +41,7 @@ INSERT INTO slot VALUES (17);
 INSERT INTO slot VALUES (18);
 
 -- creata per facilitare le query
-CREATE TABLE giorno (
+CREATE TABLE ripetizioni.giorno (
     giorno CHAR(3),
     CONSTRAINT pk_giorno PRIMARY KEY (giorno)
 );
@@ -51,7 +51,7 @@ INSERT INTO giorno VALUES ('mer');
 INSERT INTO giorno VALUES ('gio');
 INSERT INTO giorno VALUES ('ven');
 
-CREATE TABLE prenotazione (
+CREATE TABLE ripetizioni.prenotazione (
     id CHAR(36),
     docente CHAR(36),
     corso VARCHAR(30),
