@@ -2,20 +2,20 @@ package project.servlet.model;
 
 public class Corso {
 
-    private String titoloC;
+    private String titolo;
 
-    public Corso(String titoloC) {
-        this.titoloC = titoloC;
+    public Corso(String titolo) {
+        this.titolo = titolo;
     }
 
     @Override
     public String toString() {
         return "Corso{" +
-                "titoloC='" + titoloC + '\'' +
+                "titoloC='" + titolo + '\'' +
                 '}';
     }
 
-    public String getTitoloC() {
-        return titoloC;
+    public String getTitolo() {
+        return titolo;
     }
 }
