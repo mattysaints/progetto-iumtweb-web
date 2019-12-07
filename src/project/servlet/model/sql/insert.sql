@@ -78,3 +78,5 @@ INSERT INTO prenotazione (id, docente, corso, utente, ora, giorno, stato)
     WHERE nome='Simona' AND cognome='Verdi' AND insegnamento.corso='Francese';
 
 COMMIT;
+
+-- TODO ciao
