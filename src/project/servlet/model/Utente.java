@@ -7,12 +7,12 @@ public class Utente {
 
     private String account;
     private String password;
-    private String ruolo;
+    private boolean admin;
 
-    public Utente(String account, String password, String ruolo) {
+    public Utente(String account, String password, Boolean admin) {
         this.account = account;
         this.password = password;
-        this.ruolo = ruolo;
+        this.admin = admin;
     }
 
     public String getAccount() {
@@ -23,8 +23,8 @@ public class Utente {
         return password;
     }
 
-    public String getRuolo() {
-        return ruolo;
+    public boolean getAdmin() {
+        return admin;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class Utente {
         return "Utente{" +
                 "account='" + account + '\'' +
                 ", password='" + password + '\'' +
-                ", ruolo='" + ruolo + '\'' +
+                ", admin='" + admin + '\'' +
                 '}';
     }
 

@@ -26,7 +26,7 @@ public class DAO {
                 System.out.println("Connected to the database test");
             }
             Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT  FROM Utente WHERE account = "+utente.getAccount()+" and ruolo = "+utente.getRuolo()+";");
+            ResultSet rs = st.executeQuery("SELECT  FROM Utente WHERE account = "+utente.getAccount()+";");
             if(rs.next() == false){
                 return false;
             }else{
@@ -46,7 +46,7 @@ public class DAO {
                 System.out.println("Connected to the database test");
             }
             PreparedStatement prepStat = conn1.prepareStatement("INSERT INTO corso VALUES (?);");
-            prepStat.setString(1, corso.getTitoloC());
+            prepStat.setString(1, corso.getTitolo());
             prepStat.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
