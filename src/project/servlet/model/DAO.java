@@ -26,7 +26,7 @@ public class DAO {
                 System.out.println("Connected to the database test");
             }
             Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT  FROM Utente WHERE account = "+utente.getAccount()+";");
+            ResultSet rs = st.executeQuery("SELECT FROM utente WHERE account = "+utente.getAccount()+";");
             if(rs.next() == false){
                 return false;
             }else{
