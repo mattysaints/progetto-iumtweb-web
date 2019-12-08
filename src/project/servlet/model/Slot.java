@@ -21,4 +21,18 @@ enum Slot{
         return "Orario: " + value;
     }
     //public int getValue() { return value; }
+
+    public static Slot fromInt(int hour) {
+        for (Slot ora : Slot.values()) {
+            if (ora.value == hour) {
+                return ora;
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Slot.fromInt(15));
+    }
+
 }
