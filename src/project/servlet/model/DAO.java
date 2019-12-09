@@ -193,12 +193,12 @@ public class DAO {
         return ripetizioni_disp;
     }
 
-    public boolean cancelRip(Prenotazione prenotazione){ //cancellare/disdire ripetizione
-
+    public boolean cancelRip(Prenotazione prenotazione){ //todo cancellare/disdire ripetizione
+        return true;
     }
 
-    public boolean addRip(Prenotazione prenotazione){ //aggiungere/effettuata ripetizione
-
+    public boolean addRip(Prenotazione prenotazione){ //todo aggiungere/effettuata ripetizione
+        return true;
     }
 
 
