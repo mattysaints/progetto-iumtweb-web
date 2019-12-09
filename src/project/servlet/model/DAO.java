@@ -20,24 +20,22 @@ public class DAO {
         }
     }
 
-    public boolean containsUtente(Utente utente) {
+    public Utente queryUtente(Utente utente) {
         Connection conn1 = null;
+        Utente result = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
+            if (conn1 != null)
+                System.out.println("Connected to the database");
+            
             Statement st = conn1.createStatement();
             ResultSet rs = st.executeQuery("SELECT FROM utente WHERE account = "+utente.getAccount()+";");
-            if(rs.next() == false){
-                return false;
-            }else{
-                return true;
-            }
+            if(rs.next())
+                result = new Utente(rs.getString("account"), rs.getString("password"), rs.getBoolean("admin"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return result;
     }
 
     public boolean insertCo(Corso corso) {
