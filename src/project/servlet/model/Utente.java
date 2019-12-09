@@ -23,7 +23,7 @@ public class Utente {
         return password;
     }
 
-    public boolean getAdmin() {
+    public boolean isAdmin() {
         return admin;
     }
 
