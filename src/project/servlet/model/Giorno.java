@@ -30,5 +30,4 @@ enum Giorno {
         }
         return null;
     }
-
 }

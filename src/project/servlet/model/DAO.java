@@ -1,5 +1,6 @@
 package project.servlet.model;
 
+import javax.lang.model.type.IntersectionType;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -182,7 +183,7 @@ public class DAO {
                     Corso corso = new Corso(TitoloC);
                     Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                     Slot ora = Slot.fromInt(rs.getInt("ora"));
-                    ripetizioni_disp.add(new Prenotazione(docente,corso,null,ora,giorno,Stato.ATTIVA));
+                    ripetizioni_disp.add(new Prenotazione(docente,corso,null,ora,giorno,Stato.attiva));
                 }
                 return ripetizioni_disp;
             }
@@ -193,14 +194,123 @@ public class DAO {
         return ripetizioni_disp;
     }
 
-    public boolean cancelRip(Prenotazione prenotazione){ //cancellare/disdire ripetizione
-
+    public boolean disdireRip(Prenotazione prenotazione){ //segnare come disdetta una ripetizione
+        Connection conn1 = null;
+        try {
+            conn1 = DriverManager.getConnection(url, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database test");
+            }
+            PreparedStatement prepStat = conn1.prepareStatement("UPDATE prenotazione SET stato = ? WHERE id = ?;");
+            prepStat.setString(1,"disdetta");
+            prepStat.setInt(2,findPren(prenotazione));
+            prepStat.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
-    public boolean addRip(Prenotazione prenotazione){ //aggiungere/effettuata ripetizione
-
+    public boolean makeRip(Prenotazione prenotazione){ //segnare come effettuata una ripetizione
+        Connection conn1 = null;
+        try {
+            conn1 = DriverManager.getConnection(url, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database test");
+            }
+            PreparedStatement prepStat = conn1.prepareStatement("UPDATE prenotazione SET stato = ? WHERE id = ?;");
+            prepStat.setString(1,"effettuata");
+            prepStat.setInt(2,findPren(prenotazione));
+            prepStat.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
+    public boolean addRip(Prenotazione prenotazione){ //aggiungire tupla rip segnata come attiva
+        Connection conn1 = null;
+        try {
+            conn1 = DriverManager.getConnection(url, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database test");
+            }
+            PreparedStatement prepStat = conn1.prepareStatement("INSERT INTO prenotazione VALUES (?,?,?,?,?,?,?,?);");
+            prepStat.setInt(1,findPren(prenotazione));
+            prepStat.setInt(2,findIdDoc(prenotazione.getDocente()));
+            prepStat.setString(3,prenotazione.getCorso().getTitolo());
+            prepStat.setString(4,prenotazione.getUtente().getAccount());
+            prepStat.setInt(4, Integer.parseInt(prenotazione.getSlot().toString()));
+            prepStat.setString(5, prenotazione.getGiorno().toString());
+            prepStat.setString(6, "attiva");
+            prepStat.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 
+    public int findPren(Prenotazione prenotazione){ //docente corso account ora giorno
+        Connection conn1 = null;
+        try {
+            conn1 = DriverManager.getConnection(url, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database test");
+            }
+            Statement st = conn1.createStatement();
+            ResultSet rs = st.executeQuery("SELECT id from prenotazione where docente="+findIdDoc(prenotazione.getDocente())+" and utente="+prenotazione.getUtente()+" and ora="+prenotazione.getSlot().toString()+" and giorno="+prenotazione.getGiorno().toString()+" and corso="+prenotazione.getCorso().getTitolo()+";");
+            if(rs.next() == false)
+                System.out.println("Prenotazione non trovata nel database");
+            else
+                return rs.getInt("id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public boolean listRip_Utente(Utente utente){ //visualizzare le ripetizioni utente
+        Connection conn1 = null;
+        ArrayList<Prenotazione> ripetizioni_pren = new ArrayList<>();
+        try {
+            conn1 = DriverManager.getConnection(url, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database test");
+            }
+            Statement st = conn1.createStatement();
+            ResultSet rs = st.executeQuery("SELECT id,docente,corso,giorno,ora,stato from prenotazione where utente="+utente.getAccount()+";");
+            while (rs.next()){
+                int id = rs.getInt("id");
+                int docente = rs.getInt("docente");
+                Corso corso = new Corso(rs.getString("corso"));
+                Giorno giorno = Giorno.fromString(rs.getString("giorno"));
+                Slot ora = Slot.fromInt(rs.getInt("ora"));
+                Stato stato = Stato.valueOf(rs.getString("stato"));
+                ripetizioni_pren.add(new Prenotazione(findDoc_byId(docente),corso,utente,ora,giorno,stato));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public Docente findDoc_byId(int idDoc){
+        Connection conn1 = null;
+        try {
+            conn1 = DriverManager.getConnection(url, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database test");
+            }
+            Statement st = conn1.createStatement();
+            ResultSet rs = st.executeQuery("SELECT nome,cognome from Docente where id="+idDoc+";");
+            if(rs.next() == false)
+                System.out.println("Docente non trovato nel database");
+            else
+                return new Docente(rs.getString("nome"),rs.getString("cognome"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
