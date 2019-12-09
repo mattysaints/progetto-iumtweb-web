@@ -5,12 +5,13 @@ enum Stato {
     //es. Slot.SLOT1.name --> LUN
     //Mentre per visualizzare il risultato nell'interfaccia grafica useremo il metodo toString
 
-    EFFETTUATA,
-    ATTIVA,
-    DISDETTA;
+    effettuata,
+    attiva,
+    disdetta;
 
     @Override
     public String toString() {
-        return "Stato: " + this.name().toLowerCase();
+        return "Stato: " + this.name();
     }
+
 }
