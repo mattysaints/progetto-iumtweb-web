@@ -269,6 +269,44 @@ public class DAO {
         return 0;
     }
 
+    public Docente findDoc_byId(int idDoc){
+        Connection conn1 = null;
+        try {
+            conn1 = DriverManager.getConnection(url, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database test");
+            }
+            Statement st = conn1.createStatement();
+            ResultSet rs = st.executeQuery("SELECT nome,cognome from Docente where id="+idDoc+";");
+            if(rs.next() == false)
+                System.out.println("Docente non trovato nel database");
+            else
+                return new Docente(rs.getString("nome"),rs.getString("cognome"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Utente findUtente(String utente){
+        Connection conn1 = null;
+        try {
+            conn1 = DriverManager.getConnection(url, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database test");
+            }
+            Statement st = conn1.createStatement();
+            ResultSet rs = st.executeQuery("SELECT account,password,admin from utente where account= "+utente+";");
+            if(rs.next() == false)
+                System.out.println("Docente non trovato nel database");
+            else
+                return new Utente(utente,rs.getString("password"),rs.getBoolean("admin"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean listRip_Utente(Utente utente){ //visualizzare le ripetizioni utente
         Connection conn1 = null;
         ArrayList<Prenotazione> ripetizioni_pren = new ArrayList<>();
@@ -294,23 +332,29 @@ public class DAO {
         return true;
     }
 
-    public Docente findDoc_byId(int idDoc){
+    public boolean listRipPren(){ //visualizzare le ripetizioni prenotate
         Connection conn1 = null;
+        ArrayList<Prenotazione> ripetizioni_pren = new ArrayList<>();
         try {
             conn1 = DriverManager.getConnection(url, user, password);
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
             }
             Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT nome,cognome from Docente where id="+idDoc+";");
-            if(rs.next() == false)
-                System.out.println("Docente non trovato nel database");
-            else
-                return new Docente(rs.getString("nome"),rs.getString("cognome"));
+            ResultSet rs = st.executeQuery("SELECT id,docente,corso,giorno,ora from prenotazione where stato="+Stato.effettuata+";");
+            while (rs.next()){
+                int id = rs.getInt("id");
+                int docente = rs.getInt("docente");
+                String utente = rs.getString("utente");
+                Corso corso = new Corso(rs.getString("corso"));
+                Giorno giorno = Giorno.fromString(rs.getString("giorno"));
+                Slot ora = Slot.fromInt(rs.getInt("ora"));
+                ripetizioni_pren.add(new Prenotazione(findDoc_byId(docente),corso,findUtente(utente),ora,giorno,Stato.effettuata));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return true;
     }
 
 }
