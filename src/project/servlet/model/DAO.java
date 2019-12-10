@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 public class DAO {
 
-    private final String url = "jdbc:mysql://localhost:3306/";
-    private final String user = "root";
-    private final String password = "";
+    private static final String url = "jdbc:mysql://localhost:3306/";
+    private static final String user = "root";
+    private static final String password = "";
     private int idDoc;
 
-    public void registerDriver() {
+    public static  void registerDriver() {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             System.out.println("Driver correttamente registrato");
@@ -20,7 +20,7 @@ public class DAO {
         }
     }
 
-    public Utente queryUtente(Utente utente) {
+    public static  Utente queryUtente(Utente utente) {
         Connection conn1 = null;
         Utente result = null;
         try {
@@ -38,7 +38,7 @@ public class DAO {
         return result;
     }
 
-    public boolean insertCo(Corso corso) {
+    public static  boolean insertCo(Corso corso) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -54,7 +54,7 @@ public class DAO {
         return true;
     }
 
-    public boolean removeCo(Corso corso) {
+    public static  boolean removeCo(Corso corso) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -71,7 +71,7 @@ public class DAO {
         return true;
     }
 
-    public boolean insertDoc(Docente docente) {
+    public static  boolean insertDoc(Docente docente) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -89,7 +89,7 @@ public class DAO {
         return true;
     }
 
-    public boolean removeDoc(Docente docente) {
+    public static  boolean removeDoc(Docente docente) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -104,7 +104,7 @@ public class DAO {
         return true;
     }
 
-    public boolean insertInse(Docente docente, Corso corso) {
+    public static  boolean insertInse(Docente docente, Corso corso) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -121,7 +121,7 @@ public class DAO {
         return true;
     }
 
-    public boolean removeInse(Docente docente, Corso corso) {
+    public static  boolean removeInse(Docente docente, Corso corso) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -138,7 +138,7 @@ public class DAO {
         return true;
     }
 
-    public int findIdDoc(Docente docente){
+    public static  int findIdDoc(Docente docente){
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -157,7 +157,7 @@ public class DAO {
         return 0;
     }
 
-    public ArrayList<Prenotazione> ripetizioniDisp (){
+    public static  ArrayList<Prenotazione> ripetizioniDisp (){
         Connection conn1 = null;
         ArrayList<Prenotazione> ripetizioni_disp = new ArrayList<>();
         try {
@@ -192,7 +192,7 @@ public class DAO {
         return ripetizioni_disp;
     }
 
-    public boolean disdireRip(Prenotazione prenotazione){ //segnare come disdetta una ripetizione
+    public static  boolean disdireRip(Prenotazione prenotazione){ //segnare come disdetta una ripetizione
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -209,7 +209,7 @@ public class DAO {
         return true;
     }
 
-    public boolean makeRip(Prenotazione prenotazione){ //segnare come effettuata una ripetizione
+    public static  boolean makeRip(Prenotazione prenotazione){ //segnare come effettuata una ripetizione
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -226,7 +226,7 @@ public class DAO {
         return true;
     }
 
-    public boolean addRip(Prenotazione prenotazione){ //aggiungire tupla rip segnata come attiva
+    public static  boolean addRip(Prenotazione prenotazione){ //aggiungire tupla rip segnata come attiva
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -248,7 +248,7 @@ public class DAO {
         return true;
     }
 
-    public int findPren(Prenotazione prenotazione){ //docente corso account ora giorno
+    public static  int findPren(Prenotazione prenotazione){ //docente corso account ora giorno
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -267,7 +267,7 @@ public class DAO {
         return 0;
     }
 
-    public Docente findDoc_byId(int idDoc){
+    public static  Docente findDoc_byId(int idDoc){
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -286,7 +286,7 @@ public class DAO {
         return null;
     }
 
-    public Utente findUtente(String utente){
+    public static  Utente findUtente(String utente){
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -305,7 +305,7 @@ public class DAO {
         return null;
     }
 
-    public boolean listRip_Utente(Utente utente){ //visualizzare le ripetizioni utente
+    public static  boolean listRip_Utente(Utente utente){ //visualizzare le ripetizioni utente
         Connection conn1 = null;
         ArrayList<Prenotazione> ripetizioni_pren = new ArrayList<>();
         try {
@@ -330,7 +330,7 @@ public class DAO {
         return true;
     }
 
-    public boolean listRipPren(){ //visualizzare le ripetizioni prenotate
+    public static  boolean listRipPren(){ //visualizzare le ripetizioni prenotate
         Connection conn1 = null;
         ArrayList<Prenotazione> ripetizioni_pren = new ArrayList<>();
         try {
