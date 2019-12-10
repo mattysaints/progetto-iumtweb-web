@@ -42,8 +42,8 @@ Davide:
 2. visualizza lista ripetizioni disponibili (json)
 
 Marco:
-3. prenotare, disdire e segnare come effetuata la prenotazione
-4. visualizzare lo storico di un utente e visualizzare tutte le prenotazioni attive (admin)
+3. prenotare, disdire e segnare come effetuata la prenotazione [OpSuPrenotazioni]
+4. visualizzare lo storico di un utente (sia utente che admin) e visualizzare tutte le prenotazioni: attive, effettuate, cancellate (admin) [StoricoPrenotazioni]
 
 Mattia:
 5. inserire e rimuovere corsi e docenti (admin)
