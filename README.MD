@@ -41,9 +41,13 @@ Davide:
 1. controllo se un utente è registrato (ed eventualmente se è amministratore) controllo della sessione utente
 2. visualizza lista ripetizioni disponibili (json)
 
+IMPORTANTE: ogni volta che un'altra servlet viene invocata deve controllare che la sessione esista (senza crearne una nuova):
+- in caso positivo la sessione contiene le informazioni su nome utente e se è admin
+- in caso negativo: la servlet deve fare la include() alla "LoginServlet"
+
 Marco:
-3. prenotare, disdire e segnare come effetuata la prenotazione
-4. visualizzare lo storico di un utente e visualizzare tutte le prenotazioni attive (admin)
+3. prenotare, disdire e segnare come effetuata la prenotazione [OpSuPrenotazioni]
+4. visualizzare lo storico di un utente (sia utente che admin) e visualizzare tutte le prenotazioni: attive, effettuate, cancellate (admin) [StoricoPrenotazioni]
 
 Mattia:
 5. inserire e rimuovere corsi e docenti (admin)
