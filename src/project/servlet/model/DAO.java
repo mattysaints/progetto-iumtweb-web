@@ -209,16 +209,17 @@ public class DAO {
         return true;
     }
 
-    public boolean prenotareRip(Prenotazione prenotazione){ //segnare come effettuata una ripetizione
+    public boolean prenotareRip(Prenotazione prenotazione, Utente utente){ //segnare come effettuata una ripetizione
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
             }
-            PreparedStatement prepStat = conn1.prepareStatement("UPDATE prenotazione SET stato = ? WHERE id = ?;");
+            PreparedStatement prepStat = conn1.prepareStatement("UPDATE prenotazione SET stato = ?  and utente = ? WHERE id = ?;");
             prepStat.setString(1,"effettuata");
-            prepStat.setInt(2,trovaIdPren(prenotazione));
+            prepStat.setString(2,utente.getAccount());
+            prepStat.setInt(3,trovaIdPren(prenotazione));
             prepStat.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
