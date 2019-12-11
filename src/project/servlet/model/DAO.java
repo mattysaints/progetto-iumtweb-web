@@ -2,6 +2,7 @@ package project.servlet.model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DAO {
@@ -202,7 +203,7 @@ public class DAO {
             PreparedStatement prepStat = conn1.prepareStatement("UPDATE prenotazione SET stato = ?  and utente = ? WHERE id = ?;");
             prepStat.setString(1,"effettuata");
             prepStat.setString(2,utente.getAccount());
-            prepStat.setInt(3,trovaIdPren(prenotazione));
+            prepStat.setInt(3, trovaIdPren(prenotazione));
             prepStat.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

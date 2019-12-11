@@ -14,11 +14,17 @@ import java.io.PrintWriter;
 
 /**
  * Controlla se un utente è registrato e in caso positivo inizializza la sessione
+ *
+ * Parametri della request:
+ *  - username: username dell'utente che ha fatto il login
+ *  - password: password utente
+ *
+ *  Parametri della sessione:
+ *  - username: username dell'utente associato alla sessione
+ *  - admin: true se l'utente è admin
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/progetto_ium_tweb2/LoginServlet"})
-public class LoginServlet extends HttpServlet {
-    private DAO model;
-
+@WebServlet(name = "Login", urlPatterns = {"/progetto_ium_tweb2/Login"})
+public class Login extends HttpServlet {
     /**
      * Inizializza la servlet
      *
@@ -27,8 +33,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        model = new DAO();
-        model.registerDriver();
+        DAO.registerDriver();
     }
 
     /**
@@ -47,20 +52,17 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        Utente utente = model.queryUtente(new Utente(username, password, null));
+        Utente utente = DAO.queryUtente(new Utente(username, password, null));
         if (utente == null)
             out.println((String) null);
         else {
             session.setAttribute("username", utente.getAccount());
             session.setAttribute("admin", utente.isAdmin());
-
-            username = (String) session.getAttribute("username");
-            password = (String) session.getAttribute("password");
             out.println(session.getId());
         }
     }
 
-    // <editor-fold desc=" - Metodi HttpServlet - " >
+    // <editor-fold defaultstate="collapsed" desc=" - Metodi HttpServlet - " >
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
