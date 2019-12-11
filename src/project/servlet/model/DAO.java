@@ -2,10 +2,11 @@ package project.servlet.model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class DAO {
 
-    private final String url = "jdbc:mysql://localhost:3306/";
+    private final String url = "jdbc:mysql://localhost:3306/ripetizioni";
     private final String user = "root";
     private final String password = "";
 
@@ -26,11 +27,11 @@ public class DAO {
                 System.out.println("Connected to the database test");
             }
             Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT FROM utente WHERE account = "+utente.getAccount()+";");
-            if(rs.next() == false){
-                return false;
-            }else{
+            ResultSet rs = st.executeQuery("SELECT account FROM utente WHERE account = "+utente.getAccount()+";");
+            if(rs.next()){
                 return true;
+            }else{
+                return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,9 +79,10 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
             }
-            PreparedStatement prepStat = conn1.prepareStatement("INSERT INTO Docente VALUES (?,?);");
-            prepStat.setString(1, docente.getNome());
-            prepStat.setString(2, docente.getCognome());
+            PreparedStatement prepStat = conn1.prepareStatement("INSERT INTO Docente VALUES (?,?,?);");
+            prepStat.setString(1, UUID.randomUUID().toString());
+            prepStat.setString(2, docente.getNome());
+            prepStat.setString(3, docente.getCognome());
             prepStat.executeUpdate();
             System.out.println("Aggiunto Docente alla Lista");
         } catch (SQLException e) {
@@ -96,7 +98,9 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
             }
-            PreparedStatement prepStat = conn1.prepareStatement("DELETE  FROM docente WHERE nome = "+docente.getNome()+" and cognome="+docente.getCognome()+";");
+            PreparedStatement prepStat = conn1.prepareStatement("DELETE  FROM docente WHERE nome = ? and cognome=?;");
+            prepStat.setString(1,docente.getNome());
+            prepStat.setString(2,docente.getCognome());
             prepStat.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -157,7 +161,7 @@ public class DAO {
         return 0;
     }
 
-    public ArrayList<Prenotazione> ripetizioniDisp (){
+    public ArrayList<Prenotazione> ripetizioniDisp(){
         Connection conn1 = null;
         ArrayList<Prenotazione> ripetizioni_disp = new ArrayList<>();
         try {
@@ -354,6 +358,10 @@ public class DAO {
             e.printStackTrace();
         }
         return true;
+    }
+
+    public Utente queryUtente(Utente utente){
+        return null;
     }
 
 }
