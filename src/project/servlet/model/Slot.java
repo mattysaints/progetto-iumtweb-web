@@ -12,6 +12,10 @@ enum Slot{
 
     private final int value;
 
+    int getValue() {
+        return value;
+    }
+
     Slot(int newValue) {
         value = newValue;
     }

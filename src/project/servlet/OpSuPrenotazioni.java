@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import project.servlet.model.DAO;
 import project.servlet.model.Prenotazione;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,10 +46,10 @@ public class OpSuPrenotazioni extends HttpServlet {
             correct = DAO.aggiungereRip(prenot);
             break;
          case "disdire":
-            correct = DAO.disdireRip(prenot);
+            correct = DAO.deletePrenotazione(prenot);
             break;
          case "effettuare":
-            correct = DAO.prenotareRip(prenot,null); //serve l'utente come secondo parametro
+            correct = DAO.setPrenotazioneEffettuata(prenot,null); //serve l'utente come secondo parametro
             break;
          default:
             throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
