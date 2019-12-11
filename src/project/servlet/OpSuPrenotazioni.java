@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "OpSuPrenotazioni")
+@WebServlet(name = "OpSuPrenotazioni", urlPatterns = {"/progetto_ium_tweb2/OpSuPrenotazioni"})
 public class OpSuPrenotazioni extends HttpServlet {
    /**
     * Si possono fare 3 operazioni:
@@ -22,20 +22,19 @@ public class OpSuPrenotazioni extends HttpServlet {
     * - disdire
     * - effettuare
     * una ripetizione.
+    * Questo verrà discriminato da una variabile nella request (op).
     *
     * Questo verrà discriminato da una variabile nella request (op)
     *
     */
 
-
-   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      esegui(request,response);
-   }
-
-   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      esegui(request,response);
-   }
-
+   /**
+    *
+    * @param request parametri: "op" assegnare uno tra "prenotare", "disdire" ed "effettuare"; "prenotazione" assegnare oggetto json corrispondente
+    * @param response
+    * @throws ServletException
+    * @throws IOException
+    */
    private void esegui(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String op = (String) request.getAttribute("op");
       Gson json = new Gson();
@@ -45,13 +44,13 @@ public class OpSuPrenotazioni extends HttpServlet {
       boolean correct = false;
       switch (op) {
          case "prenotare":
-            correct = DAO.addRip(prenot);
+            correct = DAO.aggiungereRip(prenot);
             break;
          case "disdire":
             correct = DAO.disdireRip(prenot);
             break;
          case "effettuare":
-            correct = DAO.makeRip(prenot);
+            correct = DAO.prenotareRip(prenot,null); //serve l'utente come secondo parametro
             break;
          default:
             throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
@@ -59,4 +58,11 @@ public class OpSuPrenotazioni extends HttpServlet {
       out.print(correct);
    }
 
+   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      esegui(request,response);
+   }
+
+   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      esegui(request,response);
+   }
 }
