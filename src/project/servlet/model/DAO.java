@@ -13,7 +13,7 @@ public class DAO {
     /**
      * Registra il Driver JDBC
      */
-    public void registerDriver() {
+    public static void registerDriver() {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             System.out.println("Driver correttamente registrato");
