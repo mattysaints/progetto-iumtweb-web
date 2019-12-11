@@ -1,16 +1,23 @@
 package project.test;
 
-import project.servlet.model.Corso;
-import project.servlet.model.DAO;
-import project.servlet.model.Docente;
-import project.servlet.model.Utente;
+import project.servlet.model.*;
 
 public class DAOTest {
     public static void main(String[] args) {
-        DAO dao = new DAO();
-        dao.registraDriver();
-        //System.out.println(dao.contieneUtente(new Utente("Alex97","alex#",false)));
-        System.out.println(dao.inserisciCo(new Corso("ProvaIns")));
-        System.out.println(dao.inserisciInse(new Docente("Luca","Neri"),new Corso("ProvaIns")));
+        DAO.registerDriver();
+        Utente utente = new Utente("Davide","dado1",false);
+        System.out.println(DAO.contieneUtente(utente));
+        Docente docente = new Docente("Nome","Cognome");
+        System.out.println(DAO.inserisciDoc(docente));
+        //System.out.println(DAO.rimuoviDoc(docente));
+        Corso corso = new Corso("Corso");
+        System.out.println(DAO.inserisciCo(corso));
+        //System.out.println(DAO.rimuoviCo(corso));
+        System.out.println(DAO.trovaIdDoc(docente));
+        System.out.println(DAO.inserisciInse(docente,corso));
+        //System.out.println(DAO.rimuoviInse(docente,corso));
+        //System.out.println(DAO.ripetizioniDisp());
+        String id_doc = "385cbfac-0cbd-4c08-9177-67409007b201";
+        System.out.println(DAO.trovaDoc_byId(id_doc);
     }
 }

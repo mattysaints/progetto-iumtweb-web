@@ -43,13 +43,13 @@ public class OpSuPrenotazioni extends HttpServlet {
       boolean correct = false;
       switch (op) {
          case "prenotare":
-            correct = DAO.addRip(prenot);
+            correct = DAO.aggiungereRip(prenot);
             break;
          case "disdire":
             correct = DAO.disdireRip(prenot);
             break;
          case "effettuare":
-            correct = DAO.makeRip(prenot);
+            correct = DAO.prenotareRip(prenot,null); //serve l'utente come secondo parametro
             break;
          default:
             throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");

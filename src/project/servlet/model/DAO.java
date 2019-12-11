@@ -6,11 +6,11 @@ import java.util.UUID;
 
 public class DAO {
 
-    private final String url = "jdbc:mysql://localhost:3306/ripetizioni";
-    private final String user = "root";
-    private final String password = "";
+    private final static String url = "jdbc:mysql://localhost:3306/ripetizioni";
+    private final static String user = "root";
+    private final static String password = "";
 
-    public void registraDriver() {
+    public static void registerDriver() {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             System.out.println("Driver correttamente registrato");
@@ -19,15 +19,13 @@ public class DAO {
         }
     }
 
-    public boolean contieneUtente(Utente utente) {
+    public static boolean contieneUtente(Utente utente) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
-            Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT account FROM utente WHERE account = "+utente.getAccount()+";");
+            PreparedStatement prepStat = conn1.prepareStatement("SELECT account FROM utente WHERE account = ?;");
+            prepStat.setString(1,utente.getAccount());
+            ResultSet rs = prepStat.executeQuery();
             if(rs.next()){
                 return true;
             }else{
@@ -39,13 +37,10 @@ public class DAO {
         return false;
     }
 
-    public boolean inserisciCo(Corso corso) {
+    public static boolean inserisciCo(Corso corso) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
             PreparedStatement prepStat = conn1.prepareStatement("INSERT INTO corso VALUES (?);");
             prepStat.setString(1, corso.getTitolo());
             prepStat.executeUpdate();
@@ -55,13 +50,10 @@ public class DAO {
         return true;
     }
 
-    public boolean rimuoviCo(Corso corso) {
+    public static boolean rimuoviCo(Corso corso) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
             PreparedStatement prepStat = conn1.prepareStatement("DELETE FROM corso WHERE titolo = ?;");
             prepStat.setString(1, corso.getTitolo());
             prepStat.executeUpdate();
@@ -72,13 +64,10 @@ public class DAO {
         return true;
     }
 
-    public boolean inserisciDoc(Docente docente) {
+    public static boolean inserisciDoc(Docente docente) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
             PreparedStatement prepStat = conn1.prepareStatement("INSERT INTO Docente VALUES (?,?,?);");
             prepStat.setString(1, UUID.randomUUID().toString());
             prepStat.setString(2, docente.getNome());
@@ -91,13 +80,10 @@ public class DAO {
         return true;
     }
 
-    public boolean rimuoviDoc(Docente docente) {
+    public static boolean rimuoviDoc(Docente docente) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
             PreparedStatement prepStat = conn1.prepareStatement("DELETE  FROM docente WHERE nome = ? and cognome=?;");
             prepStat.setString(1,docente.getNome());
             prepStat.setString(2,docente.getCognome());
@@ -108,7 +94,7 @@ public class DAO {
         return true;
     }
 
-    public boolean inserisciInse(Docente docente, Corso corso) {
+    public static boolean inserisciInse(Docente docente, Corso corso) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -116,7 +102,7 @@ public class DAO {
                 System.out.println("Connected to the database test");
             }
             PreparedStatement prepStat = conn1.prepareStatement("INSERT INTO insegnamento VALUES (?,?);");
-            prepStat.setInt(1, trovaIdDoc(docente));
+            prepStat.setString(1, trovaIdDoc(docente));
             prepStat.setString(2, corso.getTitolo());
             prepStat.executeUpdate();
         } catch (SQLException e) {
@@ -125,7 +111,7 @@ public class DAO {
         return true;
     }
 
-    public boolean rimuoviInse(Docente docente, Corso corso) {
+    public static boolean rimuoviInse(Docente docente, Corso corso) {
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -133,7 +119,7 @@ public class DAO {
                 System.out.println("Connected to the database test");
             }
             PreparedStatement prepStat = conn1.prepareStatement("DELETE  FROM insegnamento WHERE docente = ? and corso = ?;");
-            prepStat.setInt(1, trovaIdDoc(docente));
+            prepStat.setString(1, trovaIdDoc(docente));
             prepStat.setString(2, corso.getTitolo());
             prepStat.executeUpdate();
         } catch (SQLException e) {
@@ -142,32 +128,32 @@ public class DAO {
         return true;
     }
 
-    public int trovaIdDoc(Docente docente){
+    public static String trovaIdDoc(Docente docente){
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
             Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT id from Docente where nome = "+docente.getNome()+" and cognome ="+docente.getCognome()+";");
+            //ResultSet rs = st.executeQuery("SELECT id from Docente where nome = "+docente.getNome()+" and cognome ="+docente.getCognome()+";");
+            PreparedStatement prepStat = conn1.prepareStatement("SELECT id from Docente where nome = ? and cognome = ?;");
+            prepStat.setString(1,docente.getNome());
+            prepStat.setString(2,docente.getCognome());
+            ResultSet rs = prepStat.executeQuery();
             if(rs.next() == false)
                 System.out.println("Docente non trovato nel database");
             else
-                return rs.getInt("id");
+                return rs.getString("id");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return null;
     }
 
-    public ArrayList<Prenotazione> ripetizioniDisp(){
+    public static ArrayList<Prenotazione> ripetizioniDisp(){
         Connection conn1 = null;
         ArrayList<Prenotazione> ripetizioni_disp = new ArrayList<>();
         try {
             conn1 = DriverManager.getConnection(url, user, password);
             if (conn1 != null) {
-                System.out.println("Connected to the database test");
                 String QUERY = "SELECT DISTINCT d.nome, d.cognome, i.corso, g.giorno, s.ora\n" +
                         "FROM ripetizioni.insegnamento i JOIN ripetizioni.docente d ON i.docente=d.id, slot s, giorno g\n" +
                         "WHERE (i.docente, i.corso, s.ora, g.giorno) NOT IN (\n" +
@@ -196,13 +182,9 @@ public class DAO {
         return ripetizioni_disp;
     }
 
-    public boolean disdireRip(Prenotazione prenotazione){ //segnare come disdetta una ripetizione
+    public static boolean disdireRip(Prenotazione prenotazione){ //segnare come disdetta una ripetizione
         Connection conn1 = null;
         try {
-            conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
             PreparedStatement prepStat = conn1.prepareStatement("UPDATE prenotazione SET stato = ? WHERE id = ?;");
             prepStat.setString(1,"disdetta");
             prepStat.setInt(2,trovaIdPren(prenotazione));
@@ -213,7 +195,7 @@ public class DAO {
         return true;
     }
 
-    public boolean prenotareRip(Prenotazione prenotazione, Utente utente){ //segnare come effettuata una ripetizione
+    public static boolean prenotareRip(Prenotazione prenotazione, Utente utente){ //segnare come effettuata una ripetizione
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -231,16 +213,13 @@ public class DAO {
         return true;
     }
 
-    public boolean aggiungereRip(Prenotazione prenotazione){ //aggiungire tupla rip segnata come attiva
+    public static boolean aggiungereRip(Prenotazione prenotazione){ //aggiungire tupla rip segnata come attiva
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
             PreparedStatement prepStat = conn1.prepareStatement("INSERT INTO prenotazione VALUES (?,?,?,?,?,?,?,?);");
             prepStat.setInt(1,trovaIdPren(prenotazione));
-            prepStat.setInt(2,trovaIdDoc(prenotazione.getDocente()));
+            prepStat.setString(2,trovaIdDoc(prenotazione.getDocente()));
             prepStat.setString(3,prenotazione.getCorso().getTitolo());
             prepStat.setString(4,prenotazione.getUtente().getAccount());
             prepStat.setInt(4, Integer.parseInt(prenotazione.getSlot().toString()));
@@ -253,7 +232,7 @@ public class DAO {
         return true;
     }
 
-    public int trovaIdPren(Prenotazione prenotazione){ //docente corso account ora giorno
+    public static int trovaIdPren(Prenotazione prenotazione){ //docente corso account ora giorno
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -272,7 +251,7 @@ public class DAO {
         return 0;
     }
 
-    public Docente trovaDoc_byId(int idDoc){
+    public static Docente trovaDoc_byId(int idDoc){
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -291,7 +270,7 @@ public class DAO {
         return null;
     }
 
-    public Utente trovaUtente(String utente){
+    public static Utente trovaUtente(String utente){
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -310,7 +289,7 @@ public class DAO {
         return null;
     }
 
-    public boolean listRip_Utente(Utente utente){ //visualizzare le ripetizioni utente
+    public static boolean listRip_Utente(Utente utente){ //visualizzare le ripetizioni utente
         Connection conn1 = null;
         ArrayList<Prenotazione> ripetizioni_pren = new ArrayList<>();
         try {
@@ -335,7 +314,7 @@ public class DAO {
         return true;
     }
 
-    public boolean listRipPren(){ //visualizzare le ripetizioni prenotate
+    public static boolean listRipPren(){ //visualizzare le ripetizioni prenotate
         Connection conn1 = null;
         ArrayList<Prenotazione> ripetizioni_pren = new ArrayList<>();
         try {

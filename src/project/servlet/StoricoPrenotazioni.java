@@ -1,6 +1,5 @@
 package project.servlet;
 
-package project.servlet;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -33,14 +32,14 @@ public class StoricoPrenotazioni extends HttpServlet {
     * @throws IOException
     */
    private void esegui(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      Gson json = new Gson();
-      Utente u = json.fromJson((JsonElement)request.getAttribute("utente"), Utente.class);
-      DAO.registerDriver();
+      //Gson json = new Gson();
+      //Utente u = json.fromJson((JsonElement)request.getAttribute("utente"), Utente.class);
+      //DAO.registraDriver();
       response.setContentType("application/json");
       PrintWriter out = response.getWriter();
-      if(u==null){
+      /*if(u==null){
          out.
-      }
+      }*/
    }
 
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
