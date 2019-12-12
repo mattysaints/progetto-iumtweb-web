@@ -38,12 +38,13 @@ Mattia:
 
 ### Servlet
 Davide:
-1. controllo se un utente è registrato (ed eventualmente se è amministratore) controllo della sessione utente
-2. visualizza lista ripetizioni disponibili (json)
+1. [Login] controllo se un utente è registrato (ed eventualmente se è amministratore) controllo della sessione utente
 
 IMPORTANTE: ogni volta che un'altra servlet viene invocata deve controllare che la sessione esista (senza crearne una nuova):
 - in caso positivo la sessione contiene le informazioni su nome utente e se è admin
 - in caso negativo: la servlet deve fare la include() alla "LoginServlet"
+
+2. [RipetizioniDisponibili] visualizza lista ripetizioni disponibili (json)
 
 Marco:
 3. prenotare, disdire e segnare come effetuata la prenotazione [OpSuPrenotazioni]
@@ -52,7 +53,7 @@ Marco:
 Mattia:
 5. inserire e rimuovere corsi e docenti (admin)
 
-##View
+## View
 
 ### Login
 Marco:
