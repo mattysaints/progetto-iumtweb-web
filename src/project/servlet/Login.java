@@ -58,7 +58,7 @@ public class Login extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        Utente utente = new DAO().queryUtente(new Utente(username, password, null));
+        Utente utente = DAO.queryUtente(new Utente(username, password, null));
         if (utente == null) {
             session.invalidate();
             out.println((String) null);
