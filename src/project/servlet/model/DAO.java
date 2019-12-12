@@ -414,7 +414,7 @@ public class DAO {
         return 0;
     }
 
-    public static Docente trovaDoc_byId(int idDoc){
+    public static Docente trovaDoc_byId(String idDoc){
         Connection conn1 = null;
         try {
             conn1 = DriverManager.getConnection(url, user, password);
@@ -452,7 +452,7 @@ public class DAO {
         return null;
     }
 
-    public static boolean listRip_Utente(Utente utente){ //visualizzare le ripetizioni utente
+    public static boolean listRip_Utente(Utente utente){ //visualizzare lo storico delle prenotazioni dell'utente
         Connection conn1 = null;
         ArrayList<Prenotazione> ripetizioni_pren = new ArrayList<>();
         try {
@@ -464,7 +464,7 @@ public class DAO {
             ResultSet rs = st.executeQuery("SELECT id,docente,corso,giorno,ora,stato from prenotazione where utente="+utente.getAccount()+";");
             while (rs.next()){
                 int id = rs.getInt("id");
-                int docente = rs.getInt("docente");
+                String docente = rs.getInt("docente");
                 Corso corso = new Corso(rs.getString("corso"));
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
@@ -489,7 +489,7 @@ public class DAO {
             ResultSet rs = st.executeQuery("SELECT id,docente,corso,giorno,ora from prenotazione where stato="+Stato.effettuata+";");
             while (rs.next()){
                 int id = rs.getInt("id");
-                int docente = rs.getInt("docente");
+                String docente = rs.getInt("docente");
                 String utente = rs.getString("utente");
                 Corso corso = new Corso(rs.getString("corso"));
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
@@ -500,6 +500,36 @@ public class DAO {
             e.printStackTrace();
         }
         return true;
+    }
+
+    public static List<Prenotazione> getStoricoPrenotazioni() {
+        Connection connection = null;
+        List<Prenotazione> result = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ripetizioni.prenotazione");
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()) {
+                String id = rs.getString("docente");
+                Docente doc = trovaDoc_byId(id);
+                Corso cor = new Corso(rs.getString("corso"));
+                Utente ut = trovaUtente(rs.getString("utente"));
+                Giorno giorno = Giorno.valueOf(rs.getString("giorno"));
+                Slot slot = Slot.valueOf(rs.getString("ora"));
+                Stato stato = Stato.valueOf(rs.getString("stato"));
+                result.add(new Prenotazione(doc, cor, ut, slot, giorno, stato));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
 }
