@@ -28,7 +28,7 @@ public class DAO {
      * @param utente: utente da trovare nel database
      * @return l'oggetto utente se esiste (con campo admin ricavato), altrimenti null
      */
-    public static  Utente queryUtente(Utente utente) {
+    public static Utente queryUtente(Utente utente) {
         Connection connection = null;
         Utente result = null;
         try {
@@ -56,14 +56,16 @@ public class DAO {
      * Inserisce un corso nel database
      *
      * @param corso: corso da aggiungere
+     * @return true se l'operazione è avvenuta con successo
      */
-    public static void insertCorso(Corso corso) {
+    public static boolean insertCorso(Corso corso) {
         Connection connection = null;
+        boolean result = false;
         try {
             connection = DriverManager.getConnection(url, user, password);
             PreparedStatement statement = connection.prepareStatement("INSERT INTO ripetizioni.corso VALUES (?);");
             statement.setString(1, corso.getTitolo());
-            statement.executeUpdate();
+            result = statement.executeUpdate() == 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,6 +77,7 @@ public class DAO {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
     /**
@@ -109,16 +112,19 @@ public class DAO {
      * Inserisce un docente nel database
      *
      * @param docente: docente da inserire
+     * @return true se l'operazione è avvenuta con successo
      */
-    public static void insertDocente(Docente docente) {
+    public static boolean insertDocente(Docente docente) {
         Connection connection = null;
+        boolean result = false;
         try {
             connection = DriverManager.getConnection(url, user, password);
             PreparedStatement statement = connection.prepareStatement("INSERT INTO ripetizioni.docente VALUES (?,?,?);");
             statement.setString(1, UUID.randomUUID().toString());
             statement.setString(2, docente.getNome());
             statement.setString(3, docente.getCognome());
-            statement.executeUpdate();
+            result = statement.executeUpdate() == 1;
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -129,6 +135,7 @@ public class DAO {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
     /**
@@ -164,9 +171,11 @@ public class DAO {
      *
      * @param docente: docente da associare al corso
      * @param corso: corso che il docente insegna
+     * @return true se l'operazione è avvenuta con successo
      */
-    public static void insertInsegnamento(Docente docente, Corso corso) {
+    public static boolean insertInsegnamento(Docente docente, Corso corso) {
         Connection connection = null;
+        boolean result = false;
         try {
             connection = DriverManager.getConnection(url, user, password);
             PreparedStatement statement = connection.prepareStatement("INSERT INTO ripetizioni.insegnamento (docente, corso) " +
@@ -176,7 +185,7 @@ public class DAO {
             statement.setString(1, docente.getNome());
             statement.setString(2, docente.getCognome());
             statement.setString(3, corso.getTitolo());
-            statement.executeUpdate();
+            result = statement.executeUpdate() == 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -188,6 +197,7 @@ public class DAO {
                 e.printStackTrace();
             }
         }
+        return result;
     }
 
     /**
@@ -290,25 +300,25 @@ public class DAO {
     }
 
     /**
+     * Contrassegna una ripetizione nel database come disdetta
      *
-     * @param prenotazione
-     * @return
+     * @param prenotazione: prenotazione da disdire
+     * @return true se l'operazione è avvenuta con successo
      */
     public static boolean deletePrenotazione(Prenotazione prenotazione){
         Connection connection = null;
         boolean result = false;
         try {
             connection = DriverManager.getConnection(url, user, password);
-            PreparedStatement statement = connection.prepareStatement("UPDATE ripetizioni.prenotazione SET stato = ? WHERE id = ( " +
+            PreparedStatement statement = connection.prepareStatement("UPDATE ripetizioni.prenotazione SET stato = 'disdetta' WHERE id = ( " +
                     "SELECT id " +
                     "FROM ripetizioni.prenotazione " +
                     "WHERE docente=? AND corso=? AND utente=? AND ora=? AND giorno=? AND stato='attiva');");
-            statement.setString(1,"disdetta");
-            statement.setString(2, prenotazione.getDocente().getNome());
-            statement.setString(3, prenotazione.getDocente().getCognome());
-            statement.setString(4, prenotazione.getUtente().getAccount());
-            statement.setString(5, prenotazione.getGiorno().toString());
-            statement.setInt(6, prenotazione.getSlot().getValue());
+            statement.setString(1, prenotazione.getDocente().getNome());
+            statement.setString(2, prenotazione.getDocente().getCognome());
+            statement.setString(3, prenotazione.getUtente().getAccount());
+            statement.setString(4, prenotazione.getGiorno().toString());
+            statement.setInt(5, prenotazione.getSlot().getValue());
             result = statement.executeUpdate() == 1;
 
         } catch (SQLException e) {
@@ -365,35 +375,45 @@ public class DAO {
         return result;
     }
 
-    /*
-        |
-        |
-        |
-        |
-        |
-        V   DA MODIFICARE
+    /**
+     * Inserisce una prenotazione nel database, contrassegnata come attiva
+     *
+     * @param prenotazione: prenotazione da inserire
      */
-
-
-
-    public static boolean aggiungereRipetizione(Prenotazione prenotazione){ //aggiungire tupla rip segnata come attiva
-        Connection conn1 = null;
+    public static boolean insertPrenotazione(Prenotazione prenotazione){
+        Connection connection = null;
+        boolean result = false;
         try {
-            conn1 = DriverManager.getConnection(url, user, password);
-            PreparedStatement prepStat = conn1.prepareStatement("INSERT INTO prenotazione VALUES (?,?,?,?,?,?,?,?);");
-            prepStat.setInt(1,trovaIdPren(prenotazione));
-            prepStat.setInt(2,trovaIdDoc(prenotazione.getDocente()));
-            prepStat.setString(3,prenotazione.getCorso().getTitolo());
-            prepStat.setString(4,prenotazione.getUtente().getAccount());
-            prepStat.setInt(4, Integer.parseInt(prenotazione.getSlot().toString()));
-            prepStat.setString(5, prenotazione.getGiorno().toString());
-            prepStat.setString(6, "attiva");
-            prepStat.executeUpdate();
+            connection = DriverManager.getConnection(url, user, password);
+            // eventualmente si può sfruttare la query ripetizioni disponibili
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO ripetizioni.prenotazione (id, docente, corso, utente, ora, giorno, stato) " +
+                    "SELECT ?, insegnamento.docente, insegnamento.corso, ?, ?, ?, 'attiva' " +
+                    "FROM ripetizioni.docente JOIN ripetizioni.insegnamento ON docente.id = insegnamento.docente " +
+                    "WHERE docente.nome=? AND docente.cognome=? AND insegnamento.corso=?;");
+            statement.setString(1, UUID.randomUUID().toString());
+            statement.setString(2, prenotazione.getUtente().getAccount());
+            statement.setInt(3, prenotazione.getSlot().getValue());
+            statement.setString(4, prenotazione.getGiorno().toString());
+            statement.setString(5, prenotazione.getDocente().getNome());
+            statement.setString(6, prenotazione.getDocente().getCognome());
+            statement.setString(6, prenotazione.getCorso().toString());
+            result = statement.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return true;
+        return result;
     }
+
+    /*
+    SI PUO FARE TRAMITE SQL
+    ---------------------------------------------
 
     public int trovaIdPren(Prenotazione prenotazione){ //docente corso account ora giorno
         Connection conn1 = null;
@@ -414,6 +434,12 @@ public class DAO {
         return 0;
     }
 
+     */
+
+    /*
+    SI PUO FARE TRAMITE SQL
+    ---------------------------------------
+
     public static Docente trovaDoc_byId(String idDoc){
         Connection conn1 = null;
         try {
@@ -433,6 +459,12 @@ public class DAO {
         return null;
     }
 
+     */
+
+    /*
+    UGUALE A QUERY UTENTE
+    --------------------------------------------
+
     public static Utente trovaUtente(String utente){
         Connection conn1 = null;
         try {
@@ -451,38 +483,51 @@ public class DAO {
         }
         return null;
     }
+     */
 
-    public static List<Prenotazione> getStoricoPrenotazioni(Utente utente){ //visualizzare lo storico delle prenotazioni dell'utente
-        Connection conn1 = null;
-        ArrayList<Prenotazione> ripetizioniPren = new ArrayList<>();
+    /**
+     * Restituisce la lista di prenotazioni presenti nello storico dell'utente
+     *
+     * @param utente: denota lo storico da estrarre dal database
+     * @return lista di oggetti prenotazione
+     */
+    public static List<Prenotazione> getStoricoPrenotazioni(Utente utente){
+        Connection connection = null;
+        List<Prenotazione> result = new ArrayList<>();
         try {
-            conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database");
-            }
-            Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT id,docente,corso,giorno,ora,stato from prenotazione where utente="+utente.getAccount()+";");
+            connection = DriverManager.getConnection(url, user, password);
+            PreparedStatement statement = connection.prepareStatement("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
+                    "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
+                    "WHERE utente=?;");
+            statement.setString(1, utente.getAccount());
+            ResultSet rs = statement.executeQuery();
+
             while (rs.next()){
-                String idDoc = rs.getString("docente");
-                Docente docente = trovaDoc_byId(idDoc);
+                Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
                 Corso corso = new Corso(rs.getString("corso"));
-                Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
+                Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Stato stato = Stato.valueOf(rs.getString("stato"));
-                ripetizioniPren.add(new Prenotazione(docente,corso,utente,ora,giorno,stato));
+
+                result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
           try {
-             if (conn1 != null)
-                conn1.close();
+             if (connection != null)
+                connection.close();
           } catch (SQLException e) {
              e.printStackTrace();
           }
        }
-        return ripetizioniPren;
+        return result;
     }
+
+    /*
+    SERVE? SE SI DA CORREGGERE ALTRIMENTI DA ELIMINARE
+    --------------------------------------------------------------
 
     public static boolean listRipPren(){ //visualizzare le ripetizioni prenotate
         Connection conn1 = null;
@@ -509,23 +554,33 @@ public class DAO {
         return true;
     }
 
+     */
+
+    /**
+     * Restituisce la lista delle prenotazioni nello storico di tutti gli utenti
+     *
+     * @return lista delle prenotazioni (degli utenti si estrae solo il nome utente)
+     */
     public static List<Prenotazione> getStoricoPrenotazioni() {
         Connection connection = null;
         List<Prenotazione> result = new ArrayList<>();
         try {
             connection = DriverManager.getConnection(url, user, password);
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ripetizioni.prenotazione");
-            ResultSet rs = statement.executeQuery();
-            while(rs.next()) {
-                String id = rs.getString("docente");
-                Docente doc = trovaDoc_byId(id);
-                Corso cor = new Corso(rs.getString("corso"));
-                Utente ut = trovaUtente(rs.getString("utente"));
-                Giorno giorno = Giorno.valueOf(rs.getString("giorno"));
-                Slot slot = Slot.fromInt(rs.getInt("ora"));
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
+                    "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id;");
+
+            while (rs.next()){
+                Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
+                Corso corso = new Corso(rs.getString("corso"));
+                Utente utente = new Utente(rs.getString("utente"), null, null);
+                Slot ora = Slot.fromInt(rs.getInt("ora"));
+                Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Stato stato = Stato.valueOf(rs.getString("stato"));
-                result.add(new Prenotazione(doc, cor, ut, slot, giorno, stato));
+
+                result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
