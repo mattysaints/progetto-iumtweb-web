@@ -13,7 +13,7 @@
 
 <!-- barra di navigazione -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#"><img id="logo" src="img/logo4.png" width="25px" alt="Logo"/> Ripetizioni</a>
+    <a class="navbar-brand"><img src="img/logo4.png" width="25px" alt="Logo"/> Ripetizioni</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -31,6 +31,7 @@
                 <a class="nav-link" href="#">Visualizza le tue prenotazioni</a>
             </li>
             <li class="nav-item dropdown">
+                <!-- Questa sezione sara visibile solo dagli amministratori -->
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Amministratore
                 </a>
@@ -41,10 +42,13 @@
                     <a class="dropdown-item" href="#">Visualizza ripetizioni attive</a>
                 </div>
             </li>
+            <!-- Fine sezione amministratore -->
         </ul>
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav">
+            <!-- Nome utente aggiunto dinamicamente -->
+            <p class="navbar-text text-muted my-0 mr-2">Benvenuto, Utente </p>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle my-2 my-sm-0" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img src="img/user.png" width="25px" alt="User logo"/>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownDropdown">
@@ -64,21 +68,21 @@
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img class="d-block w-100" src="img/img1.jpg" alt="Libri">
+            <img class="d-block w-100" src="img/img1.jpg" alt="Prenota">
             <div class="carousel-caption d-none d-md-block">
                 <h5>Prenota</h5>
                 <p>Calendario delle ripetizioni disponibili</p>
             </div>
         </div>
         <div class="carousel-item">
-            <img class="d-block w-100" src="img/img2.jpg" alt="Studio">
+            <img class="d-block w-100" src="img/img2.jpg" alt="Disdici">
             <div class="carousel-caption d-none d-md-block">
                 <h5>Disdici</h5>
                 <p>Canella una prenotazione in qualsiasi momento</p>
             </div>
         </div>
         <div class="carousel-item">
-            <img class="d-block w-100" src="img/img3.jpg" alt="Ripetizioni">
+            <img class="d-block w-100" src="img/img3.jpg" alt="Storico prenotazioni">
             <div class="carousel-caption d-none d-md-block">
                 <h5>Storico prenotazioni</h5>
                 <p>Visualizza tutte le tue prenotazioni attive, effettuate e disdette</p>
@@ -97,7 +101,7 @@
 
 <!-- footer -->
 <footer class="footer">
-    <div class="footer-copyright text-center text-muted py-4">© 2019 Copyright:
+    <div class="footer-copyright text-center text-muted bg-light pt-4">© 2019 Copyright:
         <a href="#"> Ripetizioni.it</a>
     </div>
 </footer>
