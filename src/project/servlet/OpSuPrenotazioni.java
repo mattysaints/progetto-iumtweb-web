@@ -51,7 +51,7 @@ public class OpSuPrenotazioni extends HttpServlet {
       boolean correct = false;
       switch (op) {
          case "prenotare":
-            correct = DAO.aggiungereRipetizione(prenot);
+            correct = DAO.insertPrenotazione(prenot);
             break;
          case "disdire":
             correct = DAO.deletePrenotazione(prenot);
