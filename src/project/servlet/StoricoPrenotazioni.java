@@ -56,7 +56,7 @@ public class StoricoPrenotazioni extends HttpServlet {
 
       } else {
          //restituisco storico utente
-         storico = DAO.listRip_Utente(u);
+         storico = DAO.getStoricoPrenotazioni(u);
       }
       String stor = json.toJson(storico);
       out.print(stor);
