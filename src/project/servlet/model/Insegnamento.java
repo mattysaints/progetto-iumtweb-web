@@ -1,6 +1,6 @@
 package project.servlet.model;
 
-import javax.print.Doc;
+import java.util.Objects;
 
 public class Insegnamento {
 
@@ -18,5 +18,21 @@ public class Insegnamento {
 
     public Corso getCorso() {
         return corso;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Insegnamento that = (Insegnamento) o;
+        return Objects.equals(doc, that.doc) &&
+              Objects.equals(corso, that.corso);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(doc, corso);
     }
 }

@@ -1,7 +1,6 @@
 package project.servlet.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 public class Utente {
 
@@ -36,4 +35,20 @@ public class Utente {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Utente utente = (Utente) o;
+        return admin == utente.admin &&
+              Objects.equals(account, utente.account) &&
+              Objects.equals(password, utente.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(account);
+    }
 }

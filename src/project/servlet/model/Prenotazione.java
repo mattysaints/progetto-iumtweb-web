@@ -1,6 +1,7 @@
 package project.servlet.model;
 
 import java.time.DayOfWeek;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Prenotazione {
@@ -42,5 +43,25 @@ public class Prenotazione {
                 ", giorno=" + giorno +
                 ", stato=" + stato +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Prenotazione that = (Prenotazione) o;
+        return Objects.equals(docente, that.docente) &&
+              Objects.equals(corso, that.corso) &&
+              Objects.equals(utente, that.utente) &&
+              slot == that.slot &&
+              giorno == that.giorno &&
+              stato == that.stato;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(docente, slot, giorno, stato);
     }
 }

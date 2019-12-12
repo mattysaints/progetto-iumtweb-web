@@ -6,7 +6,7 @@ enum Stato {
     //Mentre per visualizzare il risultato nell'interfaccia grafica useremo il metodo toString
 
     effettuata,
-    attiva,
+    attiva, //prenotata
     disdetta;
 
     @Override
