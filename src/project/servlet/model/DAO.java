@@ -452,29 +452,36 @@ public class DAO {
         return null;
     }
 
-    public static boolean listRip_Utente(Utente utente){ //visualizzare lo storico delle prenotazioni dell'utente
+    public static List<Prenotazione> listRip_Utente(Utente utente){ //visualizzare lo storico delle prenotazioni dell'utente
         Connection conn1 = null;
-        ArrayList<Prenotazione> ripetizioni_pren = new ArrayList<>();
+        ArrayList<Prenotazione> ripetizioniPren = new ArrayList<>();
         try {
             conn1 = DriverManager.getConnection(url, user, password);
             if (conn1 != null) {
-                System.out.println("Connected to the database test");
+                System.out.println("Connected to the database");
             }
             Statement st = conn1.createStatement();
             ResultSet rs = st.executeQuery("SELECT id,docente,corso,giorno,ora,stato from prenotazione where utente="+utente.getAccount()+";");
             while (rs.next()){
-                int id = rs.getInt("id");
-                String docente = rs.getInt("docente");
+                String idDoc = rs.getString("docente");
+                Docente docente = trovaDoc_byId(idDoc);
                 Corso corso = new Corso(rs.getString("corso"));
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
                 Stato stato = Stato.valueOf(rs.getString("stato"));
-                ripetizioni_pren.add(new Prenotazione(trovaDoc_byId(docente),corso,utente,ora,giorno,stato));
+                ripetizioniPren.add(new Prenotazione(docente,corso,utente,ora,giorno,stato));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        return true;
+        } finally {
+          try {
+             if (conn1 != null)
+                conn1.close();
+          } catch (SQLException e) {
+             e.printStackTrace();
+          }
+       }
+        return ripetizioniPren;
     }
 
     public static boolean listRipPren(){ //visualizzare le ripetizioni prenotate
@@ -515,7 +522,7 @@ public class DAO {
                 Corso cor = new Corso(rs.getString("corso"));
                 Utente ut = trovaUtente(rs.getString("utente"));
                 Giorno giorno = Giorno.valueOf(rs.getString("giorno"));
-                Slot slot = Slot.valueOf(rs.getString("ora"));
+                Slot slot = Slot.fromInt(rs.getInt("ora"));
                 Stato stato = Stato.valueOf(rs.getString("stato"));
                 result.add(new Prenotazione(doc, cor, ut, slot, giorno, stato));
             }
