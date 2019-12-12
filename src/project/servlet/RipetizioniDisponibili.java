@@ -53,10 +53,10 @@ public class RipetizioniDisponibili extends HttpServlet {
             requestDispatcher.include(request, response);
         }
 
-        List<Prenotazione> ripetizioniDisp = DAO.ripetizioniDisp();
+        List<Prenotazione> disponibili = DAO.getRipetizioniDisponibili();
         Gson gson = new Gson();
-        Type type = new TypeToken<>(){}.getType();
-        String jsonObject = gson.toJson(ripetizioniDisp, type);
+        Type type = new TypeToken<List<Prenotazione>>(){}.getType();
+        String jsonObject = gson.toJson(disponibili, type);
 
         PrintWriter out = response.getWriter();
         out.println(jsonObject);
