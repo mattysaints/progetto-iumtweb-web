@@ -452,7 +452,7 @@ public class DAO {
         return null;
     }
 
-    public static List<Prenotazione> listRip_Utente(Utente utente){ //visualizzare lo storico delle prenotazioni dell'utente
+    public static List<Prenotazione> getStoricoPrenotazioni(Utente utente){ //visualizzare lo storico delle prenotazioni dell'utente
         Connection conn1 = null;
         ArrayList<Prenotazione> ripetizioniPren = new ArrayList<>();
         try {
