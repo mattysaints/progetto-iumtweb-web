@@ -6,7 +6,7 @@ public class Utente {
 
     private String account;
     private String password;
-    private boolean admin;
+    private Boolean admin;
 
     public Utente(String account, String password, Boolean admin) {
         this.account = account;
@@ -22,7 +22,7 @@ public class Utente {
         return password;
     }
 
-    public boolean isAdmin() {
+    public Boolean isAdmin() {
         return admin;
     }
 

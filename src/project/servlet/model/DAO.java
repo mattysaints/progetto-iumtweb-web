@@ -33,8 +33,9 @@ public class DAO {
         Utente result = null;
         try {
             connection = DriverManager.getConnection(url, user, password);
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ripetizioni.utente WHERE account =?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ripetizioni.utente WHERE account =? AND password=?;");
             statement.setString(1, utente.getAccount());
+            statement.setString(2, utente.getPassword());
             ResultSet rs = statement.executeQuery();
             if(rs.next())
                 result = new Utente(rs.getString("account"), rs.getString("password"), rs.getBoolean("admin"));
