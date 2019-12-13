@@ -53,6 +53,8 @@ Marco:
 Mattia:
 5. inserire e rimuovere corsi e docenti (admin)
 
+6. visualizzare la lista dei docenti e corsi (admin)
+
 ## View
 
 ### Login
