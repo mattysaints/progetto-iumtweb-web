@@ -22,7 +22,7 @@
                   <div class="input-group-prepend">
                      <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                   </div>
-                  <input name="username" class="form-control" placeholder="Username" type="text" autofocus="autofocus" aria-required="true" required="required">
+                  <input name="username" class="form-control" placeholder="Username" type="text" autofocus="autofocus" aria-required="true" required="required" aria-label="usernameInput">
                </div> <!-- input-group.// -->
             </div> <!-- form-group// -->
             <div class="form-group">
@@ -30,15 +30,15 @@
                   <div class="input-group-prepend">
                      <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                   </div>
-                  <input name="password" class="form-control" placeholder="******" type="password" aria-required="true" required="required">
+                  <input name="password" class="form-control" placeholder="******" type="password" aria-required="true" required="required" aria-label="passwordInput">
                </div> <!-- input-group.// -->
             </div> <!-- form-group// -->
             <div class="form-group">
-               <button type="submit" class="btn btn-primary btn-block"> Accedi  </button>
+               <button type="submit" class="btn btn-primary btn-block" aria-label="buttonAccess"> Accedi  </button>
             </div> <!-- form-group// -->
             <hr>
-            <a href="" > <p class="text-sm-center">
-               Non hai un account? Accedi come ospite per vedere comunque le ripetizioni disponibili
+            <a href="" > <p class="text-sm-center" data-toggle="tooltip" title="Accedi come ospite per vedere comunque le ripetizioni disponibili">
+               Non hai un account?
             </p></a>
          </form>
       </article>
