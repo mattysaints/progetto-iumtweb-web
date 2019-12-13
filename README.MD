@@ -142,7 +142,6 @@ Collegamenti:
 
 ### Homepage
 Mattia:
-- Admin e utente
 - Contenuto di default (es. ripetizioni prenotate o immagine)
 
 Collegamenti:
@@ -158,7 +157,6 @@ Marco:
 
 ### Gestione dello storico
 Mattia:
-- Sia utente che admin
 - visualizzare lo storico
 - cambiare lo stato di una prenotazione
 - filtri (opzionale: vedi prenotazioni disponibili)
