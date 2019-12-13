@@ -1,5 +1,9 @@
 #loginCard {
-    margin: 30%;
+    /* margin: 30%; */
     align-content: center;
     alignment: center;
+}
+
+.bg {
+    background-image: url("img/login_background.jpeg");
 }
