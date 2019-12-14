@@ -72,6 +72,5 @@ public class GestioneCorsi extends HttpServlet {
         } else {
             throw new ServletException("Non hai i permessi di amministratore!");
         }
-
     }
 }
