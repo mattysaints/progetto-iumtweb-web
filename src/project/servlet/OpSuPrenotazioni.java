@@ -23,7 +23,7 @@ import java.io.PrintWriter;
  * Questo verrà discriminato da una variabile nella request (op).
  *
  */
-@WebServlet(name = "OpSuPrenotazioni", urlPatterns = {"/progetto_ium_tweb2/OpSuPrenotazioni"})
+@WebServlet(name = "OpSuPrenotazioni", urlPatterns = {"/OpSuPrenotazioni"})
 public class OpSuPrenotazioni extends HttpServlet {
    private static final Gson json = new Gson();
    @Override

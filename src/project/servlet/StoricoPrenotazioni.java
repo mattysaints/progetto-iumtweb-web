@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "StoricoPrenotazioni", urlPatterns = {"/progetto_ium_tweb2/StoricoPrenotazioni"})
+@WebServlet(name = "StoricoPrenotazioni", urlPatterns = {"/StoricoPrenotazioni"})
 public class StoricoPrenotazioni extends HttpServlet {
    private static final Gson json = new Gson();
    @Override
