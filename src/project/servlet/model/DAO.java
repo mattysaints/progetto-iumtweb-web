@@ -1,5 +1,6 @@
 package project.servlet.model;
 
+import javax.print.Doc;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -376,6 +377,7 @@ public class DAO {
         return result;
     }
 
+
     /**
      * Inserisce una prenotazione nel database, contrassegnata come attiva
      *
@@ -582,6 +584,62 @@ public class DAO {
                 result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
             }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @return lista di docenti nel database
+     */
+    public static List<Docente> getDocenti() {
+        Connection connection = null;
+        List<Docente> result = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM ripetizioni.docente;");
+            while (rs.next()){
+                Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
+                result.add(docente);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @return lista di corsi nel database
+     */
+    public static List<Corso> getCorsi() {
+        Connection connection = null;
+        List<Corso> result = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM ripetizioni.corso;");
+            while (rs.next()){
+                Corso corso = new Corso(rs.getString(0));
+                result.add(corso);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
