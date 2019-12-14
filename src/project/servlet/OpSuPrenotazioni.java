@@ -46,7 +46,7 @@ public class OpSuPrenotazioni extends HttpServlet {
          requestDispatcher.include(request, response);
       }
       String op = (String) request.getAttribute("op");
-      Prenotazione prenot = json.fromJson((JsonElement) request.getAttribute("prenotazione"), Prenotazione.class);
+      Prenotazione prenot = json.fromJson(request.getParameter("prenotazione"), Prenotazione.class);
       PrintWriter out = response.getWriter();
       boolean correct = false;
       switch (op) {

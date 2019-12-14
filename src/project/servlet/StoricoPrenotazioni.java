@@ -46,7 +46,7 @@ public class StoricoPrenotazioni extends HttpServlet {
          RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("Login");
          requestDispatcher.include(request, response);
       }
-      Utente u = json.fromJson((JsonElement)request.getAttribute("utente"), Utente.class);
+      Utente u = json.fromJson(request.getParameter("utente"), Utente.class);
       response.setContentType("application/json");
       PrintWriter out = response.getWriter();
       List<Prenotazione> storico;

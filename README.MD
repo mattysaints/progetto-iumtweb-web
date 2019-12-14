@@ -47,13 +47,13 @@ IMPORTANTE: ogni volta che un'altra servlet viene invocata deve controllare che 
 2. [RipetizioniDisponibili] visualizza lista ripetizioni disponibili (json)
 
 Marco:
-3. prenotare, disdire e segnare come effetuata la prenotazione [OpSuPrenotazioni]
-4. visualizzare lo storico di un utente (sia utente che admin) e visualizzare tutte le prenotazioni: attive, effettuate, cancellate (admin) [StoricoPrenotazioni]
+3. [OpSuPrenotazioni] prenotare, disdire e segnare come effetuata la prenotazione 
+4. [StoricoPrenotazioni] visualizzare lo storico di un utente (sia utente che admin) e visualizzare tutte le prenotazioni: attive, effettuate, cancellate (admin) 
+5. [GestioneDocenti] inserire, eliminare e visualizzare tutti i docenti (admin)
 
 Mattia:
-5. inserire e rimuovere corsi e docenti (admin)
+5. [GestioneCorsi] inserire, eliminare e visualizzare tutti i corsi (admin)
 
-6. visualizzare la lista dei docenti e corsi (admin)
 
 ## View
 
