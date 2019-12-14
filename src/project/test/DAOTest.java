@@ -16,7 +16,7 @@ public class DAOTest {
         System.out.println(DAO.insertInsegnamento(docente, corso));
         //System.out.println(DAO.rimuoviInse(docente,corso));
         //System.out.println(DAO.ripetizioniDisp());
-        //String id_doc = "385cbfac-0cbd-4c08-9177-67409007b201";
-        //System.out.println(DAO.trovaDoc_byId(id_doc);
+        System.out.println(DAO.getStoricoPrenotazioni());
+        System.out.println(DAO.listRipStato("effettuata"));
     }
 }

@@ -236,31 +236,6 @@ public class DAO {
         return result;
     }
 
-    /*
-    SI PUO TROVARE CON SQL
-
-    public static String trovaIdDocente(Docente docente){
-        Connection conn1 = null;
-        try {
-            conn1 = DriverManager.getConnection(url, user, password);
-            Statement st = conn1.createStatement();
-            //ResultSet rs = st.executeQuery("SELECT id from Docente where nome = "+docente.getNome()+" and cognome ="+docente.getCognome()+";");
-            PreparedStatement prepStat = conn1.prepareStatement("SELECT id from Docente where nome = ? and cognome = ?;");
-            prepStat.setString(1,docente.getNome());
-            prepStat.setString(2,docente.getCognome());
-            ResultSet rs = prepStat.executeQuery();
-            if(rs.next() == false)
-                System.out.println("Docente non trovato nel database");
-            else
-                return rs.getString("id");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-     */
-
     /**
      * Estrae la lista di ripetizioni disponibili dal database
      *
@@ -315,12 +290,18 @@ public class DAO {
             PreparedStatement statement = connection.prepareStatement("UPDATE ripetizioni.prenotazione SET stato = 'disdetta' WHERE id = ( " +
                     "SELECT id " +
                     "FROM ripetizioni.prenotazione " +
-                    "WHERE docente=? AND corso=? AND utente=? AND ora=? AND giorno=? AND stato='attiva');");
+                    "WHERE docente= (" +
+                    "   SELECT id " +
+                    "   FROM ripetizioni.docente " +
+                    "   WHERE docente.nome=? AND docente.cognome=?"  +
+                    ") AND corso=? AND utente=? AND ora=? AND giorno=? AND stato='effettuata'" +
+                    ");");
             statement.setString(1, prenotazione.getDocente().getNome());
             statement.setString(2, prenotazione.getDocente().getCognome());
-            statement.setString(3, prenotazione.getUtente().getAccount());
-            statement.setString(4, prenotazione.getGiorno().toString());
+            statement.setString(3,prenotazione.getCorso().getTitolo());
+            statement.setString(4, prenotazione.getUtente().getAccount());
             statement.setInt(5, prenotazione.getSlot().getValue());
+            statement.setString(6, prenotazione.getGiorno().toString());
             result = statement.executeUpdate() == 1;
 
         } catch (SQLException e) {
@@ -414,80 +395,6 @@ public class DAO {
         return result;
     }
 
-    /*
-    SI PUO FARE TRAMITE SQL
-    ---------------------------------------------
-
-    public int trovaIdPren(Prenotazione prenotazione){ //docente corso account ora giorno
-        Connection conn1 = null;
-        try {
-            conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
-            Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT id from prenotazione where docente="+trovaIdDoc(prenotazione.getDocente())+" and utente="+prenotazione.getUtente()+" and ora="+prenotazione.getSlot().toString()+" and giorno="+prenotazione.getGiorno().toString()+" and corso="+prenotazione.getCorso().getTitolo()+";");
-            if(rs.next() == false)
-                System.out.println("Prenotazione non trovata nel database");
-            else
-                return rs.getInt("id");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-     */
-
-    /*
-    SI PUO FARE TRAMITE SQL
-    ---------------------------------------
-
-    public static Docente trovaDoc_byId(String idDoc){
-        Connection conn1 = null;
-        try {
-            conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
-            Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT nome,cognome from Docente where id="+idDoc+";");
-            if(rs.next() == false)
-                System.out.println("Docente non trovato nel database");
-            else
-                return new Docente(rs.getString("nome"),rs.getString("cognome"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-     */
-
-    /*
-    UGUALE A QUERY UTENTE
-    --------------------------------------------
-
-    public static Utente trovaUtente(String utente){
-        Connection conn1 = null;
-        try {
-            conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
-            Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT account,password,admin from utente where account= "+utente+";");
-            if(rs.next() == false)
-                System.out.println("Docente non trovato nel database");
-            else
-                return new Utente(utente,rs.getString("password"),rs.getBoolean("admin"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-     */
-
     /**
      * Restituisce la lista di prenotazioni presenti nello storico dell'utente
      *
@@ -511,7 +418,6 @@ public class DAO {
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Stato stato = Stato.valueOf(rs.getString("stato"));
-
                 result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
             }
 
@@ -528,36 +434,40 @@ public class DAO {
         return result;
     }
 
-    /*
-    SERVE? SE SI DA CORREGGERE ALTRIMENTI DA ELIMINARE
-    --------------------------------------------------------------
 
-    public static boolean listRipPren(){ //visualizzare le ripetizioni prenotate
-        Connection conn1 = null;
-        ArrayList<Prenotazione> ripetizioni_pren = new ArrayList<>();
+    public static List<Prenotazione> listRipStato(String state){
+        Connection connection = null;
+        List<Prenotazione> result = new ArrayList<>();
         try {
-            conn1 = DriverManager.getConnection(url, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-            }
-            Statement st = conn1.createStatement();
-            ResultSet rs = st.executeQuery("SELECT id,docente,corso,giorno,ora from prenotazione where stato="+Stato.effettuata+";");
+            connection = DriverManager.getConnection(url, user, password);
+            PreparedStatement statement = connection.prepareStatement("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
+                    "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
+                    "WHERE stato=?;");
+            statement.setString(1, state);
+            ResultSet rs = statement.executeQuery();
+
             while (rs.next()){
-                int id = rs.getInt("id");
-                String docente = rs.getInt("docente");
-                String utente = rs.getString("utente");
+                Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
                 Corso corso = new Corso(rs.getString("corso"));
-                Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
-                ripetizioni_pren.add(new Prenotazione(trovaDoc_byId(docente),corso,trovaUtente(utente),ora,giorno,Stato.effettuata));
+                Stato stato = Stato.valueOf(state);
+                Giorno giorno = Giorno.fromString(rs.getString("giorno"));
+                Utente utente = new Utente(rs.getString("utente"),null,null);
+                result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return true;
+        return result;
     }
-
-     */
 
     /**
      * Restituisce la lista delle prenotazioni nello storico di tutti gli utenti
