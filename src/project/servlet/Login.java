@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import project.servlet.model.DAO;
 import project.servlet.model.Utente;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,21 +54,25 @@ public class Login extends HttpServlet {
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
+        //response.setContentType("application/json");
+        //PrintWriter out = response.getWriter();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
         Utente utente = DAO.queryUtente(new Utente(username, password, null));
         if (utente == null) {
             session.invalidate();
-            out.println((String) null);
+            //out.println((String) null);
         } else {
             session.setAttribute("username", utente.getAccount());
             session.setAttribute("admin", utente.isAdmin());
-            Gson gson = new Gson();
-            String json = gson.toJson(session);
-            out.println(json);
+
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/homepage.html");
+            rd.forward(request,response);
+
+            //Gson gson = new Gson();
+            //String json = gson.toJson(session);
+            //out.println(json);
         }
     }
 

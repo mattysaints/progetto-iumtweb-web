@@ -25,7 +25,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
          <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-               <a class="nav-link active" href="#">Home</a>
+               <a class="nav-link active" href="homepage.html">Home</a>
             </li>
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -67,31 +67,36 @@
    </nav>
 
    <!-- lista di docenti -->
-   <div id="listDoc" >
+   <div id="#listDoc" >
       <ul class="list-group">
-         <li class="list-group-item" v-for="docente in docenti" >{{docente.cognome}} {{docente.nome}}</li>
+         <li class="list-group-item" >
+            <p v-for="docente in docenti" >
+              {{docente.cognome}} {{docente.nome}}
+            </p>
+         </li>
       </ul>
-      <script>
-          var listDoc = new Vue({
-              el: '#listDoc',
-              data: {
-                  docenti: []
-              },
-              mounted() {this.getDocenti()},
-              methods: {
-                  getDocenti: function () {
-                      var self = this;
-                      $.get("/progetto_ium_tweb2/GestioneDocenti", "visualizzare", function(data) {
-                          self.docenti = data;
-                      });
-                  }
-              }
-          })
-      </script>
    </div>
-
+   <script>
+       var listDoc = new Vue({
+           el: '#listDoc',
+           data: {
+               docenti: []
+           },
+           mounted() {this.getDocenti()},
+           methods: {
+               getDocenti: function () {
+                   var self = this;
+                   $.get("/GestioneDocenti", "visualizzare", function(data) {
+                       self.docenti = data;
+                   });
+               }
+           }
+       })
+   </script>
 </div>
 
+<!-- vue development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <!-- librerie jquery -->
 <script src="jquery/jquery.js" ></script>
 <!-- librerie vue -->
