@@ -33,7 +33,7 @@ public class OpSuPrenotazioni extends HttpServlet {
    }
 
    /**
-    *
+    * stampa un bool se la richiesta è stata eseguita correttamente
     * @param request parametri: "op" assegnare uno tra "prenotare", "disdire" ed "effettuare"; "prenotazione" assegnare oggetto json corrispondente
     * @param response
     * @throws ServletException

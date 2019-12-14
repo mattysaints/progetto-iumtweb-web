@@ -6,8 +6,8 @@
    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
    <style type="text/css" media="screen">
-      ul#selected {
-         text-decoration-color: #0d6efd;
+      #selected {
+         text-decoration-color: lightseagreen;
       }
    </style>
    <title>
@@ -72,9 +72,20 @@
          <li class="list-group-item" v-for="docente in docenti" >{{docente.cognome}} {{docente.nome}}</li>
       </ul>
       <script>
-          var docenti = new Vue({
+          var listDoc = new Vue({
               el: '#listDoc',
-              array: [] //jquery con servlet per prendere i docenti
+              data: {
+                  docenti: []
+              },
+              mounted() {this.getDocenti()},
+              methods: {
+                  getDocenti: function () {
+                      var self = this;
+                      $.get("/progetto_ium_tweb2/GestioneDocenti", "visualizzare", function(data) {
+                          self.docenti = data;
+                      });
+                  }
+              }
           })
       </script>
    </div>
