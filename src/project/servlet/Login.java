@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 
 /**
@@ -31,6 +32,7 @@ import java.io.PrintWriter;
  */
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class Login extends HttpServlet {
+    private static final Gson gson = new Gson();
     /**
      * Inizializza la servlet
      *
@@ -58,7 +60,7 @@ public class Login extends HttpServlet {
         //PrintWriter out = response.getWriter();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
+        Boolean sessionExpired = (Boolean) request.getAttribute("sessionExpired");
         Utente utente = DAO.queryUtente(new Utente(username, password, null));
         if (utente == null) {
             session.invalidate();
@@ -66,11 +68,13 @@ public class Login extends HttpServlet {
         } else {
             session.setAttribute("username", utente.getAccount());
             session.setAttribute("admin", utente.isAdmin());
-
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/homepage.html");
-            rd.forward(request,response);
-
-            //Gson gson = new Gson();
+            RequestDispatcher rd;
+            if(sessionExpired==null || !sessionExpired) {
+                rd = getServletContext().getRequestDispatcher("/Redirect");
+                request.setAttribute("redirect", "homepage");
+                rd.forward(request,response);
+            } else
+                sessionExpired = false;
             //String json = gson.toJson(session);
             //out.println(json);
         }

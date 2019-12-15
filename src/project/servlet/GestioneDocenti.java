@@ -64,6 +64,9 @@ public class GestioneDocenti extends HttpServlet {
                List<Docente> doc = DAO.getDocenti();
                String jsonDoc = json.toJson(doc, Docente.class);
                out.print(jsonDoc);
+               break;
+            default:
+               throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
          }
          out.flush();
          out.close();
