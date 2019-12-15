@@ -27,14 +27,13 @@ public class Redirect extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+        String redirect = request.getParameter("redirect"); //setAttribute!=setParameter
         if (session == null) { //sessione scaduta
             request.setAttribute("sessionExpired", true);
             context.getRequestDispatcher("/loginPage.html").include(request, response);
         }
 
         RequestDispatcher rd = null;
-        String redirect = request.getParameter("redirect");
-
         if (redirect != null) {
             switch (redirect) {
                 case "homepage":

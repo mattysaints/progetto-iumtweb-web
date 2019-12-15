@@ -60,21 +60,19 @@ public class Login extends HttpServlet {
         //PrintWriter out = response.getWriter();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        Boolean sessionExpired = (Boolean) request.getAttribute("sessionExpired");
         Utente utente = DAO.queryUtente(new Utente(username, password, null));
         if (utente == null) {
             session.invalidate();
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/loginPage.html");
+            rd.include(request,response);
             //out.println((String) null);
         } else {
+            //login con successo
             session.setAttribute("username", utente.getAccount());
             session.setAttribute("admin", utente.isAdmin());
             RequestDispatcher rd;
-            if(sessionExpired==null || !sessionExpired) {
-                rd = getServletContext().getRequestDispatcher("/Redirect");
-                request.setAttribute("redirect", "homepage");
-                rd.forward(request,response);
-            } else
-                sessionExpired = false;
+            rd = getServletContext().getRequestDispatcher("/Redirect");
+            rd.forward(request,response);
             //String json = gson.toJson(session);
             //out.println(json);
         }
