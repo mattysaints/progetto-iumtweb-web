@@ -27,9 +27,9 @@ public class Redirect extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session == null) {
+        if (session == null) { //sessione scaduta
             request.setAttribute("sessionExpired", true);
-            getServletContext().getRequestDispatcher("/loginPage.html").include(request, response);
+            context.getRequestDispatcher("/loginPage.html").include(request, response);
         }
 
         RequestDispatcher rd = null;
@@ -37,11 +37,14 @@ public class Redirect extends HttpServlet {
 
         if (redirect != null) {
             switch (redirect) {
-                case "prenota":
-                    rd = context.getRequestDispatcher("loginPage.html");
+                case "homepage":
+                    rd = context.getRequestDispatcher("/homepage.html");
                     break;
+              /*  case "prenota":
+                    rd = context.getRequestDispatcher("loginPage.html");
+                    break;*/
                 case "gestioneDocenti":
-                    rd = context.getRequestDispatcher("gestioneDocenti.html");
+                    rd = context.getRequestDispatcher("/gestioneDocenti.html");
                     break;
                 case "gestioneCorsi" :
                     rd= context.getRequestDispatcher("gestioneCorsi.html");

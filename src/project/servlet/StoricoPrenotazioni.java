@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "StoricoPrenotazioni", urlPatterns = {"/progetto_ium_tweb2/StoricoPrenotazioni"})
+@WebServlet(name = "StoricoPrenotazioni", urlPatterns = {"/StoricoPrenotazioni"})
 public class StoricoPrenotazioni extends HttpServlet {
    private static final Gson json = new Gson();
    @Override
@@ -43,7 +43,7 @@ public class StoricoPrenotazioni extends HttpServlet {
    private void esegui(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       HttpSession session = request.getSession(false);
       if (session == null) {
-         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("Login");
+         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/Login");
          requestDispatcher.include(request, response);
       }
       Utente u = json.fromJson(request.getParameter("utente"), Utente.class);
@@ -51,8 +51,12 @@ public class StoricoPrenotazioni extends HttpServlet {
       PrintWriter out = response.getWriter();
       List<Prenotazione> storico;
       if(u==null){
-         //restituisco storico generale
+         //restituisco storico generale (solo admin)
+         assert session != null;
+         if ((boolean) session.getAttribute("admin"))
           storico = DAO.getStoricoPrenotazioni();
+         else
+            throw new ServletException("Non hai i permessi di admin!");
 
       } else {
          //restituisco storico utente

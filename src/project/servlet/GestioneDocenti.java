@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "GestioneDocenti", urlPatterns = {"/progetto_ium_tweb2/GestioneDocenti"})
+@WebServlet(name = "GestioneDocenti", urlPatterns = {"/GestioneDocenti"})
 public class GestioneDocenti extends HttpServlet {
    private static final Gson json = new Gson();
    @Override
@@ -64,6 +64,9 @@ public class GestioneDocenti extends HttpServlet {
                List<Docente> doc = DAO.getDocenti();
                String jsonDoc = json.toJson(doc, Docente.class);
                out.print(jsonDoc);
+               break;
+            default:
+               throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
          }
          out.flush();
          out.close();

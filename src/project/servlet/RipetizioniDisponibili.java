@@ -25,7 +25,7 @@ import java.util.List;
  * - Non richiede parametri
  * - Se l'utente non è autenticato inoltra la richiesta alla servlet di Login
  */
-@WebServlet(name = "RipetizioniDisponibili", urlPatterns = {"/progetto_ium_tweb2/RipetizioniDisponibili"})
+@WebServlet(name = "RipetizioniDisponibili", urlPatterns = {"/RipetizioniDisponibili"})
 public class RipetizioniDisponibili extends HttpServlet {
 
     @Override

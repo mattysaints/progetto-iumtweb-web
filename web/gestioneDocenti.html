@@ -90,7 +90,7 @@
            methods: {
                getDocenti: function () {
                    var self = this;
-                   $.get("/GestioneDocenti", "visualizzare", function(data) {
+                   $.get("/progetto_ium_tweb2/GestioneDocenti", "visualizzare", function(data) {
                        self.docenti = data;
                    });
                }
@@ -99,10 +99,9 @@
    </script>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <!-- vue development version, includes helpful console warnings -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<!-- librerie jquery -->
-<script src="jquery/jquery.js" ></script>
 <!-- librerie vue -->
 <script src="vue/vue.min.js" ></script>
 <!-- librerie bootstrap -->
