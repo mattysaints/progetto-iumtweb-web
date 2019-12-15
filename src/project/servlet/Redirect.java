@@ -45,6 +45,9 @@ public class Redirect extends HttpServlet {
                 case "gestioneDocenti":
                     rd = context.getRequestDispatcher("/gestioneDocenti.html");
                     break;
+                case "gestioneCorsi" :
+                    rd= context.getRequestDispatcher("/gestioneCorsi.html");
+                    break;
                 default:
             }
             if (rd != null)
