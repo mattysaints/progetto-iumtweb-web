@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 
 /**
@@ -55,6 +54,22 @@ public class Login extends HttpServlet {
      * @throws ServletException
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        /* Modifiche Dawoz
+        PrintWriter out = response.getWriter();
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        Utente utente = DAO.queryUtente(new Utente(username, password, null));
+        if (utente == null)
+            out.println("failure");
+        else {
+            HttpSession session = request.getSession();
+            session.setAttribute("username", utente.getAccount());
+            session.setAttribute("admin", utente.isAdmin());
+            out.println("success");
+        }
+        out.close(); */
+
         HttpSession session = request.getSession();
         //response.setContentType("application/json");
         //PrintWriter out = response.getWriter();
