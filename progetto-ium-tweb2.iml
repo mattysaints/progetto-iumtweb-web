@@ -19,8 +19,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="Tomcat 7.0.92" level="application_server_libraries" />
-    <orderEntry type="library" name="mysql-connector-java-5.1.44-bin" level="project" />
-    <orderEntry type="library" name="gson-2.8.6" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.8.6" level="project" />
+    <orderEntry type="library" exported="" name="mysql-connector-java-5.1.44-bin" level="application" />
+    <orderEntry type="library" exported="" name="gson-2.6.2" level="application" />
+    <orderEntry type="library" name="jsp-api" level="application" />
   </component>
 </module>
