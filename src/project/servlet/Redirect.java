@@ -32,7 +32,7 @@ public class Redirect extends HttpServlet {
         if (session == null) { //sessione scaduta
             request.setAttribute("sessionExpired", true);
             rd = context.getRequestDispatcher("/loginPage.html");
-            rd.include(request, response); //non si blocca qua
+            rd.forward(request, response); //non si blocca qua
         }
 
         if (redirect != null) {
