@@ -1,6 +1,7 @@
 package project.servlet;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import project.servlet.model.DAO;
 import project.servlet.model.Docente;
 
@@ -33,7 +34,7 @@ public class GestioneDocenti extends HttpServlet {
    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       HttpSession session = request.getSession(false);
       if (session == null) {
-         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("Login");
+         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/loginPage.html");
          requestDispatcher.include(request, response);
       }
       assert session != null;
@@ -62,7 +63,7 @@ public class GestioneDocenti extends HttpServlet {
             case "visualizzare":
                response.setContentType("application/json");
                List<Docente> doc = DAO.getDocenti();
-               String jsonDoc = json.toJson(doc, Docente.class);
+               String jsonDoc = json.toJson(doc, new TypeToken<List<Docente>>(){}.getType());
                out.print(jsonDoc);
                break;
             default:
@@ -74,6 +75,18 @@ public class GestioneDocenti extends HttpServlet {
          //non hai i permessi di admin
          throw new ServletException("Non hai i permessi di amministratore!");
       }
+
+
+/*
+      COSI FUNZIONA: ho provato con meno roba per semplificare
+
+      response.setContentType("application/json");
+      PrintWriter out = response.getWriter();
+      List<Docente> doc = DAO.getDocenti();
+      String jsonDoc = json.toJson(doc, new TypeToken<List<Docente>>(){}.getType());
+      out.print(jsonDoc);
+
+ */
 
    }
 
