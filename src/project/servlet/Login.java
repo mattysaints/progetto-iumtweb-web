@@ -64,12 +64,12 @@ public class Login extends HttpServlet {
 
         Utente utente = DAO.queryUtente(new Utente(username, password, null));
         if (utente == null)
-            out.println(gson.toJson("failure"));
+            out.print(gson.toJson("failure"));
         else {
             HttpSession session = request.getSession();
             session.setAttribute("username", utente.getAccount());
             session.setAttribute("admin", utente.isAdmin());
-            out.println(gson.toJson("success"));
+            out.print(gson.toJson("success"));
         }
         out.close();
     }
