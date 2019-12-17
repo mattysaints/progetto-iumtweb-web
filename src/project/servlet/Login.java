@@ -1,6 +1,8 @@
 package project.servlet;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import netscape.javascript.JSObject;
 import project.servlet.model.DAO;
 import project.servlet.model.Utente;
 
@@ -21,9 +23,9 @@ import java.io.PrintWriter;
  *  - username: username dell'utente che ha fatto il login
  *  - password: password utente
  *
- *  Stampa:
- *   - null se l'utente non è registrato
- *   -l'oggetto session in formato Json
+ *  Stampa (JSON):
+ *   - failure se username e password non corrispondono a nessun utente registrato
+ *   - success l'utente è registrato
  *
  *  Parametri della sessione:
  *  - username: username dell'utente associato alla sessione
@@ -35,7 +37,7 @@ public class Login extends HttpServlet {
     /**
      * Inizializza la servlet
      *
-     * @throws ServletException
+     * @throws ServletException: override
      */
     @Override
     public void init() throws ServletException {
@@ -48,49 +50,28 @@ public class Login extends HttpServlet {
      * - in caso negativo stampa null
      * - in caso positivo salva la sessione utente (utente, isAdmin) e la stampa l'id della sessione
      *
-     * @param request
-     * @param response
-     * @throws IOException
-     * @throws ServletException
+     * @param request: HttpServletRequest
+     * @param response: HttpServletResponse
+     * @throws IOException: override
+     * @throws ServletException: override
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        /* Modifiche Dawoz
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        Gson gson = new Gson();
 
         Utente utente = DAO.queryUtente(new Utente(username, password, null));
         if (utente == null)
-            out.println("failure");
+            out.println(gson.toJson("failure"));
         else {
             HttpSession session = request.getSession();
             session.setAttribute("username", utente.getAccount());
             session.setAttribute("admin", utente.isAdmin());
-            out.println("success");
+            out.println(gson.toJson("success"));
         }
-        out.close(); */
-
-        HttpSession session = request.getSession();
-        //response.setContentType("application/json");
-        //PrintWriter out = response.getWriter();
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        Utente utente = DAO.queryUtente(new Utente(username, password, null));
-        if (utente == null) {
-            session.invalidate();
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/loginPage.html");
-            rd.include(request,response);
-            //out.println((String) null);
-        } else {
-            //login con successo
-            session.setAttribute("username", utente.getAccount());
-            session.setAttribute("admin", utente.isAdmin());
-            RequestDispatcher rd;
-            rd = getServletContext().getRequestDispatcher("/Redirect");
-            rd.forward(request,response);
-            //String json = gson.toJson(session);
-            //out.println(json);
-        }
+        out.close();
     }
 
     // <editor-fold defaultstate="collapsed" desc=" - Metodi HttpServlet - " >
