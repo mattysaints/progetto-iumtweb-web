@@ -7,6 +7,8 @@
     <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
     <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <script src="vue/vue.min.js"></script>
+    <script src="jquery/jquery.js"></script>
     <title>Homepage</title>
 </head>
 <body>
@@ -30,7 +32,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Visualizza le tue prenotazioni</a>
             </li>
-            <li class="nav-item dropdown">
+            <li v-if="admin" class="nav-item dropdown">
                 <!-- Questa sezione sara visibile solo dagli amministratori -->
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Amministratore
@@ -46,7 +48,7 @@
         </ul>
         <ul class="nav navbar-nav">
             <!-- Nome utente aggiunto dinamicamente -->
-            <p class="navbar-text text-muted my-0 mr-2">Benvenuto, Utente </p>
+            <p class="navbar-text text-muted my-0 mr-2">Benvenuto/a, {{username}}</p>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img src="img/user.png" width="25px" alt="User logo"/>
@@ -105,6 +107,18 @@
         <a href="#"> Ripetizioni.it</a>
     </div>
 </footer>
+
+<script>
+    var $username = sessionStorage.getItem("username");
+    var $admin = sessionStorage.getItem("admin") === "true";
+    var loader = new Vue({
+        el: "#navbarSupportedContent",
+        data: {
+            username: $username,
+            admin: $admin
+        }
+    })
+</script>
 
 </body>
 </html>

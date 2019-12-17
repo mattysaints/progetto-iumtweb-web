@@ -53,24 +53,28 @@ public class Login extends HttpServlet {
      * @param request: HttpServletRequest
      * @param response: HttpServletResponse
      * @throws IOException: override
-     * @throws ServletException: override
      */
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         Gson gson = new Gson();
 
+        JsonObject jsonObject = new JsonObject();
         Utente utente = DAO.queryUtente(new Utente(username, password, null));
-        if (utente == null)
-            out.print(gson.toJson("failure"));
-        else {
+        if (utente == null) {
+            jsonObject.addProperty("result", "failure");
+            jsonObject.addProperty("admin", false);
+        } else {
             HttpSession session = request.getSession();
             session.setAttribute("username", utente.getAccount());
             session.setAttribute("admin", utente.isAdmin());
-            out.print(gson.toJson("success"));
+            jsonObject.addProperty("result", "success");
+            jsonObject.addProperty("admin", utente.isAdmin());
         }
+        out.print(gson.toJson(jsonObject));
+        out.flush();
         out.close();
     }
 

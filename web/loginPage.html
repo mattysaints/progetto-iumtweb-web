@@ -70,17 +70,23 @@
          link: "/progetto_ium_tweb2/Login",
          username: "",
          password: "",
-         result: ""
+         result: "",
+         admin: ""
       },
       methods: {
          login : function () {
             var self = this;
+            var $label = $("#label");
             $.post(this.link, {username: self.username, password: self.password}, data => {
-               self.result = data;
+               self.result = data.result;
+               self.admin = data.admin;
                if (self.result === "failure")
-                  $("#label").text("Nome utente o password inseriti non corretti");
-               else
+                  $label.text("Nome utente o password inseriti non corretti");
+               else {
+                  sessionStorage.setItem("username", self.username);
+                  sessionStorage.setItem("admin", self.admin);
                   $("#redirect").submit();
+               }
             });
          }
       }
