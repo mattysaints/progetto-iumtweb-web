@@ -32,6 +32,7 @@ public class GestioneDocenti extends HttpServlet {
     * @throws IOException
     */
    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      /*
       HttpSession session = request.getSession(false);
       if (session == null) {
          RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/loginPage.html");
@@ -77,16 +78,16 @@ public class GestioneDocenti extends HttpServlet {
       }
 
 
-/*
-      COSI FUNZIONA: ho provato con meno roba per semplificare
+       */
+
+
+      // COSI FUNZIONA: ho provato con meno roba per semplificare
 
       response.setContentType("application/json");
       PrintWriter out = response.getWriter();
       List<Docente> doc = DAO.getDocenti();
       String jsonDoc = json.toJson(doc, new TypeToken<List<Docente>>(){}.getType());
       out.print(jsonDoc);
-
- */
 
    }
 
