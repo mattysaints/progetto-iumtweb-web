@@ -10,16 +10,6 @@
             text-decoration-color: lightseagreen;
         }
     </style>
-
-    <!-- librerie bootstrap -->
-    <script src="bootstrap-4.4.1-dist/js/popper.min.js" ></script>
-    <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
-    <script src="bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
-    <!-- librerie jquery -->
-    <script src="jquery/jquery.js" ></script>
-    <!-- librerie vue -->
-    <script src="vue/vue.min.js" ></script>
-
     <title>Gestione Corsi</title>
 </head>
 <body>
@@ -76,36 +66,40 @@
     <!-- lista di Corsi -->
     <div id="listC" >
         <ul class="list-group">
-            <li class="list-group-item" v-for="corso in data" >
+            <li class="list-group-item" v-for="corso in corsi">
                 {{corso.titolo}}
             </li>
         </ul>
     </div>
-</div>
-<script>
-    var listCorsi = new Vue({
-        el: '#listC',
-        data: {
-            result: "",
-            data: []
-        },
-        methods: {
-            getCorsi: function () {
-                var self = this;
-                $.post("/progetto_ium_tweb2/GestioneCorsi", {op: "visualizzare"}, data => {
-                    self.result = data.result;
-                    self.data = data.data;
-                });
+    <script>
+        var listC = new Vue({
+            el: '#listC',
+            data: {
+                corsi: []
+            },
+            mounted() {this.getCorsi()},
+            methods: {
+                getCorsi: function () {
+                    var self = this;
+                    $.get("/progetto_ium_tweb2/GestioneCorsi", "visualizzare", function(data) {
+                        self.corsi = data;
+                    });
+                }
             }
-        },
-        mounted() {
-            this.getCorsi()
-        }
-    })
-</script>
+        })
+    </script>
+</div>
 
-
-
+<!-- vue development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- librerie jquery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- librerie vue -->
+<script src="vue/vue.min.js" ></script>
+<!-- librerie bootstrap -->
+<script src="bootstrap-4.4.1-dist/js/popper.min.js" ></script>
+<script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
+<script src="bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

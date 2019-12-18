@@ -69,13 +69,16 @@
         </div>
         <!-- Fine sezione amministratore -->
     </nav>
+
     <!-- lista delle Ripetizioni Disponibili -->
     <div id="#listR" >
         <ul class="list-group">
             <li class="list-group-item" >
                 <p v-for="ripetizione in ripetizioni" >
                     {{ripetizione.docente}}&nbsp;{{ripetizione.corso}}&nbsp;{{ripetizione.giorno}}&nbsp;{{ripetizione.slot}} &nbsp;
-                    <button class="btn btn-primary" @click="Prenota" type="submit">Prenota</button>
+                    <form action="/OpSuPrenotazioni">
+                        <button name="op" type="submit" class="btn btn-primary">Prenota</button>
+                    </form>
                 </p>
             </li>
         </ul>
@@ -90,7 +93,7 @@
             methods: {
                 getRipetizioniDisponibili: function () {
                     var self = this;
-                    $.get("/RipetizioniDisponibili", function(data) {
+                    $.get("/progetto_ium_tweb2/RipetizioniDisponibili", function(data) {
                         self.ripetizioni = data;
                     });
                 }

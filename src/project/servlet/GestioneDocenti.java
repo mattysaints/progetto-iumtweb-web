@@ -32,7 +32,7 @@ public class GestioneDocenti extends HttpServlet {
     * @throws IOException
     */
    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      HttpSession session = request.getSession(false);
+      /*HttpSession session = request.getSession(false);
       if (session == null) {
          RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/loginPage.html");
          requestDispatcher.include(request, response);
@@ -40,7 +40,7 @@ public class GestioneDocenti extends HttpServlet {
       assert session != null;
       boolean admin = (boolean) session.getAttribute("admin");
       if(admin) {
-         String op = (String) request.getParameter("op");
+         String op = (String) request.getAttribute("op");
          Docente docente = json.fromJson(request.getParameter("docente"), Docente.class);
          PrintWriter out = response.getWriter();
          switch (op) {
@@ -75,8 +75,17 @@ public class GestioneDocenti extends HttpServlet {
          //non hai i permessi di admin
          throw new ServletException("Non hai i permessi di amministratore!");
       }
-   }
 
+      */
+      //COSI FUNZIONA: ho provato con meno roba per semplificare
+
+      response.setContentType("application/json");
+      PrintWriter out = response.getWriter();
+      List<Docente> doc = DAO.getDocenti();
+      String jsonDoc = json.toJson(doc, new TypeToken<List<Docente>>(){}.getType());
+      out.print(jsonDoc);
+
+   }
    // <editor-fold defaultstate="collapsed" desc=" - Metodi HttpServlet - " >
 
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

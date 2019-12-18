@@ -94,7 +94,6 @@ public class GestioneCorsi extends HttpServlet {
         out.flush();
         out.close();
     }
-
     // <editor-fold defaultstate="collapsed" desc="- Metodi HttpServlet -">
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
