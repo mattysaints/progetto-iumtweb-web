@@ -34,7 +34,7 @@ public class DAO {
         Utente result = null;
         try {
             connection = DriverManager.getConnection(url, user, password);
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ripetizioni.utente WHERE account =? AND password=?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ripetizioni.utente WHERE BINARY account =? AND BINARY password =?;");
             statement.setString(1, utente.getAccount());
             statement.setString(2, utente.getPassword());
             ResultSet rs = statement.executeQuery();
@@ -547,7 +547,7 @@ public class DAO {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM ripetizioni.corso;");
             while (rs.next()){
-                Corso corso = new Corso(rs.getString(0));
+                Corso corso = new Corso(rs.getString("titolo"));
                 result.add(corso);
             }
         } catch (SQLException e) {
