@@ -24,9 +24,9 @@
    <div class="container-fluid mt-5 w-50" >
    <div id="loginCard" class="card">
       <article class="card-body">
-         <h4 class="card-title text-center mb-4 mt-1">Login</h4>
+         <h1 class="card-title text-center mb-4 mt-1">Ripetizioni</h1>
          <hr>
-         <p class="text-success text-center">Ripetizioni</p>
+         <p class="text-secondary text-center">Login</p>
          <form id="app" action="javascript:app.login()">
             <p id="label" class="text-danger"></p>
             <div class="form-group">
@@ -34,7 +34,7 @@
                   <div class="input-group-prepend">
                      <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                   </div>
-                  <input name="username" v-model="username" class="form-control" placeholder="Username" type="text" autofocus="autofocus" aria-required="true" required aria-label="usernameInput">
+                  <input id="username" name="username" v-model="username" class="form-control" placeholder="Username" type="text" autofocus="autofocus" aria-required="true" required aria-label="usernameInput">
                </div> <!-- input-group.// -->
             </div> <!-- form-group// -->
             <div class="form-group">
@@ -42,7 +42,7 @@
                   <div class="input-group-prepend">
                      <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                   </div>
-                  <input name="password" v-model="password" class="form-control" placeholder="******" type="password" aria-required="true" required aria-label="passwordInput">
+                  <input id="password" name="password" v-model="password" class="form-control" placeholder="******" type="password" aria-required="true" required aria-label="passwordInput">
                </div> <!-- input-group.// -->
             </div> <!-- form-group// -->
             <div class="form-group">
@@ -75,14 +75,16 @@
       },
       methods: {
          login : function () {
-            var self = this;
-            var $label = $("#label");
+            const self = this;
+            const $label = $("#label");
             $.post(this.link, {username: self.username, password: self.password}, data => {
                self.result = data.result;
                self.admin = data.admin;
-               if (self.result === "failure")
+               if (self.result === "failure") {
                   $label.text("Nome utente o password inseriti non corretti");
-               else {
+                  $("#username").val("");
+                  $("#password").val("");
+               } else {
                   sessionStorage.setItem("username", self.username);
                   sessionStorage.setItem("admin", self.admin);
                   $("#redirect").submit();
