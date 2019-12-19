@@ -22,7 +22,7 @@ import java.util.List;
 
 @WebServlet(name = "GestioneCorsi", urlPatterns = {"/GestioneCorsi"})
 public class GestioneCorsi extends HttpServlet {
-    private static final Gson gson = new Gson();
+    private static final Gson json = new Gson();
 
     @Override
     public void init() throws ServletException {
@@ -37,53 +37,38 @@ public class GestioneCorsi extends HttpServlet {
      * @throws IOException
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-/*
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/loginPage.html");
-            requestDispatcher.forward(request, response);
-        }
-
-        response.setContentType("application/json");
+        String op = (String) request.getParameter("op");
+        Corso corso = json.fromJson(request.getParameter("corso"), Corso.class);
         PrintWriter out = response.getWriter();
-        boolean admin = (boolean) session.getAttribute("admin");
-
-        JsonObject jsonResponse = new JsonObject();
-        JsonElement data = null;
-        boolean success = false;
-
-        if(admin){
-            String op = (String) request.getAttribute("op");
-            Corso corso = gson.fromJson(request.getParameter("corso"), Corso.class);
-            switch (op) {
-                case "inserire":
-                    if (corso != null)
-                        success = DAO.insertCorso(corso);
-                    break;
-                case "eliminare":
-                    if (corso != null)
-                        success = DAO.deleteCorso(corso);
-                    break;
-                case "visualizzare":
-                    List<Corso> corsi = DAO.getCorsi();
-                    success = true;
-                    data = gson.toJsonTree(corsi, new TypeToken<List<Corso>>(){}.getType());
-            }
-
-            if(success)
-                jsonResponse.addProperty("result", "success");
-            else
-                jsonResponse.addProperty("result", "failure");
-            jsonResponse.add("data", data);
-        } else
-            jsonResponse.addProperty("result", "failure");
-
-        out.print(jsonResponse);
+        switch (op) {
+            case "inserire":
+                if(corso==null || corso.getTitolo().equals("")) {
+                    out.print(false);
+                } else {
+                    boolean corretto = DAO.insertCorso(corso);
+                    out.print(corretto);
+                }
+                break;
+            case "eliminare":
+                if(corso==null || corso.getTitolo().equals("")) {
+                    out.print(false);
+                } else {
+                    boolean corretto = DAO.deleteCorso(corso);
+                    out.print(corretto);
+                }
+                break;
+            case "visualizzare":
+                response.setContentType("application/json");
+                List<Corso> cor = DAO.getCorsi();
+                String jsonDoc = json.toJson(cor, new TypeToken<List<Corso>>(){}.getType());
+                out.print(jsonDoc);
+                break;
+            default:
+                throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
+        }
         out.flush();
         out.close();
-
-*/
-        response.setContentType("application/json");
+        /*response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         JsonObject jsonResponse = new JsonObject();
         List<Corso> corsi = DAO.getCorsi();
@@ -92,7 +77,7 @@ public class GestioneCorsi extends HttpServlet {
         jsonResponse.add("data", data);
         out.print(jsonResponse);
         out.flush();
-        out.close();
+        out.close();*/
     }
     // <editor-fold defaultstate="collapsed" desc="- Metodi HttpServlet -">
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

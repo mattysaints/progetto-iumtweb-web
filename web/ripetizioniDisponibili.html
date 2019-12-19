@@ -71,18 +71,21 @@
     </nav>
 
     <!-- lista delle Ripetizioni Disponibili -->
-    <div id="#listR" >
-        <ul class="list-group">
-            <li class="list-group-item" >
+    <form action="/OpSuPrenotazioni">
+        <div id="#listR" >
+            <ul class="list-group list-group-horizontal">
                 <p v-for="ripetizione in ripetizioni" >
-                    {{ripetizione.docente}}&nbsp;{{ripetizione.corso}}&nbsp;{{ripetizione.giorno}}&nbsp;{{ripetizione.slot}} &nbsp;
-                    <form action="/OpSuPrenotazioni">
-                        <button name="op" type="submit" class="btn btn-primary">Prenota</button>
-                    </form>
+                <li class="list-group-item" id="nomeDoc">{{ripetizione.docente.nome}}</li>
+                <li class="list-group-item" id="cognomeDoc">{{ripetizione.docente.cognome}}</li>
+                <li class="list-group-item" id="titolo">{{ripetizione.corso.titolo}}</li>
+                <li class="list-group-item" id="giorno">{{ripetizione.giorno}}</li>
+                <li class="list-group-item" id="slot">{{ripetizione.slot}} </li>
+                <button id="butOp" name="op" type="submit" class="btn btn-primary">Prenota</button>
                 </p>
-            </li>
-        </ul>
-    </div>
+            </ul>
+        </div>
+    </form>
+
     <script>
         var listR = new Vue({
             el: '#listR',

@@ -52,7 +52,6 @@ public class RipetizioniDisponibili extends HttpServlet {
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("Login");
             requestDispatcher.include(request, response);
         }
-
         List<Prenotazione> disponibili = DAO.getRipetizioniDisponibili();
         Gson gson = new Gson();
         Type type = new TypeToken<List<Prenotazione>>(){}.getType();
@@ -61,7 +60,6 @@ public class RipetizioniDisponibili extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println(jsonObject);
     }
-
     // <editor-fold defaultstate="collapsed" desc="- Metodi HttpServlet -">
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);

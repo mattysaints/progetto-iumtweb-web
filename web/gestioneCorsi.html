@@ -10,6 +10,16 @@
             text-decoration-color: lightseagreen;
         }
     </style>
+    <!-- vue development version, includes helpful console warnings -->
+    <script src="vue/vue.min.js"></script>
+    <!-- librerie jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- librerie vue -->
+    <script src="vue/vue.min.js" ></script>
+    <!-- librerie bootstrap -->
+    <script src="bootstrap-4.4.1-dist/js/popper.min.js" ></script>
+    <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
+    <script src="bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
     <title>Gestione Corsi</title>
 </head>
 <body>
@@ -65,12 +75,13 @@
     </nav>
     <!-- lista di Corsi -->
     <div id="listC" >
-        <ul class="list-group">
+        <ol class="list-group">
             <li class="list-group-item" v-for="corso in corsi">
                 {{corso.titolo}}
             </li>
-        </ul>
+        </ol>
     </div>
+
     <script>
         var listC = new Vue({
             el: '#listC',
@@ -81,7 +92,7 @@
             methods: {
                 getCorsi: function () {
                     var self = this;
-                    $.get("/progetto_ium_tweb2/GestioneCorsi", "visualizzare", function(data) {
+                    $.get("/progetto_ium_tweb2/GestioneCorsi", {op:"visualizzare"}, function(data) {
                         self.corsi = data;
                     });
                 }
@@ -89,17 +100,6 @@
         })
     </script>
 </div>
-
-<!-- vue development version, includes helpful console warnings -->
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<!-- librerie jquery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<!-- librerie vue -->
-<script src="vue/vue.min.js" ></script>
-<!-- librerie bootstrap -->
-<script src="bootstrap-4.4.1-dist/js/popper.min.js" ></script>
-<script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
-<script src="bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
