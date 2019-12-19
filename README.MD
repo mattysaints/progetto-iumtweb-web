@@ -111,7 +111,7 @@ Mattia:
 ### Visualizzazione di tutte le prenotazioni del calendario
 Marco:
 - Solo admin
-- visualizzazione elenco tutte ripetizioni attive
+- visualizzazione elenco tutte ripetizioni attive, effettuate o cancellate
 
 ----------------------
 # ANDROID

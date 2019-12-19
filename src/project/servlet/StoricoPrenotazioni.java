@@ -42,10 +42,6 @@ public class StoricoPrenotazioni extends HttpServlet {
     */
    private void esegui(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       HttpSession session = request.getSession(false);
-      if (session == null) {
-         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/Login");
-         requestDispatcher.include(request, response);
-      }
       Utente u = json.fromJson(request.getParameter("utente"), Utente.class);
       response.setContentType("application/json");
       PrintWriter out = response.getWriter();

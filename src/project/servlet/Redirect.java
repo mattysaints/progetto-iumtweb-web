@@ -34,21 +34,52 @@ public class Redirect extends HttpServlet {
             rd = context.getRequestDispatcher("/loginPage.html");
             rd.forward(request, response); //non si blocca qua
         }
-
+        boolean admin;
         if (redirect != null) {
             switch (redirect) {
                 case "homepage":
                     rd = context.getRequestDispatcher("/homepage.html");
                     break;
-              /*  case "prenota":
-                    rd = context.getRequestDispatcher("loginPage.html");
-                    break;*/
                 case "gestioneDocenti":
-                    rd = context.getRequestDispatcher("/gestioneDocenti.html");
+                    assert session != null;
+                    admin = (boolean) session.getAttribute("admin");
+                    if(admin) {
+                        rd = context.getRequestDispatcher("/gestioneDocenti.html");
+                    } else {
+                        //non hai i permessi di admin
+                        throw new ServletException("Non hai i permessi di amministratore!");
+                    }
                     break;
                 case "gestioneCorsi" :
-                    rd= context.getRequestDispatcher("/gestioneCorsi.html");
+                    assert session != null;
+                    admin = (boolean) session.getAttribute("admin");
+                    if(admin) {
+                        rd = context.getRequestDispatcher("/gestioneCorsi.html");
+                    } else {
+                        //non hai i permessi di admin
+                        throw new ServletException("Non hai i permessi di amministratore!");
+                    }
                     break;
+                case "storicoGenerale":
+                    assert session != null;
+                    admin = (boolean) session.getAttribute("admin");
+                    if(admin) {
+                       // rd = context.getRequestDispatcher("/.html");
+                    } else {
+                        //non hai i permessi di admin
+                        throw new ServletException("Non hai i permessi di amministratore!");
+                    }
+                    break;
+                case "storicoUtente":
+                    if(request.getAttribute("utente")!=null) {
+                        // rd = context.getRequestDispatcher("/.html");
+                    } else {
+                        //non hai i permessi di admin
+                        throw new ServletException("Non hai specificato l'utente!");
+                    }
+                    break;
+                case "prenota":
+                    rd = context.getRequestDispatcher("/ripetizioniDisponibili.html");
                 default:
             }
             //session.invalidate(); //prova

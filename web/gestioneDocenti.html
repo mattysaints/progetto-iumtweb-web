@@ -3,23 +3,26 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!-- librerie bootstrap -->
+   <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
+   <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
+   <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+   <!-- development version, includes helpful console warnings -->
+   <script src="vue/vue.min.js"></script>
+   <!-- librerie jquery -->
+   <script src="jquery/jquery.min.js"> </script>
+
+
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
    <style type="text/css" media="screen">
       #selected {
-         text-decoration-color: lightseagreen;
+         text-decoration-color: yellow;
+      }
+      div#listDoc ul {
+         text-align-all: right;
       }
    </style>
-
-   <!-- librerie bootstrap -->
-   <script src="bootstrap-4.4.1-dist/js/popper.min.js" ></script>
-   <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
-   <script src="bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
-   <!-- librerie jquery -->
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-   <!-- librerie vue -->
-   <script src="vue/vue.min.js" ></script>
-
    <title>
       Gestione Docenti
    </title>
@@ -49,13 +52,13 @@
 
             <!-- Questa sezione sara visibile solo dagli amministratori -->
             <li class="nav-item">
-               <a class="nav-link active" href="#">Gestione corsi</a>
+               <a class="nav-link " href="#">Gestione corsi</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link active" href="#" aria-selected="true" id="selected">Gestione docenti</a>
+               <a class="nav-link " href="#" aria-selected="true" id="selected">Gestione docenti</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link active" href="#">Visualizza tutte le prenotazioni</a>
+               <a class="nav-link " href="#">Visualizza tutte le prenotazioni</a>
             </li>
             <!-- fine sezione amministratori  -->
          </ul>
@@ -78,12 +81,32 @@
 
    <!-- lista di docenti -->
    <div id="listDoc" >
-      <ul class="list-group">
-         <li class="list-group-item" v-for="docente in docenti" >
+      <ol class="list-group">
+         <li class="list-group-item" v-for="docente in docenti"  >
               {{docente.cognome}} {{docente.nome}}
          </li>
-      </ul>
+      </ol>
    </div>
+   <!--<div class="list-group" id="listDoc" >
+      <div v-for="docente in docenti">
+         <a href="#" class="list-group-item" onclick="apriAzioni()" >
+            {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded">n° corsi</span>
+         </a>
+         <div class="list-group" id="listInsegn">
+            <a href="#" class="list-group-item">
+               Cor1
+            </a>
+            <a href="#" class="list-group-item">
+               Cor2
+            </a>
+         </div>
+      </div>
+   </div>-->
+   <script>
+      function apriAzioni() {
+
+      }
+   </script>
    <script>
        var listDoc = new Vue({
            el: '#listDoc',
@@ -94,7 +117,7 @@
            methods: {
                getDocenti: function () {
                    var self = this;
-                   $.get("/progetto_ium_tweb2/GestioneDocenti", "visualizzare", function(data) {
+                   $.get("/progetto_ium_tweb2/GestioneDocenti", {op: "visualizzare"}, function(data) {
                        self.docenti = data;
                    });
                }
@@ -102,5 +125,6 @@
        })
    </script>
 </div>
+
 </body>
 </html>

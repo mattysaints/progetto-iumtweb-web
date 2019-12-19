@@ -32,59 +32,37 @@ public class GestioneDocenti extends HttpServlet {
     * @throws IOException
     */
    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      /*HttpSession session = request.getSession(false);
-      if (session == null) {
-         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/loginPage.html");
-         requestDispatcher.include(request, response);
-      }
-      assert session != null;
-      boolean admin = (boolean) session.getAttribute("admin");
-      if(admin) {
-         String op = (String) request.getAttribute("op");
-         Docente docente = json.fromJson(request.getParameter("docente"), Docente.class);
-         PrintWriter out = response.getWriter();
-         switch (op) {
-            case "inserire":
-               if(docente==null || docente.getCognome().equals("") || docente.getNome().equals("")) {
-                  out.print(false);
-               } else {
-                  boolean corretto = DAO.insertDocente(docente);
-                  out.print(corretto);
-               }
-               break;
-            case "eliminare":
-               if(docente==null || docente.getCognome().equals("") || docente.getNome().equals("")) {
-                  out.print(false);
-               } else {
-                  boolean corretto = DAO.deleteDocente(docente);
-                  out.print(corretto);
-               }
-               break;
-            case "visualizzare":
-               response.setContentType("application/json");
-               List<Docente> doc = DAO.getDocenti();
-               String jsonDoc = json.toJson(doc, new TypeToken<List<Docente>>(){}.getType());
-               out.print(jsonDoc);
-               break;
-            default:
-               throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
-         }
-         out.flush();
-         out.close();
-      } else {
-         //non hai i permessi di admin
-         throw new ServletException("Non hai i permessi di amministratore!");
-      }
-
-      */
-      //COSI FUNZIONA: ho provato con meno roba per semplificare
-
-      response.setContentType("application/json");
+      String op = (String) request.getParameter("op");
+      Docente docente = json.fromJson(request.getParameter("docente"), Docente.class);
       PrintWriter out = response.getWriter();
-      List<Docente> doc = DAO.getDocenti();
-      String jsonDoc = json.toJson(doc, new TypeToken<List<Docente>>(){}.getType());
-      out.print(jsonDoc);
-
+      switch (op) {
+         case "inserire":
+            if(docente==null || docente.getCognome().equals("") || docente.getNome().equals("")) {
+               out.print(false);
+            } else {
+               boolean corretto = DAO.insertDocente(docente);
+               out.print(corretto);
+            }
+            break;
+         case "eliminare":
+            if(docente==null || docente.getCognome().equals("") || docente.getNome().equals("")) {
+               out.print(false);
+            } else {
+               boolean corretto = DAO.deleteDocente(docente);
+               out.print(corretto);
+            }
+            break;
+         case "visualizzare":
+            response.setContentType("application/json");
+            List<Docente> doc = DAO.getDocenti();
+            String jsonDoc = json.toJson(doc, new TypeToken<List<Docente>>(){}.getType());
+            out.print(jsonDoc);
+            break;
+         default:
+            throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
+      }
+      out.flush();
+      out.close();
    }
    // <editor-fold defaultstate="collapsed" desc=" - Metodi HttpServlet - " >
 
