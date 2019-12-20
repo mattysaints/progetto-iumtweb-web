@@ -12,10 +12,8 @@ import java.io.IOException;
 public class Logout extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session == null)
-            throw new ServletException("Login non effettuato");
-
-        session.invalidate();
+        if (session != null) //sessione non scaduta
+            session.invalidate();
         getServletContext().getRequestDispatcher("/loginPage.html").forward(request, response);
     }
 
