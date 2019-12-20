@@ -30,23 +30,26 @@ public class Redirect extends HttpServlet {
         HttpSession session = request.getSession(false);
         String redirect = request.getParameter("redirect"); //setAttribute!=setParameter
         RequestDispatcher rd = null;
+        boolean admin=true;
         if(!DEBUG) {
             if (session == null) { //sessione scaduta
                 request.setAttribute("sessionExpired", true);
                 rd = context.getRequestDispatcher("/loginPage.html");
                 rd.forward(request, response); //non si blocca qua
             }
+            assert session != null;
+            admin = (boolean) session.getAttribute("admin");
+        } else { //DEBUG
+            session = request.getSession();
+            session.setAttribute("admin", true);
         }
-        boolean admin = (boolean) session.getAttribute("admin");
-        if (DEBUG)
-            admin= true;
+
         if (redirect != null) {
             switch (redirect) {
                 case "homepage":
                     rd = context.getRequestDispatcher("/homepage.html");
                     break;
                 case "gestioneDocenti":
-                    assert session != null;
                     if(admin) {
                         rd = context.getRequestDispatcher("/gestioneDocenti.html");
                     } else {
@@ -55,7 +58,6 @@ public class Redirect extends HttpServlet {
                     }
                     break;
                 case "gestioneCorsi" :
-                    assert session != null;
                     if(admin) {
                         rd = context.getRequestDispatcher("/gestioneCorsi.html");
                     } else {
@@ -64,7 +66,6 @@ public class Redirect extends HttpServlet {
                     }
                     break;
                 case "storicoGenerale":
-                    assert session != null;
                     if(admin) {
                         rd = context.getRequestDispatcher("/storicoGenerale.html");
                     } else {
@@ -84,7 +85,6 @@ public class Redirect extends HttpServlet {
                     rd = context.getRequestDispatcher("/ripetizioniDisponibili.html");
                 default:
             }
-            //session.invalidate(); //prova
             if (rd != null)
                 rd.forward(request, response);
         }
