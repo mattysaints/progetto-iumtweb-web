@@ -12,22 +12,11 @@
    <script src="vue/vue.js"></script>
    <!-- librerie jquery -->
    <script src="jquery/jquery.min.js"> </script>
-
-   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-   <style type="text/css" media="screen">
-      #selected {
-         text-decoration-color: yellow;
-      }
-      div#listDoc ul {
-         text-align-all: right;
-      }
-   </style>
    <title>
-      Gestione Docenti
+      Prenotazioni
    </title>
 </head>
 <body>
-
 <div class="container-fluid" >
    <!-- barra di navigazione -->
    <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -79,35 +68,33 @@
       <!-- Fine sezione amministratore -->
    </nav>
 
-   <!-- lista di docenti -->
-   <div id="docenti">
-      <ol class="list-group-horizontal-md" id="azioni">
-         <button class="btn btn-primary" id="aggiungi">
-            Aggiungi
-         </button>
-         <button class="btn btn-primary" id="rimuovi">
-            Rimuovi
-         </button>
-         <button class="btn btn-primary" id="insegnamenti">
-            Insegnamenti
-         </button>
-      </ol>
-      <ol class="list-group" id="listDoc" >
-         <li class="list-group-item" v-for="docente in docenti"  >
-              {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded">n° corsi</span>
+   <!-- lista storico prenotazioni -->
+   <div id="listStor" >
+      <ol class="list-group">
+         <li class="list-group-item" v-for="prenot in prenotazioni" >
+             {{prenot.docente.cognome}} {{prenot.docente.nome}} {{prenot.corso.titolo}} {{prenot.utente.account}} {{prenot.giorno}} {{prenot.slot}} {{prenot.stato}}
          </li>
       </ol>
    </div>
-   <!--
-   <div id="listDoc" v-for="docente in docenti" v-bind:doc="docente">
-      <ol class="list-group" >
-         <box-docente></box-docente>
-      </ol>
-   </div>
-   -->
+   <script>
+       var listStor = new Vue({
+           el: '#listStor',
+           data: {
+               link: "/progetto_ium_tweb2/StoricoPrenotazioni",
+               prenotazioni: []
+           },
+           mounted() {this.getPrenot()},
+           methods: {
+               getPrenot: function () {
+                   var self = this;
+                   $.get(self.link, function(data) {
+                       self.prenotazioni = data ;
+                   });
+
+               }
+           }
+       })
+   </script>
 </div>
-
-<script src="gestioneDocenti.js"></script>
-
 </body>
 </html>

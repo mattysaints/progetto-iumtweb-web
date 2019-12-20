@@ -18,6 +18,7 @@ import java.io.IOException;
 @WebServlet(name = "Redirect", urlPatterns = {"/Redirect"})
 public class Redirect extends HttpServlet {
     private ServletContext context;
+    protected static final boolean DEBUG = true;
 
     @Override
     public void init() throws ServletException {
@@ -29,20 +30,26 @@ public class Redirect extends HttpServlet {
         HttpSession session = request.getSession(false);
         String redirect = request.getParameter("redirect"); //setAttribute!=setParameter
         RequestDispatcher rd = null;
-        if (session == null) { //sessione scaduta
-            request.setAttribute("sessionExpired", true);
-            rd = context.getRequestDispatcher("/loginPage.html");
-            rd.forward(request, response); //non si blocca qua
+        boolean admin=true;
+        if(!DEBUG) {
+            if (session == null) { //sessione scaduta
+                request.setAttribute("sessionExpired", true);
+                rd = context.getRequestDispatcher("/loginPage.html");
+                rd.forward(request, response); //non si blocca qua
+            }
+            assert session != null;
+            admin = (boolean) session.getAttribute("admin");
+        } else { //DEBUG
+            session = request.getSession();
+            session.setAttribute("admin", true);
         }
-        boolean admin;
+
         if (redirect != null) {
             switch (redirect) {
                 case "homepage":
                     rd = context.getRequestDispatcher("/homepage.html");
                     break;
                 case "gestioneDocenti":
-                    assert session != null;
-                    admin = (boolean) session.getAttribute("admin");
                     if(admin) {
                         rd = context.getRequestDispatcher("/gestioneDocenti.html");
                     } else {
@@ -51,8 +58,6 @@ public class Redirect extends HttpServlet {
                     }
                     break;
                 case "gestioneCorsi" :
-                    assert session != null;
-                    admin = (boolean) session.getAttribute("admin");
                     if(admin) {
                         rd = context.getRequestDispatcher("/gestioneCorsi.html");
                     } else {
@@ -61,10 +66,8 @@ public class Redirect extends HttpServlet {
                     }
                     break;
                 case "storicoGenerale":
-                    assert session != null;
-                    admin = (boolean) session.getAttribute("admin");
                     if(admin) {
-                       // rd = context.getRequestDispatcher("/.html");
+                        rd = context.getRequestDispatcher("/storicoGenerale.html");
                     } else {
                         //non hai i permessi di admin
                         throw new ServletException("Non hai i permessi di amministratore!");
@@ -82,7 +85,6 @@ public class Redirect extends HttpServlet {
                     rd = context.getRequestDispatcher("/ripetizioniDisponibili.html");
                 default:
             }
-            //session.invalidate(); //prova
             if (rd != null)
                 rd.forward(request, response);
         }
