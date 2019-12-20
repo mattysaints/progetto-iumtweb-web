@@ -10,16 +10,15 @@
             text-decoration-color: lightseagreen;
         }
     </style>
-    <!-- vue development version, includes helpful console warnings -->
-    <script src="vue/vue.min.js"></script>
-    <!-- librerie jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- librerie vue -->
-    <script src="vue/vue.min.js" ></script>
     <!-- librerie bootstrap -->
     <script src="bootstrap-4.4.1-dist/js/popper.min.js" ></script>
     <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
     <script src="bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
+    <!-- librerie jquery -->
+    <script src="jquery/jquery.min.js" ></script>
+    <!-- librerie vue -->
+    <script src="vue/vue.min.js" ></script>
+
     <title>Gestione Corsi</title>
 </head>
 <body>
@@ -75,31 +74,34 @@
     </nav>
     <!-- lista di Corsi -->
     <div id="listC" >
-        <ol class="list-group">
-            <li class="list-group-item" v-for="corso in corsi">
+        <ul class="list-group">
+            <li class="list-group-item" v-for="corso in data" >
                 {{corso.titolo}}
             </li>
-        </ol>
+        </ul>
     </div>
-
-    <script>
-        var listC = new Vue({
-            el: '#listC',
-            data: {
-                corsi: []
-            },
-            mounted() {this.getCorsi()},
-            methods: {
-                getCorsi: function () {
-                    var self = this;
-                    $.get("/progetto_ium_tweb2/GestioneCorsi", {op:"visualizzare"}, function(data) {
-                        self.corsi = data;
-                    });
-                }
-            }
-        })
-    </script>
 </div>
+<script>
+    var listCorsi = new Vue({
+        el: '#listC',
+        data: {
+            result: "",
+            data: []
+        },
+        methods: {
+            getCorsi: function () {
+                var self = this;
+                $.post("/progetto_ium_tweb2/GestioneCorsi", {op: "visualizzare"}, data => {
+                    self.result = data.result;
+                    self.data = data.data;
+                });
+            }
+        },
+        mounted() {
+            this.getCorsi()
+        }
+    })
+</script>
 
 </body>
 </html>
