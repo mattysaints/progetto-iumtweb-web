@@ -9,10 +9,9 @@
    <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
    <!-- development version, includes helpful console warnings -->
-   <script src="vue/vue.min.js"></script>
+   <script src="vue/vue.js"></script>
    <!-- librerie jquery -->
    <script src="jquery/jquery.min.js"> </script>
-
 
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
    <style type="text/css" media="screen">
@@ -28,6 +27,7 @@
    </title>
 </head>
 <body>
+
 <div class="container-fluid" >
    <!-- barra di navigazione -->
    <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -80,51 +80,34 @@
    </nav>
 
    <!-- lista di docenti -->
-   <div id="listDoc" >
-      <ol class="list-group">
+   <div id="docenti">
+      <ol class="list-group-horizontal-md" id="azioni">
+         <button class="btn btn-primary" id="aggiungi">
+            Aggiungi
+         </button>
+         <button class="btn btn-primary" id="rimuovi">
+            Rimuovi
+         </button>
+         <button class="btn btn-primary" id="insegnamenti">
+            Insegnamenti
+         </button>
+      </ol>
+      <ol class="list-group" id="listDoc" >
          <li class="list-group-item" v-for="docente in docenti"  >
-              {{docente.cognome}} {{docente.nome}}
+              {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded">n° corsi</span>
          </li>
       </ol>
    </div>
-   <!--<div class="list-group" id="listDoc" >
-      <div v-for="docente in docenti">
-         <a href="#" class="list-group-item" onclick="apriAzioni()" >
-            {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded">n° corsi</span>
-         </a>
-         <div class="list-group" id="listInsegn">
-            <a href="#" class="list-group-item">
-               Cor1
-            </a>
-            <a href="#" class="list-group-item">
-               Cor2
-            </a>
-         </div>
-      </div>
-   </div>-->
-   <script>
-      function apriAzioni() {
-
-      }
-   </script>
-   <script>
-       var listDoc = new Vue({
-           el: '#listDoc',
-           data: {
-               docenti: []
-           },
-           mounted() {this.getDocenti()},
-           methods: {
-               getDocenti: function () {
-                   var self = this;
-                   $.get("/progetto_ium_tweb2/GestioneDocenti", {op: "visualizzare"}, function(data) {
-                       self.docenti = data;
-                   });
-               }
-           }
-       })
-   </script>
+   <!--
+   <div id="listDoc" v-for="docente in docenti" v-bind:doc="docente">
+      <ol class="list-group" >
+         <box-docente></box-docente>
+      </ol>
+   </div>
+   -->
 </div>
+
+<script src="gestioneDocenti.js"></script>
 
 </body>
 </html>
