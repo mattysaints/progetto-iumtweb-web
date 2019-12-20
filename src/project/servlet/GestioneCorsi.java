@@ -8,11 +8,13 @@ import com.google.gson.reflect.TypeToken;
 import project.servlet.model.Corso;
 import project.servlet.model.DAO;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -34,7 +36,6 @@ public class GestioneCorsi extends HttpServlet {
      * @throws IOException
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-/*
         HttpSession session = request.getSession(false);
         if (session == null) {
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/loginPage.html");
@@ -50,7 +51,7 @@ public class GestioneCorsi extends HttpServlet {
         boolean success = false;
 
         if(admin){
-            String op = (String) request.getAttribute("op");
+            String op = (String) request.getParameter("op");
             Corso corso = gson.fromJson(request.getParameter("corso"), Corso.class);
             switch (op) {
                 case "inserire":
@@ -75,18 +76,6 @@ public class GestioneCorsi extends HttpServlet {
         } else
             jsonResponse.addProperty("result", "failure");
 
-        out.print(jsonResponse);
-        out.flush();
-        out.close();
-
-*/
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-        JsonObject jsonResponse = new JsonObject();
-        List<Corso> corsi = DAO.getCorsi();
-        JsonElement data = gson.toJsonTree(corsi, new TypeToken<List<Corso>>(){}.getType());;
-        jsonResponse.addProperty("result", "success");
-        jsonResponse.add("data", data);
         out.print(jsonResponse);
         out.flush();
         out.close();

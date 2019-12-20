@@ -86,7 +86,9 @@
         el: '#listC',
         data: {
             result: "",
-            data: []
+            data: [],
+            username: sessionStorage.getItem("username"),
+            admin: sessionStorage.getItem("admin")
         },
         methods: {
             getCorsi: function () {
