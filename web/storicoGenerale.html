@@ -12,11 +12,14 @@
    <script src="vue/vue.js"></script>
    <!-- librerie jquery -->
    <script src="jquery/jquery.min.js"> </script>
+
+   <!-- script e css nostri -->
+   <link href="gestioneCorsi.css" rel="stylesheet">
    <title>
       Prenotazioni
    </title>
 </head>
-<body>
+<body class="bg">
 <div class="container-fluid" >
    <!-- barra di navigazione -->
    <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -70,17 +73,38 @@
 
 
    <!-- lista storico prenotazioni -->
-   <div id="listStor" >
-      <ol class="list-group">
-         <li class="list-group-item" v-for="(prenot, index) in prenotazioni" >
-            {{prenot.docente.cognome}} {{prenot.docente.nome}} {{prenot.corso.titolo}} {{prenot.utente.account}} {{prenot.giorno}} {{prenot.slot}} <span :hidden="attiva[index]">{{prenot.stato}} </span>
-            <select aria-label="StatoPrenotazione" :hidden="!attiva[index]">
-               <option value="attiva">Attiva</option>
-               <option value="effettuata">Effettuata</option>
-               <option value="cancellata">Cancellata</option>
-            </select>
-         </li>
-      </ol>
+   <div id="listStor" class="container-fluid card w-75 mx-auto mt-5">
+      <table class="table table-striped">
+         <thead>
+            <tr>
+               <th scope="col">Cognome Docente</th>
+               <th scope="col">Nome Docente</th>
+               <th scope="col">Corso</th>
+               <th scope="col">Utente</th>
+               <th scope="col">Giorno</th>
+               <th scope="col">Ora</th>
+               <th scope="col">Stato</th>
+            </tr>
+         </thead>
+         <tbody>
+         <tr v-for="(prenot, index) in prenotazioni">
+            <td>{{prenot.docente.cognome}}</td>
+            <td>{{prenot.docente.nome}}</td>
+            <td>{{prenot.corso.titolo}}</td>
+            <td>{{prenot.utente.account}}</td>
+            <td>{{prenot.giorno}}</td>
+            <td>{{prenot.slot}}</td>
+            <td><span :hidden="attiva[index]">{{prenot.stato}} </span>
+               <select aria-label="StatoPrenotazione" :hidden="!attiva[index]">
+                  <option value="attiva">Attiva</option>
+                  <option value="effettuata">Effettuata</option>
+                  <option value="cancellata">Cancellata</option>
+               </select>
+            </td>
+         </tr>
+         </tbody>
+      </table>
+      <button class="btn btn-success align-self-end" >Salva</button>
    </div>
    <script>
        var listStor = new Vue({
