@@ -52,15 +52,15 @@ public class GestioneCorsi extends HttpServlet {
 
         if(admin){
             String op = request.getParameter("op");
-            Corso corso = gson.fromJson(request.getParameter("corso"), Corso.class);
+            String corso = request.getParameter("corso");
             switch (op) {
                 case "inserire":
                     if (corso != null)
-                        success = DAO.insertCorso(corso);
+                        success = DAO.insertCorso(new Corso(corso));
                     break;
                 case "eliminare":
                     if (corso != null)
-                        success = DAO.deleteCorso(corso);
+                        success = DAO.deleteCorso(new Corso(corso));
                     break;
                 case "visualizzare":
                     List<Corso> corsi = DAO.getCorsi();
