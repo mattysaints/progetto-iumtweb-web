@@ -51,7 +51,7 @@ public class GestioneCorsi extends HttpServlet {
         boolean success = false;
 
         if(admin){
-            String op = (String) request.getParameter("op");
+            String op = request.getParameter("op");
             Corso corso = gson.fromJson(request.getParameter("corso"), Corso.class);
             switch (op) {
                 case "inserire":
