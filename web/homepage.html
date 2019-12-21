@@ -109,13 +109,24 @@
 </footer>
 
 <script>
-    var $username = sessionStorage.getItem("username");
-    var $admin = sessionStorage.getItem("admin") === "true";
-    var loader = new Vue({
+    // possiamo valutare di inserirlo in un file js separato
+    const autenticationChecker = new Vue({
         el: "#navbarSupportedContent",
         data: {
-            username: $username,
-            admin: $admin
+            username: null,
+            admin: null
+        },
+        methods: {
+            checkAutentication: function () {
+                this.username =  sessionStorage.getItem("username");
+                this.admin = sessionStorage.getItem("admin") === "true";
+
+                if(this.username === null || this.admin === null)
+                    window.location.replace("/progetto_ium_tweb2/loginPage.html");
+            }
+        },
+        mounted() {
+            this.checkAutentication();
         }
     })
 </script>

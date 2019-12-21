@@ -86,9 +86,9 @@
         </div>
 
         <div class="container-fluid card w-50 mx-auto mt-5">
-            <p class="text-primary my-3">Lista corsi esistenti</p>
-            <table class="table table-striped">
-                <caption>Corsi presenti</caption>
+            <p class="text-primary my-3">Lista corsi esistenti: </p>
+            <p v-if="data.length === 0">Nessun corso da visualizzare</p>
+            <table v-else class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -98,10 +98,10 @@
                 </thead>
                 <tbody>
                 <tr v-for="(c, index) in data" :key="index">
-                    <td>{{index}}</td>
+                    <td>{{index+1}}</td>
                     <td>{{c.titolo}}</td>
                     <td class="align-content-center">
-                        <button v-on:click="delCorso(c)" class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Cancella</button>
+                        <button v-on:click="delCorso(c.titolo, index)" class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Cancella</button>
                     </td>
                 </tr>
                 </tbody>
@@ -118,10 +118,20 @@
             result: "",
             data: [],
             corso: "",
-            username: sessionStorage.getItem("username"),
-            admin: sessionStorage.getItem("admin")
+            username: null,
+            admin: null
         },
         methods: {
+            checkAutentication: function () {
+                this.username =  sessionStorage.getItem("username");
+                this.admin = sessionStorage.getItem("admin") === "true";
+
+                if(this.username === null || this.admin === null) {
+                    window.location.replace("/progetto_ium_tweb2/loginPage.html");
+                    return false;
+                } else
+                    return true;
+            },
             getCorsi: function () {
                 var self = this;
                 $.post(this.link, {op: "visualizzare"}, data => {
@@ -151,7 +161,9 @@
             }
         },
         mounted() {
-            this.getCorsi()
+            var autenticated = this.checkAutentication();
+            if (autenticated)
+                this.getCorsi()
         }
     })
 </script>
