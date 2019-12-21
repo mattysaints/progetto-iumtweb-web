@@ -15,18 +15,35 @@
 
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
    <style type="text/css" media="screen">
+      .bg {
+         background-image: url("img/corsi.jpg");
+         background-size: cover;
+         background-repeat: no-repeat;
+         background-position: center;
+         background-attachment: fixed;
+      }
+      div#azioni {
+         padding: 16px;
+      }
+      div#azioni>button {
+         padding-right: 16px;
+         padding-left: 16px;
+         margin-left: 32px;
+         margin-right: 32px;
+      }
+      div#listDoc>button#docente {
+         text-align: left;
+      }
       #selected {
-         text-decoration-color: yellow;
+         text-emphasis-color: yellow;
       }
-      div#listDoc ul {
-         text-align-all: right;
-      }
+
    </style>
    <title>
       Gestione Docenti
    </title>
 </head>
-<body>
+<body class="bg">
 
 <div class="container-fluid" >
    <!-- barra di navigazione -->
@@ -80,31 +97,24 @@
    </nav>
 
    <!-- lista di docenti -->
-   <div id="docenti">
-      <ol class="list-group-horizontal-md" id="azioni">
+   <div class="container-fluid card w-75 mx-auto mt-5" id="docenti">
+      <div class="list-group-horizontal-md" id="azioni">
          <button class="btn btn-primary" id="aggiungi">
             Aggiungi
          </button>
-         <button class="btn btn-primary" id="rimuovi">
+         <button class="btn btn-danger" id="rimuovi">
             Rimuovi
          </button>
          <button class="btn btn-primary" id="insegnamenti">
             Insegnamenti
          </button>
-      </ol>
-      <ol class="list-group" id="listDoc" >
-         <li class="list-group-item" v-for="docente in docenti"  >
-              {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded">n° corsi</span>
-         </li>
-      </ol>
+      </div>
+      <div class="btn-group-vertical" id="listDoc" >
+         <button class="btn btn-light btn-block btn" id="docente" v-for="n in docenti.length" :key="n">
+            #{{n}}  {{docenti[n-1].cognome}} {{docenti[n-1].nome}} <span class="badge badge-primary rounded">n° corsi</span>
+         </button>
+      </div>
    </div>
-   <!--
-   <div id="listDoc" v-for="docente in docenti" v-bind:doc="docente">
-      <ol class="list-group" >
-         <box-docente></box-docente>
-      </ol>
-   </div>
-   -->
 </div>
 
 <script src="gestioneDocenti.js"></script>
