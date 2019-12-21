@@ -38,7 +38,7 @@
                     Amministratore
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Gestione corsi</a>
+                    <a class="dropdown-item" href="/progetto_ium_tweb2/Redirect?redirect=gestioneCorsi">Gestione corsi</a>
                     <a class="dropdown-item" href="/progetto_ium_tweb2/Redirect?redirect=gestioneDocenti">Gestione docenti</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Visualizza ripetizioni attive</a> <!-- anche effettuate e cancellate! -->
@@ -54,7 +54,7 @@
                     <img src="img/user.png" width="25px" alt="User logo"/>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownDropdown">
-                    <a class="dropdown-item" href="Logout">Logout</a>
+                    <a class="dropdown-item" onclick="sessionStorage.clear()" href="Logout">Logout</a>
                 </div>
             </li>
         </ul>
