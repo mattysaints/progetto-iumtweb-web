@@ -68,11 +68,17 @@
       <!-- Fine sezione amministratore -->
    </nav>
 
+
    <!-- lista storico prenotazioni -->
    <div id="listStor" >
       <ol class="list-group">
-         <li class="list-group-item" v-for="prenot in prenotazioni" >
-             {{prenot.docente.cognome}} {{prenot.docente.nome}} {{prenot.corso.titolo}} {{prenot.utente.account}} {{prenot.giorno}} {{prenot.slot}} {{prenot.stato}}
+         <li class="list-group-item" v-for="(prenot, index) in prenotazioni" >
+            {{prenot.docente.cognome}} {{prenot.docente.nome}} {{prenot.corso.titolo}} {{prenot.utente.account}} {{prenot.giorno}} {{prenot.slot}} <span :hidden="attiva[index]">{{prenot.stato}} </span>
+            <select aria-label="StatoPrenotazione" :hidden="!attiva[index]">
+               <option value="attiva">Attiva</option>
+               <option value="effettuata">Effettuata</option>
+               <option value="cancellata">Cancellata</option>
+            </select>
          </li>
       </ol>
    </div>
@@ -81,17 +87,22 @@
            el: '#listStor',
            data: {
                link: "/progetto_ium_tweb2/StoricoPrenotazioni",
-               prenotazioni: []
+               prenotazioni: [],
+               attiva: [],
            },
-           mounted() {this.getPrenot()},
+           mounted() {
+               this.getPrenot();
+           },
            methods: {
                getPrenot: function () {
                    var self = this;
                    $.get(self.link, function(data) {
                        self.prenotazioni = data ;
+                       for (var i=0; i<data.length; i++) {
+                           self.attiva.push( data[i].stato==='attiva' );
+                       }
                    });
-
-               }
+               },
            }
        })
    </script>
