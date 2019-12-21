@@ -54,6 +54,8 @@ Marco:
 Mattia:
 5. [GestioneCorsi] inserire, eliminare e visualizzare tutti i corsi (admin)
 
+Aggiunte:
+1. inserire, eliminare e visualizzare tutti gli insegnamenti (dato il docente o il corso)
 
 ## View
 

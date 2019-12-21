@@ -236,6 +236,8 @@ public class DAO {
         return result;
     }
 
+    //todo visualizzare insegnamenti a partire da un dato docente o corso
+
     /**
      * Estrae la lista di ripetizioni disponibili dal database
      *
@@ -358,7 +360,6 @@ public class DAO {
         return result;
     }
 
-
     /**
      * Inserisce una prenotazione nel database, contrassegnata come attiva
      *
@@ -433,7 +434,6 @@ public class DAO {
        }
         return result;
     }
-
 
     public static List<Prenotazione> listRipStato(String state){
         Connection connection = null;
