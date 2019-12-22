@@ -562,4 +562,73 @@ public class DAO {
         }
         return result;
     }
+
+    /**
+     *
+     *
+     * @return Lista dei corsi tenuti da un docente
+     */
+
+    public static List<Corso> getCorsi_D(Docente docente) {
+        Connection connection = null;
+        List<Corso> result = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+            PreparedStatement statement = connection.prepareStatement("SELECT corso FROM " +
+                    "ripetizioni.insegnamento JOIN ripetizioni.docente ON insegnamento.docente = docente.id " +
+                    "where docente.nome=? AND docente.cognome=?;");
+            statement.setString(1,docente.getNome());
+            statement.setString(2,docente.getCognome());
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                Corso corso = new Corso(rs.getString("corso"));
+                result.add(corso);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    /**
+     *
+     *
+     * @return Lista dei docenti che tengono un corso
+     */
+
+    public static List<Docente> getDoc_C(Corso corso) {
+        Connection connection = null;
+        List<Docente> result = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+            PreparedStatement statement = connection.prepareStatement("SELECT docente.nome,docente.cognome FROM " +
+                    "ripetizioni.insegnamento JOIN ripetizioni.docente ON insegnamento.docente = docente.id " +
+                    "where insegnamento.corso=?;");
+            statement.setString(1,corso.getTitolo());
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
+                result.add(docente);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+
 }
