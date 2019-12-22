@@ -94,25 +94,27 @@
             <td>{{prenot.utente.account}}</td>
             <td>{{prenot.giorno}}</td>
             <td>{{prenot.slot}}</td>
-            <td><span :hidden="attiva[index]">{{prenot.stato}} </span>
-               <select aria-label="StatoPrenotazione" :hidden="!attiva[index]">
-                  <option value="attiva">Attiva</option>
+            <td>
+               <span v-if="prenot.stato!=='attiva'">{{prenot.stato}} </span>
+               <select aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
+                  <option value="attiva" selected >Attiva</option>
                   <option value="effettuata">Effettuata</option>
-                  <option value="cancellata">Cancellata</option>
+                  <option value="disdetta">Disdetta</option>
                </select>
             </td>
          </tr>
          </tbody>
       </table>
-      <button class="btn btn-success align-self-end" >Salva</button>
+      <button v-on:click="salvaPrenotazioni()" class="btn btn-success align-self-end" >Salva</button>
    </div>
    <script>
-       var listStor = new Vue({
+      var listStor = new Vue({
            el: '#listStor',
            data: {
                link: "/progetto_ium_tweb2/StoricoPrenotazioni",
                prenotazioni: [],
-               attiva: [],
+               statoAggiornato: [],
+               risultato: true,
            },
            mounted() {
                this.getPrenot();
@@ -122,11 +124,40 @@
                    var self = this;
                    $.get(self.link, function(data) {
                        self.prenotazioni = data ;
-                       for (var i=0; i<data.length; i++) {
-                           self.attiva.push( data[i].stato==='attiva' );
+                       for(var i=0; i<data.length; i++) {
+                          self.statoAggiornato.push(data[i].stato);
                        }
                    });
                },
+               salvaPrenotazioni: function () {
+                  var thiz = this;
+                  var oldPrenot= this.prenotazioni;
+                  var newState = this.statoAggiornato;
+                  for(var i=0; i<oldPrenot.length; i++) {
+                     var oldState = oldPrenot[i].stato;
+                     if(oldState !== newState[i]) {
+                        $.post(
+                           "/progetto_ium_tweb2/OpSuPrenotazioni",
+                           {
+                              op: (oldState === "effettuata" ? "effettuare" : "disdire"),
+                              prenotazione: oldPrenot[i],
+                           },
+                           function (res) {
+                              thiz.risultato = thiz.risultato && res;
+                              if(res)
+                                 oldPrenot[i].stato = newState[i];
+                              if(i===oldPrenot.length-1) {
+                                 if(thiz.risultato)
+                                    window.alert("Operazione riuscita");
+                                 else
+                                    window.alert("operazione fallita!");
+                              }
+                           }
+                        ); //end get
+                     } //end if
+                  } //end for
+
+              } //end func
            }
        })
    </script>
