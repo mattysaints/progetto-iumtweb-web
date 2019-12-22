@@ -1,0 +1,22 @@
+.bg {
+    background-image: url("img/corsi.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+div#azioni {
+    padding: 16px;
+}
+div#azioni>button {
+    padding-right: 16px;
+    padding-left: 16px;
+    margin-left: 32px;
+    margin-right: 32px;
+}
+div#listDoc>button#docente {
+    text-align: left;
+}
+#selected {
+    text-emphasis-color: yellow;
+}

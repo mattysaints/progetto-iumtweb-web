@@ -11,34 +11,10 @@
    <!-- development version, includes helpful console warnings -->
    <script src="vue/vue.js"></script>
    <!-- librerie jquery -->
-   <script src="jquery/jquery.min.js"> </script>
+   <script src="jquery/jquery.js"> </script>
 
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-   <style type="text/css" media="screen">
-      .bg {
-         background-image: url("img/corsi.jpg");
-         background-size: cover;
-         background-repeat: no-repeat;
-         background-position: center;
-         background-attachment: fixed;
-      }
-      div#azioni {
-         padding: 16px;
-      }
-      div#azioni>button {
-         padding-right: 16px;
-         padding-left: 16px;
-         margin-left: 32px;
-         margin-right: 32px;
-      }
-      div#listDoc>button#docente {
-         text-align: left;
-      }
-      #selected {
-         text-emphasis-color: yellow;
-      }
-
-   </style>
+   <link href="gestioneDocenti.css" rel="stylesheet">
    <title>
       Gestione Docenti
    </title>
@@ -96,7 +72,7 @@
       <!-- Fine sezione amministratore -->
    </nav>
 
-   <!-- lista di docenti -->
+<!--   &lt;!&ndash; lista di docenti &ndash;&gt;
    <div class="container-fluid card w-75 mx-auto mt-5" id="docenti">
       <div class="list-group-horizontal-md" id="azioni">
          <button class="btn btn-primary" id="aggiungi">
@@ -110,9 +86,30 @@
          </button>
       </div>
       <div class="btn-group-vertical" id="listDoc" >
-         <button class="btn btn-light btn-block btn" id="docente" v-for="n in docenti.length" :key="n">
-            #{{n}}  {{docenti[n-1].cognome}} {{docenti[n-1].nome}} <span class="badge badge-primary rounded">n° corsi</span>
+         <button class="btn btn-light btn-block btn-lg" id="docente" v-for="n in docenti.length" :key="n">
+            #{{n-1}}  {{docenti[n-1].cognome}} {{docenti[n-1].nome}} <span class="badge badge-primary rounded">n° corsi</span>
          </button>
+      </div>
+   </div>-->
+
+   <!-- lista di docenti -->
+   <div class="container-fluid card w-75 mx-auto mt-5" id="docenti">
+      <div class="list-group-horizontal-md" id="azioni">
+         <button class="btn btn-primary" id="aggiungi">
+            Aggiungi
+         </button>
+         <button class="btn btn-danger" id="rimuovi">
+            Rimuovi
+         </button>
+         <button class="btn btn-primary" id="insegnamenti">
+            Insegnamenti
+         </button>
+      </div>
+      <div class="btn-group-toggle btn-group-vertical" id="listDoc" data-toggle="buttons">
+         <label class="btn btn-outline-secondary btn-block btn-lg active" id="docente" v-for="n in docenti.length" :key="n">
+            <input type="checkbox" autocomplete="off">
+            #{{n-1}}  {{docenti[n-1].cognome}} {{docenti[n-1].nome}} <span class="badge badge-primary rounded">n° corsi</span>
+         </label>
       </div>
    </div>
 </div>
