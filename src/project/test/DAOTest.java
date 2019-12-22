@@ -2,6 +2,8 @@ package project.test;
 
 import project.servlet.model.*;
 
+import java.util.zip.CheckedOutputStream;
+
 public class DAOTest {
     public static void main(String[] args) {
         DAO.registerDriver();
@@ -17,7 +19,12 @@ public class DAOTest {
         //System.out.println(DAO.rimuoviInse(docente,corso));
         //System.out.println(DAO.ripetizioniDisp());
         System.out.println(DAO.getStoricoPrenotazioni());
-        System.out.println(DAO.listRipStato("effettuata"));*/
-        System.out.println(DAO.getCorsi());
+        System.out.println(DAO.listRipStato("effettuata"));
+        System.out.println(DAO.getCorsi());*/
+        Docente docente = new Docente("Andrea","Bianchi");
+        System.out.println(DAO.getCorsi_D(docente));
+        Corso corso = new Corso("Matematica");
+        System.out.println(DAO.getDoc_C(corso));
+
     }
 }
