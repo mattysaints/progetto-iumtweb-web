@@ -1,0 +1,91 @@
+<!-- TEMPLATE BARRA DI NAVIGAZIONE -->
+
+<!-- barra di navigazione -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a class="navbar-brand"><i class='fas fa-book mr-3'></i>Ripetizioni</a>
+
+    <!-- bottone compressione della navbar -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+            <!-- link home -->
+            <li class="nav-item">
+                <a id="home" class="nav-link" href="/progetto_ium_tweb2/Redirect?redirect=homepage">Home</a>
+            </li>
+
+            <!-- link prenotazioni -->
+            <li class="nav-item">
+                <a id="prenota" class="nav-link" href="/progetto_ium_tweb2/Redirect?redirect=prenota">Prenota una ripetizione</a>
+            </li>
+
+            <!-- link storico-->
+            <li class="nav-item">
+                <a id="storico" class="nav-link" href="/progetto_ium_tweb2/Redirect?redirect=storicoUtente">Visualizza le tue prenotazioni</a>
+            </li>
+
+            <!-- sezione amministratori -->
+            <li v-if="admin" class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Amministratore</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                    <!-- gestione dei corsi -->
+                    <a class="dropdown-item" href="/progetto_ium_tweb2/Redirect?redirect=gestioneCorsi">Gestione corsi</a>
+
+                    <!-- gestione dei docenti -->
+                    <a class="dropdown-item" href="/progetto_ium_tweb2/Redirect?redirect=gestioneDocenti">Gestione docenti</a>
+                    <div class="dropdown-divider"></div>
+
+                    <!-- storico globale -->
+                    <a class="dropdown-item" href="/progetto_ium_tweb2/Redirect?redirect=storicoGenerale">Storico globale delle ripetizioni</a>
+                </div>
+            </li>
+        </ul>
+
+        <!-- Sezione utente -->
+        <ul class="nav navbar-nav">
+            <li class="navbar-text text-muted my-0 mr-2">Benvenuto/a, {{username}}</li>
+
+            <!-- logout -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownDropdown">
+                    <a class="dropdown-item" onclick="sessionStorage.clear()" href="Logout">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+    // Gestione della sessione utente lato client e caricamento dinamico
+    // dei contenuti della navbar
+
+    const autenticationChecker = new Vue({
+        el: "#navbarSupportedContent",
+        data: {
+            username: null,
+            admin: null
+        },
+        methods: {
+            checkAutentication: function () {
+                this.username =  sessionStorage.getItem("username");
+                this.admin = sessionStorage.getItem("admin") === "true";
+
+                if(this.username === null || this.admin === null)
+                    window.location.replace("/progetto_ium_tweb2/loginPage.html");
+            }
+        },
+        mounted() {
+            this.checkAutentication();
+        }
+    })
+</script>
+
+<!-- FINE TEMPLATE -->

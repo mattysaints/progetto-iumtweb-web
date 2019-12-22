@@ -6,11 +6,7 @@
     <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
     <link rel="stylesheet" href="gestioneCorsi.css" >
-    <style type="text/css" media="screen">
-        #selected {
-            text-decoration-color: lightseagreen;
-        }
-    </style>
+
     <!-- librerie bootstrap -->
     <script src="bootstrap-4.4.1-dist/js/popper.min.js" ></script>
     <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
@@ -22,94 +18,48 @@
 
     <title>Gestione Corsi</title>
 </head>
+
 <body class="bg">
-<div class="w-100 mx-0" >
-    <!-- barra di navigazione -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand"><img src="img/logo4.png" width="25px" alt="Logo"/> Ripetizioni</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="homepage.html">Home</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Ripetizioni
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Prenota</a>
-                        <a class="dropdown-item" href="#">Visualizza</a>
-                    </div>
-                </li>
 
-                <!-- Questa sezione sara visibile solo dagli amministratori -->
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Gestione corsi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#" aria-selected="true" id="selected">Gestione docenti</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Visualizza tutte le prenotazioni</a>
-                </li>
-                <!-- fine sezione amministratori  -->
-            </ul>
+<div id="navbar" id-active-page=""></div>
 
-            <ul class="nav navbar-nav">
-                <!-- Nome utente aggiunto dinamicamente -->
-                <p class="navbar-text text-muted my-0 mr-2">Benvenuto, Utente </p>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="img/user.png" width="25px" alt="User logo"/>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownDropdown">
-                        <a class="dropdown-item" href="#">Logout</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <!-- Fine sezione amministratore -->
-    </nav>
-
-    <div id="appCorso">
-        <div class="container-fluid card w-50 mx-auto mt-5">
-            <h1 class="text-center my-4">Gestione corsi</h1>
-            <hr>
-            <form action="javascript:appCorso.addCorso()">
-                <div class="mx-auto text-center">
-                    <p class="text-primary">Nuovo corso:<input class="ml-2" aria-required="true" v-model="corso" type="text" placeholder="Corso" required/> <button title="Inserisci un nuovo corso" type="submit" class="btn btn-primary ml-5 w-auto">Inserisci</button></p>
-                </div>
-                </form>
-        </div>
-
-        <div class="container-fluid card w-50 mx-auto my-5">
-            <p class="text-primary my-3">Lista corsi esistenti: </p>
-            <p v-if="data.length === 0" class="border-top pt-2">Nessun corso da visualizzare</p>
-            <table v-else class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Corso</th>
-                    <th scope="col"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(c, index) in data" :key="index">
-                    <td class="col-md-1">{{index+1}}</td>
-                    <td>{{c.titolo}}</td>
-                    <td class="align-content-center col-md-3">
-                        <button v-on:click="delCorso(c.titolo, index)" class="btn btn-danger btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i> Cancella</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+<div id="appCorso">
+    <div class="container-fluid card w-50 mx-auto mt-5">
+        <h1 class="text-center my-4">Gestione corsi</h1>
+        <hr>
+        <form action="javascript:appCorso.addCorso()">
+            <div class="mx-auto text-center">
+                <p class="text-primary">Nuovo corso:<input class="ml-2" aria-required="true" v-model="corso" type="text" placeholder="Corso" required/> <button title="Inserisci un nuovo corso" type="submit" class="btn btn-primary ml-5 w-auto">Inserisci</button></p>
+            </div>
+            </form>
     </div>
 
+    <div class="container-fluid card w-50 mx-auto my-5">
+        <p class="text-primary my-3">Lista corsi esistenti: </p>
+        <p v-if="data.length === 0" class="border-top pt-2">Nessun corso da visualizzare</p>
+        <table v-else class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Corso</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(c, index) in data" :key="index">
+                <td class="col-md-1">{{index+1}}</td>
+                <td>{{c.titolo}}</td>
+                <td class="align-content-center col-md-3">
+                    <button v-on:click="delCorso(c.titolo, index)" class="btn btn-danger btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i> Cancella</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<div id="footer"></div>
+
 <script>
     var appCorso = new Vue({
         el: '#appCorso',
@@ -167,6 +117,9 @@
         }
     })
 </script>
+
+<script src="navbar-loader.js"></script>
+<script src="footer-loader.js"></script>
 
 </body>
 </html>
