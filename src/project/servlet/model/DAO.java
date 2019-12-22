@@ -296,7 +296,7 @@ public class DAO {
                     "   SELECT id " +
                     "   FROM ripetizioni.docente " +
                     "   WHERE docente.nome=? AND docente.cognome=?"  +
-                    ") AND corso=? AND utente=? AND ora=? AND giorno=? AND stato='effettuata'" +
+                    ") AND corso=? AND utente=? AND ora=? AND giorno=? AND stato='attiva'" +
                     ");");
             statement.setString(1, prenotazione.getDocente().getNome());
             statement.setString(2, prenotazione.getDocente().getCognome());
