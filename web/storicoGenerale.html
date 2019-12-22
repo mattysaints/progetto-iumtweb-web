@@ -139,25 +139,26 @@
                         var op = "disdire";
                         if(newState[i]==="effettuata")
                            op="effettuare";
-                        $.post("/progetto_ium_tweb2/OpSuPrenotazioni", {
+                        $.ajax({
+                           type: 'POST',
+                           url: "/progetto_ium_tweb2/OpSuPrenotazioni",
+                           data: {
                               "op": op,
                               "prenotazione": JSON.stringify(oldPrenot[i]),
                            },
-                           function (res) {
+                           success: function (res) {
                               thiz.risultato = thiz.risultato && res;
                               if(res)
                                  oldPrenot[i].stato = newState[i];
-                              if(i===oldPrenot.length-1) {
-                                 if(thiz.risultato)
-                                    window.alert("Operazione riuscita");
-                                 else
-                                    window.alert("operazione fallita!");
-                              }
-                           }
-                        ); //end get
+                           },
+                           async:false
+                        });
                      } //end if
                   } //end for
-
+                  if(thiz.risultato)
+                     window.alert("Operazione riuscita");
+                  else
+                     window.alert("operazione fallita!");
               } //end func
            }
        })
