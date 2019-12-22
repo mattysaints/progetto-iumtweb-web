@@ -21,10 +21,20 @@ public class DAOTest {
         System.out.println(DAO.getStoricoPrenotazioni());
         System.out.println(DAO.listRipStato("effettuata"));
         System.out.println(DAO.getCorsi());*/
-        Docente docente = new Docente("Andrea","Bianchi");
+
+        Docente docente = new Docente("Mario","Rossi");
         System.out.println(DAO.getCorsi_D(docente));
         Corso corso = new Corso("Matematica");
         System.out.println(DAO.getDoc_C(corso));
+        Utente utente = new Utente("Alex97","alex#",false);
+
+        /*Docente docente = new Docente("Mario","Rossi");
+        Corso corso = new Corso("Matematica");
+        Utente utente = new Utente("Alex97","alex#",false);
+        Slot slot = SLOT3;
+        Giorno giorno = Giorno.MAR;
+        Prenotazione prenotazione = new Prenotazione(docente,corso,utente,slot,giorno,Stato.attiva);
+        System.out.println(DAO.deletePrenotazione(prenotazione));*/
 
     }
 }

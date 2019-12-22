@@ -1,16 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- librerie bootstrap -->
+    <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
+    <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
+    <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
     <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- development version, includes helpful console warnings -->
+    <script src="vue/vue.js"></script>
+    <!-- librerie jquery -->
+    <script src="jquery/jquery.min.js"></script>
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
     <style type="text/css" media="screen">
         #selected {
-            text-decoration-color: lightseagreen;
+            text-decoration-color: yellow;
+        }
+        div#listDoc ul {
+            text-align-all: right;
         }
     </style>
     <title>Ripetizioni Disponibili</title>
+
 </head>
 <body>
 <div class="w-100 mx-0" >
@@ -71,20 +84,37 @@
     </nav>
 
     <!-- lista delle Ripetizioni Disponibili -->
-    <form action="/OpSuPrenotazioni">
-        <div id="#listR" >
-            <ul class="list-group list-group-horizontal">
-                <p v-for="ripetizione in ripetizioni" >
-                <li class="list-group-item" id="nomeDoc">{{ripetizione.docente.nome}}</li>
-                <li class="list-group-item" id="cognomeDoc">{{ripetizione.docente.cognome}}</li>
-                <li class="list-group-item" id="titolo">{{ripetizione.corso.titolo}}</li>
-                <li class="list-group-item" id="giorno">{{ripetizione.giorno}}</li>
-                <li class="list-group-item" id="slot">{{ripetizione.slot}} </li>
-                <button id="butOp" name="op" type="submit" class="btn btn-primary">Prenota</button>
-                </p>
-            </ul>
+    <div id="listR">
+        <div class="container-fluid card w-50 mx-auto my-5">
+            <p class="text-primary my-3">Lista ripetizioni disponibili: </p>
+            <p v-if="data.length === 0" class="border-top pt-2">Nessun ripetizione da visualizzare</p>
+            <table v-else class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Docente</th>
+                    <th scope="col">Corso</th>
+                    <th scope="col">Giorno</th>
+                    <th scope="col">Ora</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(r, index) in data" :key="index">
+                    <td class="col-md-1">{{index+1}}</td>
+                    <td class="col-md-2">{{r.docente.nome}} {{r.docente.cognome}}</td>
+                    <td class="col-md-3">{{r.corso.titolo}}</td>
+                    <td class="col-md-4">{{r.giorno}}</td>
+                    <td class="col-md-4">{{r.slot}}</td>
+                    <td class="align-content-center col-md-6">
+                        <button v-on:click="prenRip(r.docente.nome,r.docente.cognome,r.corso.titolo,r.giorno,r.slot, index)" class="btn btn-danger btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i>Prenota</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-    </form>
+    </div>
+
 
     <script>
         var listR = new Vue({
@@ -99,6 +129,9 @@
                     $.get("/progetto_ium_tweb2/RipetizioniDisponibili", function(data) {
                         self.ripetizioni = data;
                     });
+                },
+                prenRip: function () {
+
                 }
             }
         })
@@ -108,7 +141,7 @@
 <!-- vue development version, includes helpful console warnings -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <!-- librerie vue -->
-<script src="vue/vue.min.js" ></script>
+<script src="vue/vue.js" ></script>
 <!-- librerie bootstrap -->
 <script src="bootstrap-4.4.1-dist/js/popper.min.js" ></script>
 <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
