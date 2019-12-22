@@ -1,11 +1,9 @@
 package project.servlet;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import project.servlet.model.DAO;
 import project.servlet.model.Prenotazione;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,11 +39,7 @@ public class OpSuPrenotazioni extends HttpServlet {
     */
    private void esegui(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       HttpSession session = request.getSession(false);
-      if (session == null) {
-         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("Login");
-         requestDispatcher.include(request, response);
-      }
-      String op = (String) request.getAttribute("op");
+      String op = json.fromJson(request.getParameter("op"), String.class);
       Prenotazione prenot = json.fromJson(request.getParameter("prenotazione"), Prenotazione.class);
       PrintWriter out = response.getWriter();
       boolean correct = false;
@@ -64,7 +58,6 @@ public class OpSuPrenotazioni extends HttpServlet {
       }
       out.print(correct);
       out.flush();
-      out.close();
    }
 
    // <editor-fold defaultstate="collapsed" desc="- Metodi HttpServlet -">

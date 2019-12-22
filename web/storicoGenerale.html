@@ -11,7 +11,7 @@
    <!-- development version, includes helpful console warnings -->
    <script src="vue/vue.js"></script>
    <!-- librerie jquery -->
-   <script src="jquery/jquery.min.js"> </script>
+   <script src="jquery/jquery.js"> </script>
 
    <!-- script e css nostri -->
    <link href="gestioneCorsi.css" rel="stylesheet">
@@ -136,27 +136,29 @@
                   for(var i=0; i<oldPrenot.length; i++) {
                      var oldState = oldPrenot[i].stato;
                      if(oldState !== newState[i]) {
-                        $.post(
-                           "/progetto_ium_tweb2/OpSuPrenotazioni",
-                           {
-                              op: (oldState === "effettuata" ? "effettuare" : "disdire"),
-                              prenotazione: oldPrenot[i],
+                        var op = "disdire";
+                        if(newState[i]==="effettuata")
+                           op="effettuare";
+                        $.ajax({
+                           type: 'POST',
+                           url: "/progetto_ium_tweb2/OpSuPrenotazioni",
+                           data: {
+                              "op": op,
+                              "prenotazione": JSON.stringify(oldPrenot[i]),
                            },
-                           function (res) {
+                           success: function (res) {
                               thiz.risultato = thiz.risultato && res;
                               if(res)
                                  oldPrenot[i].stato = newState[i];
-                              if(i===oldPrenot.length-1) {
-                                 if(thiz.risultato)
-                                    window.alert("Operazione riuscita");
-                                 else
-                                    window.alert("operazione fallita!");
-                              }
-                           }
-                        ); //end get
+                           },
+                           async:false
+                        });
                      } //end if
                   } //end for
-
+                  if(thiz.risultato)
+                     window.alert("Operazione riuscita");
+                  else
+                     window.alert("operazione fallita!");
               } //end func
            }
        })
