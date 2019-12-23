@@ -88,34 +88,34 @@
                },
                salvaPrenotazioni: function () {
                   var thiz = this;
-                  var oldPrenot= this.prenotazioni;
+                  var oldPrenots= this.prenotazioni;
                   var newState = this.statoAggiornato;
-                  for(var i=0; i<oldPrenot.length; i++) {
-                     var oldState = oldPrenot[i].stato;
+                  var ops = [];
+                  var sendPrenots = [];
+                  for(var i=0; i<oldPrenots.length; i++) {
+                     var oldState = oldPrenots[i].stato;
                      if(oldState !== newState[i]) {
-                        var op = "disdire";
-                        if(newState[i]==="effettuata")
-                           op="effettuare";
-                        $.ajax({
-                           type: 'POST',
-                           url: "/progetto_ium_tweb2/OpSuPrenotazioni",
-                           data: {
-                              "op": op,
-                              "prenotazione": JSON.stringify(oldPrenot[i]),
-                           },
-                           success: function (res) {
-                              thiz.risultato = thiz.risultato && res;
-                              if(res)
-                                 oldPrenot[i].stato = newState[i];
-                           },
-                           async:false
-                        });
+                        ops.push(newState[i]==="effettuata" ? "effettuare" : "disdire");
+                        sendPrenots.push(oldPrenots[i]);
+                        oldPrenots[i].stato = newState[i];
                      } //end if
                   } //end for
-                  if(thiz.risultato)
-                     window.alert("Operazione riuscita");
-                  else
-                     window.alert("operazione fallita!");
+                  $.ajax({
+                     type: 'POST',
+                     url: "/progetto_ium_tweb2/OpSuPrenotazioni",
+                     data: {
+                        "ops": JSON.stringify(ops),
+                        "prenotazioni": JSON.stringify(sendPrenots),
+                     },
+                     success: function (res) {
+                        if(thiz.risultato)
+                           window.alert("Operazione riuscita");
+                        else
+                           window.alert("operazione fallita!");
+                     },
+                     async:false,
+                  });
+
               } //end func
            }
        })
