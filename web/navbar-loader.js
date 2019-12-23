@@ -10,8 +10,11 @@
  * - prenota
  */
 $(function () {
-    $("#navbar").load("navbar.html", () => {
-        var idActivePage = $("#navbar").attr("id-active-page");
+    var $navbar = $("#navbar");
+    $navbar.load("navbar.html", () => {
+        var idActivePage = $navbar.attr("id-active-page");
+        $navbar.addClass("fixed-top");
         $("#" + idActivePage + "").addClass("active")
-    })
+    });
+    $("body").addClass("pt-5")
 });
