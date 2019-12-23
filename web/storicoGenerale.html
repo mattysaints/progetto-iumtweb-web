@@ -28,8 +28,7 @@
       <table class="table table-striped">
          <thead>
             <tr>
-               <th scope="col">Cognome Docente</th>
-               <th scope="col">Nome Docente</th>
+               <th scope="col">Docente</th>
                <th scope="col">Corso</th>
                <th scope="col">Utente</th>
                <th scope="col">Giorno</th>
@@ -39,8 +38,7 @@
          </thead>
          <tbody>
          <tr v-for="(prenot, index) in prenotazioni">
-            <td>{{prenot.docente.cognome}}</td>
-            <td>{{prenot.docente.nome}}</td>
+            <td>{{prenot.docente.cognome}} {{prenot.docente.nome}}</td>
             <td>{{prenot.corso.titolo}}</td>
             <td>{{prenot.utente.account}}</td>
             <td>{{prenot.giorno}}</td>
@@ -56,7 +54,7 @@
          </tr>
          </tbody>
       </table>
-      <button v-on:click="salvaPrenotazioni()" class="btn btn-success align-self-end" >Salva</button>
+      <button v-on:click="salvaPrenotazioni()" class="btn btn-success btn-lg align-self-end px-5" >Salva</button>
    </div>
 
 <div id="footer"></div>
