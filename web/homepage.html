@@ -9,61 +9,15 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
 
     <script src="vue/vue.min.js"></script>
+    <script src="jquery/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>Homepage</title>
 </head>
 <body>
 
-<!-- barra di navigazione -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand"><i class='fas fa-book mr-3'></i>Ripetizioni</a>
+<div id="navbar" id-active-page="home"></div>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Home</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#">Prenota una ripetizione</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Visualizza le tue prenotazioni</a>
-            </li>
-            <li v-if="admin" class="nav-item dropdown">
-                <!-- Questa sezione sara visibile solo dagli amministratori -->
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Amministratore
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/progetto_ium_tweb2/Redirect?redirect=gestioneCorsi">Gestione corsi</a>
-                    <a class="dropdown-item" href="/progetto_ium_tweb2/Redirect?redirect=gestioneDocenti">Gestione docenti</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/progetto_ium_tweb2/Redirect?redirect=storicoGenerale">Visualizza ripetizioni attive</a> <!-- anche effettuate e cancellate! -->
-                </div>
-            </li>
-            <!-- Fine sezione amministratore -->
-        </ul>
-        <ul class="nav navbar-nav">
-            <!-- Nome utente aggiunto dinamicamente -->
-            <p class="navbar-text text-muted my-0 mr-2">Benvenuto/a, {{username}}</p>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownDropdown">
-                    <a class="dropdown-item" onclick="sessionStorage.clear()" href="Logout">Logout</a>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-<!-- scorre immagini -->
+<!-- scorre immagini benvenuto -->
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -103,35 +57,10 @@
     </a>
 </div>
 
-<!-- footer -->
-<footer class="footer">
-    <div class="footer-copyright text-center text-muted bg-light pt-4">© 2019 Copyright:
-        <a href="#"> Ripetizioni.it</a>
-    </div>
-</footer>
+<div id="footer"></div>
 
-<script>
-    // possiamo valutare di inserirlo in un file js separato
-    const autenticationChecker = new Vue({
-        el: "#navbarSupportedContent",
-        data: {
-            username: null,
-            admin: null
-        },
-        methods: {
-            checkAutentication: function () {
-                this.username =  sessionStorage.getItem("username");
-                this.admin = sessionStorage.getItem("admin") === "true";
-
-                if(this.username === null || this.admin === null)
-                    window.location.replace("/progetto_ium_tweb2/loginPage.html");
-            }
-        },
-        mounted() {
-            this.checkAutentication();
-        }
-    })
-</script>
+<script src="footer-loader.js"></script>
+<script src="navbar-loader.js"></script>
 
 </body>
 </html>
