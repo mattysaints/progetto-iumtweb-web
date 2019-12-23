@@ -34,7 +34,7 @@
             </form>
     </div>
 
-    <div class="container-fluid card w-50 mx-auto my-5">
+    <div class="container-fluid card w-50 mx-auto mt-5">
         <p class="text-primary my-3">Lista corsi esistenti: </p>
         <p v-if="data.length === 0" class="border-top pt-2">Nessun corso da visualizzare</p>
         <table v-else class="table table-striped">
@@ -50,7 +50,7 @@
                 <td class="col-md-1">{{index+1}}</td>
                 <td>{{c.titolo}}</td>
                 <td class="align-content-center col-md-3">
-                    <button v-on:click="delCorso(c.titolo, index)" class="btn btn-danger btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i> Cancella</button>
+                    <button v-on:click="delCorso(c.titolo, index)" class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i></button>
                 </td>
             </tr>
             </tbody>
