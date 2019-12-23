@@ -16,6 +16,7 @@ div#azioni>button {
 }
 div#listDoc>button#docente {
     text-align: left;
+    margin: 8px;
 }
 #selected {
     text-emphasis-color: yellow;

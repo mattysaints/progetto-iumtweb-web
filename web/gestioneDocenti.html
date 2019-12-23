@@ -95,7 +95,7 @@
    <!-- lista di docenti -->
    <div class="container-fluid card w-75 mx-auto mt-5" id="docenti">
       <div class="list-group-horizontal-md" id="azioni">
-         <button class="btn btn-primary" id="aggiungi">
+         <button class="btn btn-primary" id="aggiungi" v-if="!areaAggiungi">
             Aggiungi
          </button>
          <button class="btn btn-danger" id="rimuovi">
@@ -105,16 +105,41 @@
             Insegnamenti
          </button>
       </div>
+      <!-- Aggiungi docente -->
+<!--      <div class="container-fluid card" id="aggiungiDocente" v-show="areaAggiungi">
+            <div class="mx-auto text-center">
+               <p class="text-primary">Nuovo docente:<input class="ml-2" aria-required="true" v-model="nuovoDocente" type="text" placeholder="Docente" required/> <button v-on:click="areaAggiungi=false" title="Inserisci un nuovo docente" class="btn btn-primary ml-5 w-auto">Inserisci</button></p>
+            </div>
+      </div>-->
+      <!-- lista docenti -->
       <div class="btn-group-toggle btn-group-vertical" id="listDoc" data-toggle="buttons">
-         <label class="btn btn-outline-secondary btn-block btn-lg active" id="docente" v-for="n in docenti.length" :key="n">
-            <input type="checkbox" autocomplete="off">
+         <label class="btn btn-outline-danger btn-block btn-lg" id="docente" v-for="n in docenti.length" :key="n-1">
+            <input type="checkbox">
             #{{n-1}}  {{docenti[n-1].cognome}} {{docenti[n-1].nome}} <span class="badge badge-primary rounded">n° corsi</span>
          </label>
       </div>
    </div>
 </div>
 
-<script src="gestioneDocenti.js"></script>
+<script>
+   var listDoc = new Vue({
+      el: '#listDoc',
+      data: {
+         docenti: [],
+         areaAggiungi: false,
+         nuovoDocente: {},
+      },
+      mounted() {this.getDocenti()},
+      methods: {
+         getDocenti: function () {
+            var self = this;
+            $.get("/progetto_ium_tweb2/GestioneDocenti", {op: "visualizzare"}, function(data) {
+               self.docenti = data;
+            });
+         }
+      }
+   });
+</script>
 
 </body>
 </html>

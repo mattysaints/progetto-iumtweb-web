@@ -1,18 +1,4 @@
-var listDoc = new Vue({
-    el: '#listDoc',
-    data: {
-        docenti: []
-    },
-    mounted() {this.getDocenti()},
-    methods: {
-        getDocenti: function () {
-            var self = this;
-            $.get("/progetto_ium_tweb2/GestioneDocenti", {op: "visualizzare"}, function(data) {
-                self.docenti = data;
-            });
-        }
-    }
-});
+
 /*
 Vue.component("box-docente", {
     template:
