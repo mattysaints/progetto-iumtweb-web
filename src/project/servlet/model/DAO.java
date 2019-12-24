@@ -1,6 +1,5 @@
 package project.servlet.model;
 
-import javax.print.Doc;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -235,8 +234,6 @@ public class DAO {
         }
         return result;
     }
-
-    //todo visualizzare insegnamenti a partire da un dato docente o corso
 
     /**
      * Estrae la lista di ripetizioni disponibili dal database
@@ -508,7 +505,6 @@ public class DAO {
     }
 
     /**
-     *
      * @return lista di docenti nel database
      */
     public static List<Docente> getDocenti() {
@@ -536,7 +532,6 @@ public class DAO {
     }
 
     /**
-     *
      * @return lista di corsi nel database
      */
     public static List<Corso> getCorsi() {
@@ -564,12 +559,9 @@ public class DAO {
     }
 
     /**
-     *
-     *
      * @return Lista dei corsi tenuti da un docente
      */
-
-    public static List<Corso> getCorsi_D(Docente docente) {
+    public static List<Corso> getCorsiInsegnatiDa(Docente docente) {
         Connection connection = null;
         List<Corso> result = new ArrayList<>();
         try {
@@ -598,12 +590,9 @@ public class DAO {
     }
 
     /**
-     *
-     *
      * @return Lista dei docenti che tengono un corso
      */
-
-    public static List<Docente> getDoc_C(Corso corso) {
+    public static List<Docente> getDocentiCheInsegnano(Corso corso) {
         Connection connection = null;
         List<Docente> result = new ArrayList<>();
         try {

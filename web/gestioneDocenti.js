@@ -2,7 +2,6 @@ var listDoc = new Vue({
    el: '#listDoc',
    data: {
       docenti: [],
-      areaAggiungi: false,
       nuovoDocente: {},
    },
    mounted() {this.getDocenti()},
@@ -15,17 +14,54 @@ var listDoc = new Vue({
       }
    }
 });
+Vue.component("box-docente", {
+   template:
+      `
+   <div>
+      <docente class="card-header align-items-start m-2">
+          {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded">{{corsiInsegnati.length}}</span>
+      </docente>
+      <docente-corsi class="card-body collapse" :id="'collapseDoc' + i" data-parent="#accordion" >
+      </docente-corsi>
+   </div>
+   `,
+   props: ['docente', 'i'],
+   data: function() {
+      var ret = {
+         corsiInsegnati: [],
+      };
+      var self = this;
+      $.ajax({
+         type: 'post',
+         url: "progetto_ium_tweb2/GestioneInsegnamenti",
+         data: {
+            "op": "visualizzare",
+            "docente": JSON.stringify(self.docente),
+         },
+         success: function (listCorsi) {
+            if (listCorsi instanceof boolean && !listCorsi)
+               window.alert("ERRORE");
+            else {
+               ret.corsiInsegnati = JSON.parse(listCorsi);
+            }
+         },
+         async: false,
+      });
+      return ret;
+   },
+});
 Vue.component('docente', {
    template:
       `
       <button class="btn btn-light btn-block btn-lg">
-         <slot></slot> <span class="badge badge-primary rounded">n° corsi</span>
+         <slot></slot>
        </button>
       `
 });
 Vue.component('docente-corsi', {
+   //todo da fare
    template:
       `
-      <label>text</label> //todo da fare
+      <label>text</label>
       `
 });

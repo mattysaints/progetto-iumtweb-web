@@ -62,16 +62,10 @@
 
       <!-- lista docenti -->
       <div id="listDoc"  >
-         <div class="card" v-for="(doc, index) in docenti" id="docente" data-toggle="collapse" v-bind:key="index" v-bind:data-target="'#collapseDoc' + index" v-bind="doc">
-            <docente class="card-header align-items-start m-2" v-bind="doc">
-               {{doc.cognome}} {{doc.nome}}
-            </docente>
-            <docente-corsi class="card-body" v-bind:id="'collapseDoc' + index" data-parent="#accordion" >
-            </docente-corsi>
-         </div>
+         <box-docente class="card" v-for="(doc, index) in docenti" id="docente" data-toggle="collapse" v-bind:key="index" v-bind:data-target="'#collapseDoc' + index" v-bind:docente="doc" v-bind:i="index">
 
-         </div>
-      </card>
+         </box-docente>
+      </div>
    </div>
 </div>
 

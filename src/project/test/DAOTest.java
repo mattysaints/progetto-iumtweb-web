@@ -1,8 +1,9 @@
 package project.test;
 
-import project.servlet.model.*;
-
-import java.util.zip.CheckedOutputStream;
+import project.servlet.model.Corso;
+import project.servlet.model.DAO;
+import project.servlet.model.Docente;
+import project.servlet.model.Utente;
 
 public class DAOTest {
     public static void main(String[] args) {
@@ -23,9 +24,9 @@ public class DAOTest {
         System.out.println(DAO.getCorsi());*/
 
         Docente docente = new Docente("Mario","Rossi");
-        System.out.println(DAO.getCorsi_D(docente));
+        System.out.println(DAO.getCorsiInsegnatiDa(docente));
         Corso corso = new Corso("Matematica");
-        System.out.println(DAO.getDoc_C(corso));
+        System.out.println(DAO.getDocentiCheInsegnano(corso));
         Utente utente = new Utente("Alex97","alex#",false);
 
         /*Docente docente = new Docente("Mario","Rossi");
