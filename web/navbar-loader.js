@@ -14,7 +14,7 @@ $(function () {
     $navbar.load("navbar.html", () => {
         var idActivePage = $navbar.attr("id-active-page");
         $navbar.addClass("fixed-top");
-        $("#" + idActivePage + "").addClass("active")
+        $(idActivePage).addClass("active") //dava errore con # davanti
     });
     $("body").addClass("pt-5")
 });
