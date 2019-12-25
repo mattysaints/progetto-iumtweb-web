@@ -47,7 +47,7 @@
             <tbody>
             <tr v-for="(r, index) in ripetizioni" :key="index">
                 <td class="col-md-1">{{index+1}}</td>
-                <td class="col-md-2">{{r.docente.nome}}{{r.docente.cognome}}</td>
+                <td class="col-md-2">{{r.docente.nome}} {{r.docente.cognome}}</td>
                 <td class="col-md-3">{{r.corso.titolo}}</td>
                 <td class="col-md-4">{{r.giorno}}</td>
                 <td class="col-md-4">{{r.slot}}</td>
@@ -76,24 +76,9 @@
         data: {
             ripetizioni: [],
             prenotazione: "",
-            utente:""
+            username: null
         },
-        mounted() {var autenticated = this.checkAutentication();
-            if (autenticated)
-                this.getRipetizioni(utente)},
         methods: {
-            getRipetizioni: function (utente) {
-                var self = this;
-                $.get("/progetto_ium_tweb2/StoricoPrenotazioni",{utente: utente}, function(data) {
-                    self.ripetizioni = data;
-                });
-            },
-            disdiciRip: function (prenotazione,index) {
-                var self = this;
-                $.post("/progetto_ium_tweb2/StoricoPrenotazioni", {op:"disdire",prenotazione:prenotazione}, data => {
-                    self.data.splice(index,1)
-                })
-            },
             checkAutentication: function () {
                 this.utente =  sessionStorage.getItem("username");
                 if(this.utente === null) {
@@ -102,6 +87,23 @@
                 } else
                     return true;
             },
+            getRipetizioni: function (utente) {
+                var self = this;
+                $.get("/progetto_ium_tweb2/StoricoPrenotazioni",{utente: utente}, function(data) {
+                    self.ripetizioni = JSON.parse(data);
+                });
+            },
+            disdiciRip: function (prenotazione,index) {
+                var self = this;
+                $.post("/progetto_ium_tweb2/StoricoPrenotazioni", {op:"disdire",prenotazione:prenotazione}, data => {
+                    self.data.splice(index,1)
+                })
+            }
+        },
+        mounted() {
+            var autenticated = this.checkAutentication();
+            if (autenticated)
+                this.getRipetizioni()
         }
     })
 </script>

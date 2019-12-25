@@ -47,7 +47,7 @@
                 <tbody>
                 <tr v-for="(r, index) in ripetizioni" :key="index">
                     <td class="col-md-1">{{index+1}}</td>
-                    <td class="col-md-2">{{r.docente.nome}}{{r.docente.cognome}}</td>
+                    <td class="col-md-2">{{r.docente.nome}} {{r.docente.cognome}}</td>
                     <td class="col-md-3">{{r.corso.titolo}}</td>
                     <td class="col-md-4">{{r.giorno}}</td>
                     <td class="col-md-4">{{r.slot}}</td>
@@ -75,12 +75,12 @@
                 getRipetizioniDisponibili: function () {
                     var self = this;
                     $.get(this.link, function(data) {
-                        self.ripetizioni = data;
+                        self.ripetizioni = JSON.parse(data);
                     });
                 },
                 prenRip: function (prenotazione,index) {
                     var self = this;
-                    $.post(this.link, {op:"prenotare",prenotazione:prenotazione}, data => {
+                    $.post(this.link, {ops:"prenotare",prenotazioni:prenotazione}, data => {
                         self.data.splice(index,1)
                     })
                 }

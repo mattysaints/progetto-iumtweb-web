@@ -34,5 +34,4 @@ enum Slot{
         }
         return null;
     }
-
 }
