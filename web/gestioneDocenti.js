@@ -32,17 +32,17 @@ Vue.component("box-docente", {
       };
       var self = this;
       $.ajax({
-         type: 'post',
-         url: "progetto_ium_tweb2/GestioneInsegnamenti",
+         type: 'POST',
+         url: "/progetto_ium_tweb2/GestioneInsegnamenti",
          data: {
             "op": "visualizzare",
             "docente": JSON.stringify(self.docente),
          },
          success: function (listCorsi) {
-            if (listCorsi instanceof boolean && !listCorsi)
+            if (listCorsi instanceof Boolean && !listCorsi)
                window.alert("ERRORE");
             else {
-               ret.corsiInsegnati = JSON.parse(listCorsi);
+               ret.corsiInsegnati = listCorsi;
             }
          },
          async: false,
