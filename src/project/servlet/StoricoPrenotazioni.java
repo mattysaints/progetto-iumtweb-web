@@ -42,7 +42,8 @@ public class StoricoPrenotazioni extends HttpServlet {
     */
    private void esegui(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       HttpSession session = request.getSession(false);
-      Utente u = json.fromJson(request.getParameter("utente"), Utente.class);
+      //Utente u = json.fromJson(request.getParameter("utente"), Utente.class);
+      Utente u = new Utente(request.getParameter("utente"),null,null);
       response.setContentType("application/json");
       PrintWriter out = response.getWriter();
       List<Prenotazione> storico;
@@ -55,7 +56,6 @@ public class StoricoPrenotazioni extends HttpServlet {
             throw new ServletException("Non hai i permessi di admin!");
 
       } else {
-         //restituisco storico utente
          storico = DAO.getStoricoPrenotazioni(u);
       }
       String stor = json.toJson(storico);

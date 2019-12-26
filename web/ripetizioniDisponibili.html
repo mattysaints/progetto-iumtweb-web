@@ -45,14 +45,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(r, index) in ripetizioni" :key="index">
+                <tr v-for="(r, index) in ripetizioni" :key="index" c-bind="r">
                     <td class="col-md-1">{{index+1}}</td>
                     <td class="col-md-2">{{r.docente.nome}} {{r.docente.cognome}}</td>
                     <td class="col-md-3">{{r.corso.titolo}}</td>
                     <td class="col-md-4">{{r.giorno}}</td>
                     <td class="col-md-4">{{r.slot}}</td>
                     <td class="col-md-5">
-                        <button v-on:click="prenRip(this.r, index)" type="button" class="btn btn-primary">Prenota</button>
+                        <button v-on:click="prenRip(r,index)" type="button" class="btn btn-primary">Prenota</button>
                     </td>
                 </tbody>
             </table>
@@ -80,9 +80,9 @@
                 },
                 prenRip: function (prenotazione,index) {
                     var self = this;
-                    $.post(this.link, {ops:"prenotare",prenotazioni:prenotazione}, data => {
-                        self.data.splice(index,1)
-                    })
+                    $.post(this.link, {ops:"prenotare",prenotazioni:JSON.stringify(prenotazione)}, data => {
+                        self.ripetizioni.splice(index,1);
+                    });
                 }
             }
         })

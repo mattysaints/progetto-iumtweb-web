@@ -54,7 +54,7 @@
                 <td class="col-md-5">
                     <span v-if = "r.stato == 'effettuata'" class="badge badge-primary">Effettuata</span>
                     <span v-if = "r.stato == 'disdetta'" class="badge badge-primary">Disdetta</span>
-                    <button id="myBtn" v-else onclick="disabilitaB(this)" v-on:click="disdiciRip(this.r, index)" type="button" class="btn btn-primary">Disdici</button>
+                    <button id="myBtn" v-else onclick="disabilitaB(this)" v-on:click="disdiciRip(r, index)" type="button" class="btn btn-primary">Disdici</button>
                 </td>
             </tbody>
         </table>
@@ -80,8 +80,8 @@
         },
         methods: {
             checkAutentication: function () {
-                this.utente =  sessionStorage.getItem("username");
-                if(this.utente === null) {
+                this.username =  sessionStorage.getItem("username");
+                if(this.username === null) {
                     window.location.replace("/progetto_ium_tweb2/loginPage.html");
                     return false;
                 } else
@@ -89,22 +89,26 @@
             },
             getRipetizioni: function (utente) {
                 var self = this;
-                $.get("/progetto_ium_tweb2/StoricoPrenotazioni",{utente: utente}, function(data) {
+                $.get("/progetto_ium_tweb2/StoricoPrenotazioni",{utente: JSON.stringify(utente)}, function(data) {
+                    console.log(data);
                     self.ripetizioni = JSON.parse(data);
                 });
             },
             disdiciRip: function (prenotazione,index) {
                 var self = this;
-                $.post("/progetto_ium_tweb2/StoricoPrenotazioni", {op:"disdire",prenotazione:prenotazione}, data => {
-                    self.data.splice(index,1)
+                $.post("/progetto_ium_tweb2/StoricoPrenotazioni", {op:"disdire", prenotazione:JSON.stringify(prenotazione)}, data => {
+                    self.ripetizioni.splice(index,1);
                 })
             }
         },
         mounted() {
             var autenticated = this.checkAutentication();
-            if (autenticated)
-                this.getRipetizioni()
+            if(autenticated){
+                this.getRipetizioni(this.username);
+            }
         }
+
+
     })
 </script>
 

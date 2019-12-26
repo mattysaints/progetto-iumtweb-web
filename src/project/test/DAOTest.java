@@ -36,6 +36,8 @@ public class DAOTest {
         Giorno giorno = Giorno.MAR;
         Prenotazione prenotazione = new Prenotazione(docente,corso,utente,slot,giorno,Stato.attiva);
         System.out.println(DAO.deletePrenotazione(prenotazione));*/
+        Utente u = new Utente("Marco",null,null);
+        System.out.println(DAO.getStoricoPrenotazioni(u));
 
     }
 }
