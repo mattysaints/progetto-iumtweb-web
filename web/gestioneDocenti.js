@@ -95,7 +95,7 @@ Vue.component('docente-corsi', {
                    <td class="col-md-1">{{index+1}}</td>
                    <td>{{c.titolo}}</td>
                    <td class="align-content-center col-md-3">
-                       <button v-on:click="eliminaCorso(c.titolo, index)" class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i></button>
+                       <button v-on:click="eliminaCorso(c, index)" class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i></button>
                    </td>
                </tr>
                </tbody>
@@ -143,8 +143,8 @@ Vue.component('docente-corsi', {
          var self = this;
          $.post(this.link, {
             op: "eliminare",
-            docente: this.docente,
-            corso: corso,
+            docente: JSON.stringify(this.docente),
+            corso: JSON.stringify(corso),
          }, data => {
             if (data.successo)
                self.corsi.splice(index, 1);
