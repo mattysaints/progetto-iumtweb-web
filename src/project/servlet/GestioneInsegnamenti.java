@@ -1,6 +1,8 @@
 package project.servlet;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import project.servlet.model.Corso;
 import project.servlet.model.DAO;
@@ -36,38 +38,40 @@ public class GestioneInsegnamenti extends HttpServlet {
       Docente docente = json.fromJson(request.getParameter("docente"), Docente.class);
       Corso corso = json.fromJson(request.getParameter("corso"), Corso.class);
       PrintWriter out = response.getWriter();
+      response.setContentType("application/json");
+      JsonObject rispostaJson = new JsonObject();
+      JsonElement corsi = null;
+      boolean corretto = true;
       switch (op) {
          case "inserire":
             if(docente==null || docente.getCognome().equals("") || docente.getNome().equals("") || corso== null || corso.getTitolo().equals("")) {
-               out.print(false);
+               corretto=false;
             } else {
-               boolean corretto = DAO.insertInsegnamento(docente,corso);
-               out.print(corretto);
+               corretto = DAO.insertInsegnamento(docente,corso);
             }
             break;
          case "eliminare":
             if(docente==null || docente.getCognome().equals("") || docente.getNome().equals("") || corso== null || corso.getTitolo().equals("")) {
-               out.print(false);
+               corretto = false;
             } else {
-               boolean corretto = DAO.deleteInsegnamento(docente,corso);
-               out.print(corretto);
+               corretto = DAO.deleteInsegnamento(docente,corso);
             }
             break;
          case "visualizzare":
             if(docente==null || docente.getCognome().equals("") || docente.getNome().equals("")) {
-               out.print(false);
+               corretto = false;
             } else {
-               response.setContentType("application/json");
-               List<Corso> corsi = DAO.getCorsiInsegnatiDa(docente);
-               String jsonDoc = json.toJson(corsi, new TypeToken<List<Corso>>() {
-               }.getType());
-               out.print(jsonDoc);
+               corsi = json.toJsonTree(DAO.getCorsiInsegnatiDa(docente), new TypeToken<List<Corso>>() {}.getType());
             }
             break;
          default:
             throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
       }
+      rispostaJson.addProperty("successo", corretto);
+      rispostaJson.add("corsi", corsi);
+      out.print(rispostaJson);
       out.flush();
+      out.close();
    }
    //<editor-fold defaultstate="collapsed" desc="Metodi Http Servlet" >
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

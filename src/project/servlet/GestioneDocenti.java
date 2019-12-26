@@ -1,6 +1,8 @@
 package project.servlet;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import project.servlet.model.DAO;
 import project.servlet.model.Docente;
@@ -33,33 +35,37 @@ public class GestioneDocenti extends HttpServlet {
       String op = (String) request.getParameter("op");
       Docente docente = json.fromJson(request.getParameter("docente"), Docente.class);
       PrintWriter out = response.getWriter();
+      response.setContentType("application/json");
+      JsonObject rispostaJson = new JsonObject();
+      JsonElement docenti = null;
+      boolean corretto = true;
       switch (op) {
          case "inserire":
             if(docente==null || docente.getCognome().equals("") || docente.getNome().equals("")) {
-               out.print(false);
+               corretto=false;
             } else {
-               boolean corretto = DAO.insertDocente(docente);
-               out.print(corretto);
+               corretto = DAO.insertDocente(docente);
             }
             break;
          case "eliminare":
             if(docente==null || docente.getCognome().equals("") || docente.getNome().equals("")) {
-               out.print(false);
+               corretto = false;
             } else {
-               boolean corretto = DAO.deleteDocente(docente);
-               out.print(corretto);
+               corretto = DAO.deleteDocente(docente);
             }
             break;
          case "visualizzare":
-            response.setContentType("application/json");
             List<Docente> doc = DAO.getDocenti();
-            String jsonDoc = json.toJson(doc, new TypeToken<List<Docente>>(){}.getType());
-            out.print(jsonDoc);
+            docenti = json.toJsonTree(doc, new TypeToken<List<Docente>>(){}.getType());
             break;
          default:
             throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
       }
+      rispostaJson.addProperty("successo", corretto);
+      rispostaJson.add("docenti", docenti);
+      out.print(rispostaJson);
       out.flush();
+      out.close();
    }
 
    // <editor-fold defaultstate="collapsed" desc=" - Metodi HttpServlet - " >
