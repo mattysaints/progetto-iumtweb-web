@@ -1,19 +1,55 @@
 var listDoc = new Vue({
    el: '#listDoc',
    data: {
+      link: "/progetto_ium_tweb2/GestioneDocenti",
       docenti: [],
-      nuovoDocente: {},
+      docente: {
+         cognome: "",
+         nome: ""
+      }
    },
    mounted() {this.getDocenti()},
    methods: {
       getDocenti: function () {
          var self = this;
-         $.get("/progetto_ium_tweb2/GestioneDocenti", {op: "visualizzare"}, function(data) {
+         $.get(self.link, {op: "visualizzare"}, function(data) {
             if(!data.successo)
                window.alert("Errore nel caricamento dei docenti");
             else
                self.docenti = data.docenti;
          });
+      },
+      eliminaDocente: function(docente, index) {
+         var self = this;
+         $.post(
+            self.link,
+            {
+               op: "eliminare",
+               docente: JSON.stringify(docente),
+            },
+            data => {
+               if (data.successo)
+                  self.docenti.splice(index, 1);
+               else
+                  alert("Errore nell'eliminazione del docente");
+            },
+         );
+      },
+      aggiungiDocente: function() {
+         var self = this;
+         $.post(
+            self.link,
+            {
+               op: "inserire",
+               docente: JSON.stringify(self.docente),
+            },
+            data => {
+               if (data.successo)
+                  self.docenti.push(data.docente);
+               else
+                  alert("Errore nell'inserimento del docente");
+            }
+         )
       }
    }
 });
@@ -23,9 +59,9 @@ Vue.component("box-docente", {
       `
       <div class="card">
          <docente class="card-header align-items-start" data-toggle="collapse" :data-target="'#collapseDoc' + i">
-             {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded">{{corsiInsegnati.length}}</span>
+             {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded" data-toggle="tooltip" title="n° di corsi insegnati">{{corsiInsegnati.length}}</span> <slot></slot>
          </docente>
-         <docente-corsi class="collapse" :id="'collapseDoc' + i" data-parent="#accordion" v-bind:docente="docente" v-bind:corsi="corsiInsegnati">
+         <docente-corsi class="collapse" :id="'collapseDoc' + i" data-parent="#listDoc" v-bind:docente="docente" v-bind:corsi="corsiInsegnati">
          </docente-corsi>
       </div>
    `,

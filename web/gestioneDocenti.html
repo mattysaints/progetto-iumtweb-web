@@ -23,7 +23,7 @@
 
 <div id="navbar" id-active-page=""></div>
 
-   <div class="container-fluid card w-75 mx-auto mt-5" id="accordion">
+   <div class="container-fluid card w-75 mx-auto mt-5" id="listDoc">
       <div class="card m-2">
          <!-- aggiungi docenti -->
          <div class="card-header align-items-center" id="aggiungi" data-toggle="collapse" data-target="#collapseAggiungi">
@@ -31,17 +31,21 @@
                Aggiungi un nuovo docente
             </button>
          </div>
-         <div class="collapse m-2" id="collapseAggiungi" data-parent="#accordion">
+         <div class="collapse m-2" id="collapseAggiungi" data-parent="#listDoc">
             <div class="card-body mx-auto text-center">
-               <p class="text-primary">Nuovo docente:<input class="ml-2" aria-required="true" v-model="nuovoDocente" type="text" placeholder="Docente" required/> <button title="Inserisci un nuovo docente" class="btn btn-primary ml-5 w-auto">Inserisci</button></p>
+               <p class="text-primary">
+                  Cognome:<input id="cognome" class="ml-2" aria-required="true" type="text" placeholder="Docente" v-model="docente.cognome" required/>
+                  Nome: <input id="nome" class="ml-2" aria-required="true" type="text" placeholder="Docente" v-model="docente.nome" required/>
+                  <button title="Inserisci un nuovo docente" class="btn btn-primary ml-5 w-auto" @click="aggiungiDocente()">Inserisci</button>
+               </p>
             </div>
          </div>
       </div>
 
       <!-- lista docenti -->
-      <div id="listDoc" >
+      <div  >
          <box-docente v-for="(doc, index) in docenti" id="docente" :key="index" v-bind:docente="doc" v-bind:i="index">
-
+            <button class="btn-danger" @click="eliminaDocente(doc,index)"><i class="fas fa-times"></i>Elimina</button>
          </box-docente>
       </div>
    </div>
