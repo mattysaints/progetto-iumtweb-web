@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- librerie bootstrap -->
+    <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
+    <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
+    <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- development version, includes helpful console warnings -->
+    <script src="vue/vue.js"></script>
+    <!-- librerie jquery -->
+    <script src="jquery/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <style type="text/css" media="screen">
+        #selected {
+            text-decoration-color: yellow;
+        }
+        div#listDoc ul {
+            text-align-all: right;
+        }
+    </style>
+    <title>Gestione Storico</title>
+
+</head>
+<body>
+
+<div id="navbar" id-active-page="prenota"></div>
+
+<!-- Storico Ripetizioni -->
+<div id="listR">
+    <div class="container-fluid card w-50 mx-auto my-5">
+        <p class="text-primary my-3">Storico Ripetizioni: </p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Docente</th>
+                <th scope="col">Corso</th>
+                <th scope="col">Giorno</th>
+                <th scope="col">Ora</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(r, index) in ripetizioni" :key="index">
+                <td class="col-md-1">{{index+1}}</td>
+                <td class="col-md-2">{{r.docente.nome}} {{r.docente.cognome}}</td>
+                <td class="col-md-3">{{r.corso.titolo}}</td>
+                <td class="col-md-4">{{r.giorno}}</td>
+                <td class="col-md-4">{{r.slot}}</td>
+                <td class="col-md-5">
+                    <span v-if = "r.stato == 'effettuata'" class="badge badge-primary">Effettuata</span>
+                    <span v-if = "r.stato == 'disdetta'" class="badge badge-primary">Disdetta</span>
+                    <button id="myBtn" v-else onclick="disabilitaB(this)" v-on:click="disdiciRip(this.r, index)" type="button" class="btn btn-primary">Disdici</button>
+                </td>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="footer"></div>
+
+<script>
+    function disabilitaB(btn) {
+        document.getElementById("myBtn").disabled = true;
+    }
+</script>
+
+
+<script>
+    var listR = new Vue({
+        el: '#listR',
+        data: {
+            ripetizioni: [],
+            prenotazione: "",
+            username: null
+        },
+        methods: {
+            checkAutentication: function () {
+                this.utente =  sessionStorage.getItem("username");
+                if(this.utente === null) {
+                    window.location.replace("/progetto_ium_tweb2/loginPage.html");
+                    return false;
+                } else
+                    return true;
+            },
+            getRipetizioni: function (utente) {
+                var self = this;
+                $.get("/progetto_ium_tweb2/StoricoPrenotazioni",{utente: utente}, function(data) {
+                    self.ripetizioni = JSON.parse(data);
+                });
+            },
+            disdiciRip: function (prenotazione,index) {
+                var self = this;
+                $.post("/progetto_ium_tweb2/StoricoPrenotazioni", {op:"disdire",prenotazione:prenotazione}, data => {
+                    self.data.splice(index,1)
+                })
+            }
+        },
+        mounted() {
+            var autenticated = this.checkAutentication();
+            if (autenticated)
+                this.getRipetizioni()
+        }
+    })
+</script>
+
+<script src="navbar-loader.js"></script>
+<script src="footer-loader.js"></script>
+
+</body>
+</html>
