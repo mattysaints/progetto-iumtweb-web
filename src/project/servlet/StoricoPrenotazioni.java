@@ -2,12 +2,10 @@ package project.servlet;
 
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import project.servlet.model.DAO;
 import project.servlet.model.Prenotazione;
 import project.servlet.model.Utente;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,8 +40,7 @@ public class StoricoPrenotazioni extends HttpServlet {
     */
    private void esegui(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       HttpSession session = request.getSession(false);
-      //Utente u = json.fromJson(request.getParameter("utente"), Utente.class);
-      Utente u = new Utente(request.getParameter("utente"),null,null);
+      Utente u = json.fromJson(request.getParameter("utente"), Utente.class);
       response.setContentType("application/json");
       PrintWriter out = response.getWriter();
       List<Prenotazione> storico;

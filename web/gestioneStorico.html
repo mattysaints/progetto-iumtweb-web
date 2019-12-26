@@ -89,10 +89,18 @@
             },
             getRipetizioni: function (utente) {
                 var self = this;
-                $.get("/progetto_ium_tweb2/StoricoPrenotazioni",{utente: utente}, function(data) {
-                    console.log(data);
-                    self.ripetizioni = data;
-                });
+                $.get(
+                      "/progetto_ium_tweb2/StoricoPrenotazioni",
+                      {
+                          account: utente,
+                          username:null,
+                          password: null
+                      },
+                      function(data) {
+                        console.log(data);
+                        self.ripetizioni = data;
+                      }
+                );
             },
             disdiciRip: function (prenotazione,index) {
                 var self = this;
