@@ -24,9 +24,9 @@
 <div id="navbar" id-active-page=""></div>
 
    <div class="container-fluid card w-75 mx-auto mt-5" id="accordion">
-      <div class="card">
+      <div class="card m-2">
          <!-- aggiungi docenti -->
-         <div class="card-header align-items-center m-2" id="aggiungi" data-toggle="collapse" data-target="#collapseAggiungi">
+         <div class="card-header align-items-center" id="aggiungi" data-toggle="collapse" data-target="#collapseAggiungi">
             <button class="btn btn-link btn-block">
                Aggiungi un nuovo docente
             </button>
@@ -39,8 +39,8 @@
       </div>
 
       <!-- lista docenti -->
-      <div id="listDoc"  >
-         <box-docente class="card" v-for="(doc, index) in docenti" id="docente" data-toggle="collapse" v-bind:key="index" v-bind:data-target="'#collapseDoc' + index" v-bind:docente="doc" v-bind:i="index">
+      <div id="listDoc" >
+         <box-docente v-for="(doc, index) in docenti" id="docente" :key="index" v-bind:docente="doc" v-bind:i="index">
 
          </box-docente>
       </div>

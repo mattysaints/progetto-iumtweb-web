@@ -17,14 +17,15 @@ var listDoc = new Vue({
       }
    }
 });
+
 Vue.component("box-docente", {
    template:
       `
-      <div>
-         <docente class="card-header align-items-start m-2">
+      <div class="card">
+         <docente class="card-header align-items-start" data-toggle="collapse" :data-target="'#collapseDoc' + i">
              {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded">{{corsiInsegnati.length}}</span>
          </docente>
-         <docente-corsi class="card-body collapse" :id="'collapseDoc' + i" data-parent="#accordion" v-bind:docente="docente" v-bind:corsi="corsiInsegnati">
+         <docente-corsi class="collapse" :id="'collapseDoc' + i" data-parent="#accordion" v-bind:docente="docente" v-bind:corsi="corsiInsegnati">
          </docente-corsi>
       </div>
    `,
@@ -53,6 +54,7 @@ Vue.component("box-docente", {
       return ret;
    },
 });
+
 Vue.component('docente', {
    template:
       `
@@ -61,19 +63,23 @@ Vue.component('docente', {
        </button>
       `
 });
+
 Vue.component('docente-corsi', {
    template:
       `
-      <div id="insegnamenti">
-         <div class="container-fluid card">
-            <form action="javascript:insegnamenti.aggiungiCorso()">
-                <div class="mx-auto text-center">
-                  <p class="text-primary">Nuovo corso:<input class="ml-2" aria-required="true" v-model="corso" type="text" placeholder="Corso" required/> <button title="Inserisci un nuovo corso" type="submit" class="btn btn-primary ml-5 w-auto">Inserisci</button></p>
-               </div>
-            </form>
+      <div id="insegnamenti" class="card-body">
+         <div class="container-fluid">
+             <div class="mx-auto text-center">
+               <p class="text-primary">Nuovo insegnamento:
+                  <select class="ml-2" aria-required="true" v-model="corso" >
+                     <option v-for="(cor, index) in corsiAggiungibili" :value="cor" :selected="index===1">{{cor}}</option>
+                  </select>
+                  <button title="Inserisci un nuovo insegnamento" class="btn btn-primary ml-5 w-auto" @click="aggiungiCorso()">Inserisci</button>
+               </p>
+            </div>
          </div>
 
-         <div class="container-fluid card">
+         <div class="container-fluid card no-collapsible">
             <p class="text-primary my-3">Lista corsi insegnati: </p>
             <p v-if="corsi.length === 0" class="border-top pt-2">Nessun corso da visualizzare</p>
             <table v-else class="table table-striped">
@@ -118,16 +124,20 @@ Vue.component('docente-corsi', {
       },
       aggiungiCorso: function () {
          var self = this;
-         $.post(this.link, {
-            op: "inserire",
-            corso: this.corso,
-            docente: this.docente,
-         }, data => {
-            if (data.successo)
-               self.corsi.push({titolo: self.corso});
-            else
-               window.alert("Errore nell'inserimento del corso");
-         })
+         if(this.corso!=="") {
+            $.post(this.link, {
+               op: "inserire",
+               corso: JSON.stringify({titolo: this.corso}),
+               docente: JSON.stringify(this.docente),
+            }, data => {
+               if (data.successo)
+                  self.corsi.push({titolo: self.corso});
+               else
+                  window.alert("Errore nell'inserimento del corso");
+            });
+         }
+         else
+            window.alert("Errore nell'inserimento del corso");
       },
       eliminaCorso: function (corso, index) {
          var self = this;
@@ -143,4 +153,26 @@ Vue.component('docente-corsi', {
          })
       }
    },
+   computed: {
+      corsiAggiungibili: function () { //array dei corsi che possono essere aggiunti
+         //getter
+         var tuttiCorsi=[];
+         $.ajax({
+            method: "GET",
+            url: "/progetto_ium_tweb2/GestioneCorsi",
+            data: {
+               "op": "visualizzare",
+            },
+            success: (data) => {
+               if(data.result==="success")
+                  tuttiCorsi = data.data.map(x => x.titolo);
+            },
+            async: false,
+         });
+         var corsiInseg = this.corsi.map(x => x.titolo);
+         let differenza= tuttiCorsi.filter(x => !corsiInseg.includes(x));
+         return differenza;
+
+      }
+   }
 });
