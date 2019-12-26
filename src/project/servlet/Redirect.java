@@ -74,12 +74,12 @@ public class Redirect extends HttpServlet {
                     }
                     break;
                 case "storicoUtente":
-                    if(request.getAttribute("utente")!=null) {
-                        // rd = context.getRequestDispatcher("/.html");
-                    } else {
+                    // if(request.getAttribute("utente")!=null) {
+                        rd = context.getRequestDispatcher("/gestioneStorico.html");
+                    // } else {
                         //non hai i permessi di admin
-                        throw new ServletException("Non hai specificato l'utente!");
-                    }
+                        // throw new ServletException("Non hai specificato l'utente!");
+                    //}
                     break;
                 case "prenota":
                     rd = context.getRequestDispatcher("/ripetizioniDisponibili.html");

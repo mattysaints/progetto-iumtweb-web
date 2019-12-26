@@ -89,14 +89,14 @@
             },
             getRipetizioni: function (utente) {
                 var self = this;
-                $.get("/progetto_ium_tweb2/StoricoPrenotazioni",{utente: JSON.stringify(utente)}, function(data) {
+                $.get("/progetto_ium_tweb2/StoricoPrenotazioni",{utente: utente}, function(data) {
                     console.log(data);
-                    self.ripetizioni = JSON.parse(data);
+                    self.ripetizioni = data;
                 });
             },
             disdiciRip: function (prenotazione,index) {
                 var self = this;
-                $.post("/progetto_ium_tweb2/StoricoPrenotazioni", {op:"disdire", prenotazione:JSON.stringify(prenotazione)}, data => {
+                $.post("/progetto_ium_tweb2/StoricoPrenotazioni", {op:"disdire", prenotazione: prenotazione}, () => {
                     self.ripetizioni.splice(index,1);
                 })
             }
