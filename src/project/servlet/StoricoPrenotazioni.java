@@ -1,6 +1,5 @@
 package project.servlet;
 
-
 import com.google.gson.Gson;
 import project.servlet.model.DAO;
 import project.servlet.model.Prenotazione;

@@ -44,8 +44,8 @@
 
       <!-- lista docenti -->
       <div  >
-         <box-docente v-for="(doc, index) in docenti" id="docente" :key="index" v-bind:docente="doc" v-bind:i="index">
-            <button class="btn-danger" @click="eliminaDocente(doc,index)"><i class="fas fa-times"></i>Elimina</button>
+         <box-docente v-for="(doc, index) in docenti" id="docente" :key="index" v-bind.sync="doc" :i="index">
+            <button class="btn-danger" @click="eliminaDocente(doc.docente,index)"><i class="fas fa-times"></i>Elimina</button>
          </box-docente>
       </div>
    </div>
