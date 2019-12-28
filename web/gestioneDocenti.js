@@ -139,9 +139,20 @@ Vue.component("box-docente", {
    template:
       `
       <div class="card">
-         <docente class="card-header align-items-start text-left pl-lg-5" data-toggle="collapse" :data-target="'#collapseDoc' + i">
-             {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded" data-toggle="tooltip" title="n° di corsi insegnati">{{corsiInsegnati.length}}</span> <slot></slot>
-         </docente>
+         <div class="card-header align-items-start text-left pl-lg-5" data-toggle="collapse" :data-target="'#collapseDoc' + i">
+            <button class="btn btn-light btn-block btn-lg" >
+               <div class="row">
+                  <div class="col text-center">
+                      {{docente.cognome}} {{docente.nome}}
+                      <span class="badge badge-primary rounded" data-toggle="tooltip" title="n° di corsi insegnati">{{corsiInsegnati.length}}</span>
+                  </div> 
+                  <div class="col text-center">
+                      <button class="btn btn-danger collapse" :id="'collapseDoc' + i" data-parent="#listDoc" @click="$root.eliminaDocente(docente,i)"><i class="fas fa-times"></i> Elimina docente
+                      </button>
+                  </div>
+               </div>
+            </button>
+         </div>
          <docente-corsi class="collapse" :id="'collapseDoc' + i" data-parent="#listDoc" v-bind:docente="docente" v-bind:corsi.sync="corsiInsegnati" :i="i">
          </docente-corsi>
       </div>
@@ -196,10 +207,6 @@ Vue.component('docente-corsi', {
                </tr>
                </tbody>
             </table>
-         </div>
-         <hr class="my-2">
-         <div class="text-right">
-                <button class="btn btn-danger" @click="$root.eliminaDocente(docente,i)"><i class="fas fa-times"></i> Elimina docente</button>
          </div>
       </div>
       `,

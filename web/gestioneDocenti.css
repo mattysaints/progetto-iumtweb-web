@@ -5,19 +5,6 @@
     background-position: center;
     background-attachment: fixed;
 }
-/*div#azioni {
-    padding: 16px;
-}*/
-/*div#azioni>button {
-    padding-right: 16px;
-    padding-left: 16px;
-    margin-left: 32px;
-    margin-right: 32px;
-}*/
-/*div#listDoc>button#docente {
-    text-align: left;
-    margin: 8px;
-}*/
 #selected {
     text-emphasis-color: yellow;
 }
