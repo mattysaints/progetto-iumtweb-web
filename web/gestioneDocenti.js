@@ -158,7 +158,7 @@ Vue.component("box-docente", {
    template:
       `
       <div class="card">
-         <docente class="card-header align-items-start" data-toggle="collapse" :data-target="'#collapseDoc' + i">
+         <docente class="card-header align-items-start text-left pl-lg-5" data-toggle="collapse" :data-target="'#collapseDoc' + i">
              {{docente.cognome}} {{docente.nome}} <span class="badge badge-primary rounded" data-toggle="tooltip" title="n° di corsi insegnati">{{corsiInsegnati.length}}</span> <slot></slot>
          </docente>
          <docente-corsi class="collapse" :id="'collapseDoc' + i" data-parent="#listDoc" v-bind:docente="docente" v-bind:corsi.sync="corsiInsegnati" :i="i">
@@ -183,17 +183,19 @@ Vue.component('docente-corsi', {
       `
       <div id="insegnamenti" class="card-body" >
          <div class="container-fluid">
-             <div class="mx-auto text-center">
-               <p class="text-primary">Nuovo insegnamento:
-                  <select class="ml-2" aria-required="true" v-model="corso" >
+             <div class="mx-auto">
+               <p class="text-primary">Nuovo insegnamento:</p>
+               <div class="mx-auto d-flex d-inline">
+                  <select class="ml-2 form-control" aria-required="true" v-model="corso" >
+                     <option value="" selected disabled hidden>Scegli corso</option>
                      <option v-for="(cor, index) in corsiAggiungibili" :value="cor" :selected="index===1">{{cor}}</option>
                   </select>
-                  <button title="Inserisci un nuovo insegnamento" class="btn btn-primary ml-5 w-auto" @click="$root.aggiungiCorso(docente, i, corso)">Inserisci</button>
-               </p>
+                  <button title="Inserisci un nuovo insegnamento" class="btn btn-primary ml-5 w-auto" @click="$root.aggiungiCorso(docente, i, corso)">Inserisci</button>    
+               </div>
             </div>
          </div>
 
-         <div class="container-fluid card no-collapsible">
+         <div class="container-fluid card no-collapsible mt-3">
             <p class="text-primary my-3">Lista corsi insegnati: </p>
             <p v-if="corsi.length === 0" class="border-top pt-2">Nessun corso da visualizzare</p>
             <table v-else class="table table-striped">
@@ -214,6 +216,10 @@ Vue.component('docente-corsi', {
                </tr>
                </tbody>
             </table>
+         </div>
+         <hr class="my-2">
+         <div class="text-right">
+                <button class="btn btn-danger" @click="eliminaDocente(doc.docente,index)"><i class="fas fa-times"></i> Elimina docente</button>
          </div>
       </div>
       `,

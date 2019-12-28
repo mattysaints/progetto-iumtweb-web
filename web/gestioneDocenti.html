@@ -23,7 +23,9 @@
 
 <div id="navbar" id-active-page=""></div>
 
-   <div class="container-fluid card w-75 mx-auto mt-5" id="listDoc">
+<div class="container-fluid card w-50 mx-auto mt-5 py-3" id="listDoc">
+   <h1 class="text-center my-4">Gestione docenti</h1>
+   <hr>
       <div class="card m-2">
          <!-- aggiungi docenti -->
          <div class="card-header align-items-center" id="aggiungi" data-toggle="collapse" data-target="#collapseAggiungi">
@@ -32,21 +34,43 @@
             </button>
          </div>
          <div class="collapse m-2" id="collapseAggiungi" data-parent="#listDoc">
-            <div class="card-body mx-auto text-center">
-               <p class="text-primary">
-                  Cognome:<input id="cognome" class="ml-2" aria-required="true" type="text" placeholder="Docente" v-model="docente.cognome" required/>
-                  Nome: <input id="nome" class="ml-2" aria-required="true" type="text" placeholder="Docente" v-model="docente.nome" required/>
-                  <button title="Inserisci un nuovo docente" class="btn btn-primary ml-5 w-auto" @click="aggiungiDocente()">Inserisci</button>
-               </p>
+            <div class="card-body mx-auto w-75">
+               <div class="container">
+                  <div class="row my-2">
+                     <div class="col text-right">
+                        <label class="text-primary" for="cognome">Cognome: </label>
+                     </div>
+                     <div class="col text-left">
+                        <input aria-required="true" id="cognome" placeholder="Cognome docente" required type="text"
+                               v-model="docente.cognome"/>
+                     </div>
+                  </div>
+                  <div class="row my-2">
+                     <div class="col text-right">
+                        <label class="text-primary" for="nome">Nome: </label>
+                     </div>
+                     <div class="col text-left">
+                        <input aria-required="true" id="nome" placeholder="Nome docente" required type="text"
+                               v-model="docente.nome"/>
+                     </div>
+                  </div>
+                  <div class="row my-2">
+                     <div class="col"></div>
+                     <div class="col w-100">
+                        <button @click="aggiungiDocente()" class="btn btn-primary w-100"
+                                title="Inserisci un nuovo docente">Inserisci
+                        </button>
+                     </div>
+                  </div>
+               </div>
             </div>
          </div>
       </div>
+   <hr>
 
       <!-- lista docenti -->
-      <div  >
-         <box-docente v-for="(doc, index) in docenti" id="docente" :key="index" v-bind.sync="doc" :i="index">
-            <button class="btn-danger" @click="eliminaDocente(doc.docente,index)"><i class="fas fa-times"></i>Elimina</button>
-         </box-docente>
+   <div>
+      <box-docente :i="index" :key="index" id="docente" v-bind.sync="doc" v-for="(doc, index) in docenti"></box-docente>
       </div>
    </div>
 
