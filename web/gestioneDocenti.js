@@ -9,7 +9,9 @@ var listDoc = new Vue({
          nome: ""
       },
    },
-   mounted() {this.getDocenti()},
+   mounted() {
+      this.getDocenti();
+   },
    methods: {
       getDocenti: function () {
          var thiz = this;
@@ -131,27 +133,6 @@ var listDoc = new Vue({
          })
       }
    },
-/*   computed: {
-      //array dei corsi che possono essere aggiunti, index del docente
-      corsiAggiungibili: function (index) {
-         var tuttiCorsi=[];
-         $.ajax({
-            method: "GET",
-            url: "/progetto_ium_tweb2/GestioneCorsi",
-            data: {
-               "op": "visualizzare",
-            },
-            success: (data) => {
-               if(data.result==="success")
-                  tuttiCorsi = data.data.map(x => x.titolo);
-            },
-            async: false,
-         });
-         var corsiInseg = this.docenti[index].corsiInsegnati.map(x => x.titolo);
-         let differenza= tuttiCorsi.filter(x => !corsiInseg.includes(x));
-         return differenza;
-      }
-   },*/
 });
 
 Vue.component("box-docente", {
@@ -177,7 +158,6 @@ Vue.component('docente', {
       `
 });
 
-//per l'aggiornamento dei corsi si usano l'emit degli eventi
 Vue.component('docente-corsi', {
    template:
       `
@@ -219,7 +199,7 @@ Vue.component('docente-corsi', {
          </div>
          <hr class="my-2">
          <div class="text-right">
-                <button class="btn btn-danger" @click="eliminaDocente(doc.docente,index)"><i class="fas fa-times"></i> Elimina docente</button>
+                <button class="btn btn-danger" @click="$root.eliminaDocente(docente,i)"><i class="fas fa-times"></i> Elimina docente</button>
          </div>
       </div>
       `,
@@ -230,39 +210,6 @@ Vue.component('docente-corsi', {
          corso: "",
       };
    },
-/*   methods: {
-      aggiungiCorso: function () {
-        this.$emit('update:corsi', )
-         /!*var thiz = this;
-         if(this.corso!=="") {
-            $.post(this.link, {
-               op: "inserire",
-               corso: JSON.stringify({titolo: this.corso}),
-               docente: JSON.stringify(this.docente),
-            }, data => {
-               if (data.successo)
-                  thiz.corsi.push({titolo: thiz.corso});
-               else
-                  window.alert("Errore nell'inserimento del corso");
-            });
-         }
-         else
-            window.alert("Errore nell'inserimento del corso");*!/
-      },
-      eliminaCorso: function (corso, index) {
-         var thiz = this;
-         $.post(this.link, {
-            op: "eliminare",
-            docente: JSON.stringify(this.docente),
-            corso: JSON.stringify(corso),
-         }, data => {
-            if (data.successo)
-               thiz.corsi.splice(index, 1);
-            else
-               window.alert("Errore nell'eliminazione del corso");
-         })
-      }
-   },*/
    computed: {
       corsiAggiungibili: function () { //array dei corsi che possono essere aggiunti
          var tuttiCorsi=[];
@@ -279,9 +226,7 @@ Vue.component('docente-corsi', {
             async: false,
          });
          var corsiInseg = this.corsi.map(x => x.titolo);
-         let differenza= tuttiCorsi.filter(x => !corsiInseg.includes(x));
-         return differenza;
-
+         return tuttiCorsi.filter(x => !corsiInseg.includes(x));
       }
    }
 });
