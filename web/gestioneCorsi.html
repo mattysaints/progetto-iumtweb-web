@@ -23,6 +23,7 @@
 
 <div id="navbar" id-active-page=""></div>
 
+
 <div id="appCorso">
     <div class="container-fluid card w-50 mx-auto mt-5">
         <h1 class="text-center my-4">Gestione corsi</h1>
@@ -68,20 +69,8 @@
             result: "",
             data: [],
             corso: "",
-            username: null,
-            admin: null
         },
         methods: {
-            checkAutentication: function () {
-                this.username =  sessionStorage.getItem("username");
-                this.admin = sessionStorage.getItem("admin") === "true";
-
-                if(this.username === null || this.admin === null) {
-                    window.location.replace("/progetto_ium_tweb2/loginPage.html");
-                    return false;
-                } else
-                    return true;
-            },
             getCorsi: function () {
                 var self = this;
                 $.post(this.link, {op: "visualizzare"}, data => {
@@ -111,9 +100,7 @@
             }
         },
         mounted() {
-            var autenticated = this.checkAutentication();
-            if (autenticated)
-                this.getCorsi()
+            this.getCorsi()
         }
     })
 </script>
