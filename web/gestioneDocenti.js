@@ -89,7 +89,8 @@ var listDoc = new Vue({
                   alert("Errore nell'inserimento del docente");
             },
             async: false,
-         })
+         });
+         window.location.reload();
       },
       aggiungiCorso: function (docente, index, corso) {
          var thiz = this;

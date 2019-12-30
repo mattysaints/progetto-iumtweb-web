@@ -24,12 +24,12 @@
             </li>
 
             <!-- link storico-->
-            <li class="nav-item">
-                <a id="storico" class="nav-link" href="/progetto_ium_tweb2/Redirect?redirect=gestioneStorico" :disabled="ospite">Visualizza le tue prenotazioni</a>
+            <li class="nav-item" v-if="ospite==='false'">
+                <a id="storico" class="nav-link" href="/progetto_ium_tweb2/Redirect?redirect=gestioneStorico" >Visualizza le tue prenotazioni</a>
             </li>
 
             <!-- sezione amministratori -->
-            <li id="sezioneAdmin" v-if="admin" class="nav-item dropdown">
+            <li id="sezioneAdmin" v-if="admin==='true'" class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Amministratore</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
@@ -62,58 +62,6 @@
         </ul>
     </div>
 </nav>
-
-<script>
-    // Gestione della sessione utente lato client e caricamento dinamico
-    // dei contenuti della navbar
-
-    const autenticationChecker = new Vue({
-        el: "#navbarSupportedContent",
-        data: function() {
-            var user = sessionStorage.getItem("username");
-            var admin = sessionStorage.getItem("admin");
-            var ospite = sessionStorage.getItem("ospite");
-            console.log(user + " " + admin + " " + ospite);
-            if(!user && !admin && !ospite) {
-                alert("Non hai effettuato il login. Verrai reindirizzato a breve");
-                window.location.replace("/progetto_ium_tweb2/loginPage.html");
-            } else if(ospite) {
-                var isRedirect = window.location.search.search("redirect=");
-                var path;
-                console.log(isRedirect);
-                if(isRedirect===-1)
-                    path=window.location.pathname;
-                else
-                    path = "/progetto_ium_tweb2/" + window.location.search.substr(isRedirect+ 9) + ".html";
-                console.log("currentPage: " + path);
-                switch (path) {
-                    case "/progetto_ium_tweb2/storicoGenerale.html":
-                    case "/progetto_ium_tweb2/gestioneDocenti.html":
-                    case "/progetto_ium_tweb2/gestioneCorsi.html":
-                    case "progetto_ium_tweb2/gestioneStorico.html":
-                        alert("Non hai i permessi per visualizzare le informazioni di questa pagina. Verrai reindirizzato alla homepage");
-                        window.location.replace("/progetto_ium_tweb2/homepage.html");
-                        break;
-                }
-            }
-            else if (admin!==null && !admin) {
-                switch (window.location.pathname) {
-                    case "/progetto_ium_tweb2/storicoGenerale.html":
-                    case "/progetto_ium_tweb2/gestioneDocenti.html":
-                    case "/progetto_ium_tweb2/gestioneCorsi.html":
-                        alert("Non hai i permessi per visualizzare le informazioni di questa pagina. Verrai reindirizzato alla homepage");
-                        window.location.replace("/progetto_ium_tweb2/homepage.html");
-                        break;
-                }
-            }
-            return {username: user, admin:admin, ospite:ospite};
-        },
-        methods: {
-            getNomeUtente() {
-                return this.username || "ospite";
-            },
-        },
-    })
-</script>
+<script src="authenticationChecker.js"></script>
 
 <!-- FINE TEMPLATE -->

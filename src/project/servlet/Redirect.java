@@ -38,7 +38,7 @@ public class Redirect extends HttpServlet {
                 rd.forward(request, response); //non si blocca qua
             }
             assert session != null;
-            admin = (Boolean) request.getAttribute("admin");
+            admin = (Boolean) session.getAttribute("admin");
         } else { //DEBUG
             session = request.getSession();
             session.setAttribute("admin", true);
