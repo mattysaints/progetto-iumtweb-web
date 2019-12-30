@@ -139,22 +139,10 @@ Vue.component("box-docente", {
    template:
       `
       <div class="card">
-         <div class="card-header align-items-start text-left pl-lg-5" data-toggle="collapse" :data-target="'#collapseDoc' + i">
-            <button class="btn btn-light btn-block btn-lg" >
-               <div class="row">
-                  <div class="col text-center">
-                      {{docente.cognome}} {{docente.nome}}
-                      <span class="badge badge-primary rounded" data-toggle="tooltip" title="n° di corsi insegnati">{{corsiInsegnati.length}}</span>
-                  </div> 
-                  <div class="col text-center">
-                      <button class="btn btn-danger collapse" :id="'collapseDoc' + i" data-parent="#listDoc" @click="$root.eliminaDocente(docente,i)"><i class="fas fa-times"></i> Elimina docente
-                      </button>
-                  </div>
-               </div>
-            </button>
-         </div>
-         <docente-corsi class="collapse" :id="'collapseDoc' + i" data-parent="#listDoc" v-bind:docente="docente" v-bind:corsi.sync="corsiInsegnati" :i="i">
-         </docente-corsi>
+         <docente class="card-header align-items-start text-left pl-lg-5" data-toggle="collapse" :data-target="'#collapseDoc' + i" v-bind:docente="docente" v-bind:indexDoc="i" v-bind:corsiInsegnati="corsiInsegnati">
+         </docente>
+         <insegnamenti class="collapse" :id="'collapseDoc' + i" data-parent="#listDoc" v-bind:docente="docente" v-bind:corsi.sync="corsiInsegnati" :indexDoc="i">
+         </insegnamenti>
       </div>
    `,
    props: ['docente', 'i', 'corsiInsegnati'],
@@ -164,29 +152,40 @@ Vue.component('docente', {
    template:
       `
       <button class="btn btn-light btn-block btn-lg" >
-         <slot></slot>
-       </button>
-      `
+         <div class="row">
+            <div class="col text-center">
+                {{docente.cognome}} {{docente.nome}}
+                <span class="badge badge-primary rounded" data-toggle="tooltip" title="n° di corsi insegnati">{{corsiInsegnati.length}}</span>
+            </div> 
+            <div class="col text-center">
+                <button class="btn btn-danger collapse" :id="'collapseDoc' + indexDoc" data-parent="#listDoc" @click="$root.eliminaDocente(docente,indexDoc)"><i class="fas fa-times"></i> Elimina docente
+                </button>
+            </div>
+         </div>
+      </button>
+      `,
+   props: ['docente', 'indexDoc', 'corsiInsegnati'],
 });
 
-Vue.component('docente-corsi', {
+Vue.component('insegnamenti', {
    template:
       `
       <div id="insegnamenti" class="card-body" >
          <div class="container-fluid">
              <div class="mx-auto">
+             
                <p class="text-primary">Nuovo insegnamento:</p>
                <div class="mx-auto d-flex d-inline">
                   <select class="ml-2 form-control" aria-required="true" v-model="corso" >
                      <option value="" selected disabled hidden>Scegli corso</option>
-                     <option v-for="(cor, index) in corsiAggiungibili" :value="cor" :selected="index===1">{{cor}}</option>
+                     <option v-for="(cor, indexCor) in corsiAggiungibili" :value="cor" :selected="indexCor===1">{{cor}}</option>
                   </select>
-                  <button title="Inserisci un nuovo insegnamento" class="btn btn-primary ml-5 w-auto" @click="$root.aggiungiCorso(docente, i, corso)">Inserisci</button>    
+                  <button title="Inserisci un nuovo insegnamento" class="btn btn-primary ml-5 w-auto" @click="$root.aggiungiCorso(docente, indexDoc, corso)">Inserisci</button>    
                </div>
             </div>
          </div>
 
-         <div class="container-fluid card no-collapsible mt-3">
+         <div class="container-fluid card mt-3">
             <p class="text-primary my-3">Lista corsi insegnati: </p>
             <p v-if="corsi.length === 0" class="border-top pt-2">Nessun corso da visualizzare</p>
             <table v-else class="table table-striped">
@@ -198,11 +197,11 @@ Vue.component('docente-corsi', {
                   </tr>
                </thead>
                <tbody>
-               <tr v-for="(c, index) in corsi" :key="index">
-                   <td class="col-md-1">{{index+1}}</td>
+               <tr v-for="(c, indexCor) in corsi" :key="indexCor">
+                   <td class="col-md-1">{{indexCor+1}}</td>
                    <td>{{c.titolo}}</td>
                    <td class="align-content-center col-md-3">
-                       <button v-on:click="$root.eliminaCorso(docente, i, c, index)" class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i></button>
+                       <button v-on:click="$root.eliminaCorso(docente, indexDoc, c, indexCor)" class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i></button>
                    </td>
                </tr>
                </tbody>
@@ -210,7 +209,7 @@ Vue.component('docente-corsi', {
          </div>
       </div>
       `,
-   props: ['corsi', 'docente', 'i'],
+   props: ['corsi', 'docente', 'indexDoc'],
    data: function() {
       return {
          link: "/progetto_ium_tweb2/GestioneInsegnamenti",
