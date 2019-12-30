@@ -50,12 +50,10 @@ Marco:
 3. [OpSuPrenotazioni] prenotare, disdire e segnare come effetuata la prenotazione 
 4. [StoricoPrenotazioni] visualizzare lo storico di un utente (sia utente che admin) e visualizzare tutte le prenotazioni: attive, effettuate, cancellate (admin) 
 5. [GestioneDocenti] inserire, eliminare e visualizzare tutti i docenti (admin)
+6. [GestioneInsegnamenti] inserire, eliminare e visualizzare tutti gli insegnamenti (dato il docente o il corso)
 
 Mattia:
 5. [GestioneCorsi] inserire, eliminare e visualizzare tutti i corsi (admin)
-
-Aggiunte:
-1. inserire, eliminare e visualizzare tutti gli insegnamenti (dato il docente o il corso)
 
 ## View
 

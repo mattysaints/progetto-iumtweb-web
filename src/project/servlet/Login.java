@@ -2,11 +2,9 @@ package project.servlet;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import netscape.javascript.JSObject;
 import project.servlet.model.DAO;
 import project.servlet.model.Utente;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -59,19 +57,28 @@ public class Login extends HttpServlet {
         PrintWriter out = response.getWriter();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        Gson gson = new Gson();
-
+        String ospite = request.getParameter("ospite");
         JsonObject jsonObject = new JsonObject();
-        Utente utente = DAO.queryUtente(new Utente(username, password, null));
-        if (utente == null) {
-            jsonObject.addProperty("result", "failure");
-            jsonObject.addProperty("admin", false);
-        } else {
+        if(ospite!=null) { //accesso come ospite
             HttpSession session = request.getSession();
-            session.setAttribute("username", utente.getAccount());
-            session.setAttribute("admin", utente.isAdmin());
-            jsonObject.addProperty("result", "success");
-            jsonObject.addProperty("admin", utente.isAdmin());
+            jsonObject.addProperty("result", true);
+            jsonObject.addProperty("admin", false);
+            jsonObject.addProperty("ospite", true);
+            session.setAttribute("ospite", true);
+        } else { //accesso come utente
+            Utente utente = DAO.queryUtente(new Utente(username, password, null));
+            if (utente == null) {
+                jsonObject.addProperty("result", false);
+                jsonObject.addProperty("admin", false);
+                jsonObject.addProperty("ospite", false);
+            } else {
+                HttpSession session = request.getSession();
+                session.setAttribute("username", utente.getAccount());
+                session.setAttribute("admin", utente.isAdmin());
+                session.setAttribute("ospite", true);
+                jsonObject.addProperty("result", true);
+                jsonObject.addProperty("admin", utente.isAdmin());
+            }
         }
         out.print(gson.toJson(jsonObject));
         out.flush();

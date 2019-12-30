@@ -9,12 +9,12 @@
  * - storico
  * - prenota
  */
-$(function () {
+$( document ).ready(function () {
     var $navbar = $("#navbar");
     $navbar.load("navbar.html", () => {
         var idActivePage = $navbar.attr("id-active-page");
         $navbar.addClass("fixed-top");
         $(idActivePage).addClass("active") //dava errore con # davanti
     });
-    $("body").addClass("pt-5")
+    $("body").addClass("pt-5");
 });

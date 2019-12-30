@@ -18,7 +18,7 @@ import java.io.IOException;
 @WebServlet(name = "Redirect", urlPatterns = {"/Redirect"})
 public class Redirect extends HttpServlet {
     private ServletContext context;
-    protected static final boolean DEBUG = true;
+    protected static final boolean DEBUG = false;
 
     @Override
     public void init() throws ServletException {
@@ -28,9 +28,9 @@ public class Redirect extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        String redirect = request.getParameter("redirect"); //setAttribute!=setParameter
+        String redirect = request.getParameter("redirect");
         RequestDispatcher rd = null;
-        boolean admin=true;
+        Boolean admin=true;
         if(!DEBUG) {
             if (session == null) { //sessione scaduta
                 request.setAttribute("sessionExpired", true);
@@ -38,7 +38,7 @@ public class Redirect extends HttpServlet {
                 rd.forward(request, response); //non si blocca qua
             }
             assert session != null;
-            admin = (boolean) session.getAttribute("admin");
+            admin = (Boolean) request.getAttribute("admin");
         } else { //DEBUG
             session = request.getSession();
             session.setAttribute("admin", true);
@@ -73,15 +73,10 @@ public class Redirect extends HttpServlet {
                         throw new ServletException("Non hai i permessi di amministratore!");
                     }
                     break;
-                case "storicoUtente":
-                    // if(request.getAttribute("utente")!=null) {
-                        rd = context.getRequestDispatcher("/gestioneStorico.html");
-                    // } else {
-                        //non hai i permessi di admin
-                        // throw new ServletException("Non hai specificato l'utente!");
-                    //}
+                case "gestioneStorico":
+                    rd = context.getRequestDispatcher("/gestioneStorico.html");
                     break;
-                case "prenota":
+                case "ripetizioniDisponibili":
                     rd = context.getRequestDispatcher("/ripetizioniDisponibili.html");
                 default:
             }

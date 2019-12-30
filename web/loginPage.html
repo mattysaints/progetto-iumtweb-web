@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="it">
    <head>
       <meta charset="UTF-8" >
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,7 +49,7 @@
                <button type="submit" class="btn btn-primary btn-block" aria-label="buttonAccess"> Accedi </button>
             </div> <!-- form-group// -->
             <hr>
-            <a href="" > <p class="text-sm-center" data-toggle="tooltip" title="Accedi come ospite per vedere comunque le ripetizioni disponibili">
+            <a @click="ospite()" > <p class="text-sm-center" data-toggle="tooltip" title="Accedi come ospite per vedere comunque le ripetizioni disponibili">
                Non hai un account?
             </p></a>
          </form>
@@ -70,21 +70,26 @@
          link: "/progetto_ium_tweb2/Login",
          username: "",
          password: "",
-         result: "",
-         admin: ""
       },
       methods: {
          login : function () {
             var self = this;
             var $label = $("#label");
             $.post(this.link, {username: self.username, password: self.password}, data => {
-               self.result = data.result;
-               self.admin = data.admin;
-               if (self.result === "failure")
+               if (!data.result)
                   $label.text("Nome utente o password inseriti non corretti");
                else {
                   sessionStorage.setItem("username", self.username);
-                  sessionStorage.setItem("admin", self.admin);
+                  sessionStorage.setItem("admin", data.admin);
+                  sessionStorage.setItem("ospite", data.ospite);
+                  $("#redirect").submit();
+               }
+            });
+         },
+         ospite: function () {
+            $.post(this.link, {ospite: "ospite"}, data => {
+               if(data.result) {
+                  sessionStorage.setItem("ospite", data.ospite);
                   $("#redirect").submit();
                }
             });
