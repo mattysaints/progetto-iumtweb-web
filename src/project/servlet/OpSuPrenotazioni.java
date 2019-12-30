@@ -64,6 +64,7 @@ public class OpSuPrenotazioni extends HttpServlet {
          }
          out.print(correct);
          out.flush();
+         out.close();
       }
    }
 

@@ -104,8 +104,9 @@
             },
             disdiciRip: function (prenotazione,index) {
                 var self = this;
-                $.post("/progetto_ium_tweb2/StoricoPrenotazioni", {op:"disdire", prenotazione: prenotazione}, () => {
-                    self.ripetizioni.splice(index,1);
+                $.post("/progetto_ium_tweb2/StoricoPrenotazioni", {ops:["disdire"], prenotazioni: [prenotazione]}, (corretto) => {
+                    if(corretto)
+                        self.ripetizioni.splice(index,1);
                 })
             }
         },
