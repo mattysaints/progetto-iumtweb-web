@@ -28,11 +28,43 @@
 
 <div id="navbar" id-active-page="prenota"></div>
     <!-- lista delle Ripetizioni Disponibili -->
+
+<div class="container-fluid card w-50 mx-auto mt-5">
+    <h1 class="text-center my-4">Lista ripetizioni disponibili</h1>
+
+    <div class="text-center my-4" class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            <span class="input-group-text red lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
+            <input type="text" id="searchDoc" onkeyup="searchDoc()" placeholder="Cerca per docente..">
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            <span class="input-group-text red lighten-3" id="basic-text2"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
+            <input type="text" id="...." onkeyup="searchCo()" placeholder="Cerca per corso">
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            <select title="Scegli un giorno">
+                <option value="Value 1">Lun</option>
+                <option value="Value 2">Mar</option>
+                <option value="Value 3">Mer</option>
+                <option value="Value 4">Gio</option>
+                <option value="Value 5">Ven</option>
+            </select>
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            <select title="Scegli un'ora">
+                <option value="Value 1">SLOT1</option>
+                <option value="Value 2">SLOT2</option>
+                <option value="Value 3">SLOT3</option>
+                <option value="Value 4">SLOT4</option>
+            </select>
+        </div>
+    </div>
+</div>
+
     <div id="listR">
         <div class="container-fluid card w-50 mx-auto my-5">
-            <p class="text-primary my-3">Lista ripetizioni disponibili: </p>
             <table class="table table-striped" id="listRip">
-                <thead>
+                <thead class="thead-dark">
                 <tr id="myUL">
                     <th scope="col" >#</th>
                     <th scope="col">Docente</th>
@@ -43,24 +75,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row"></th>
-                    <td><input type="text" id="searchDoc" onkeyup="searchDoc()" placeholder="Cerca per docente.."></td>
-                    <td><input type="text" id="...." onkeyup="searchCo()" placeholder="Cerca per corso"></td>
-                    <td><select title="Scegli un giorno">
-                        <option value="Value 1">Lun</option>
-                        <option value="Value 2">Mar</option>
-                        <option value="Value 3">Mer</option>
-                        <option value="Value 4">Gio</option>
-                        <option value="Value 5">Ven</option>
-                    </select></td>
-                    <td><select title="Scegli un'ora">
-                        <option value="Value 1">SLOT1</option>
-                        <option value="Value 2">SLOT2</option>
-                        <option value="Value 3">SLOT3</option>
-                        <option value="Value 4">SLOT4</option>
-                    </select></td>
-                </tr>
                 <tr v-for="(r, index) in ripetizioni" :key="index" c-bind="r">
                     <td class="col-md-1">{{index+1}}</td>
                     <td class="col-md-2">{{r.docente.nome}} {{r.docente.cognome}}</td>
