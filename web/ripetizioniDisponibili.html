@@ -23,20 +23,18 @@
         }
     </style>
     <title>Ripetizioni Disponibili</title>
-
 </head>
 <body>
 
 <div id="navbar" id-active-page="prenota"></div>
-
     <!-- lista delle Ripetizioni Disponibili -->
     <div id="listR">
         <div class="container-fluid card w-50 mx-auto my-5">
             <p class="text-primary my-3">Lista ripetizioni disponibili: </p>
-            <table class="table table-striped">
+            <table class="table table-striped" id="listRip">
                 <thead>
-                <tr>
-                    <th scope="col">#</th>
+                <tr id="myUL">
+                    <th scope="col" >#</th>
                     <th scope="col">Docente</th>
                     <th scope="col">Corso</th>
                     <th scope="col">Giorno</th>
@@ -45,6 +43,24 @@
                 </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <th scope="row"></th>
+                    <td><input type="text" id="searchDoc" onkeyup="searchDoc()" placeholder="Cerca per docente.."></td>
+                    <td><input type="text" id="...." onkeyup="searchCo()" placeholder="Cerca per corso"></td>
+                    <td><select title="Scegli un giorno">
+                        <option value="Value 1">Lun</option>
+                        <option value="Value 2">Mar</option>
+                        <option value="Value 3">Mer</option>
+                        <option value="Value 4">Gio</option>
+                        <option value="Value 5">Ven</option>
+                    </select></td>
+                    <td><select title="Scegli un'ora">
+                        <option value="Value 1">SLOT1</option>
+                        <option value="Value 2">SLOT2</option>
+                        <option value="Value 3">SLOT3</option>
+                        <option value="Value 4">SLOT4</option>
+                    </select></td>
+                </tr>
                 <tr v-for="(r, index) in ripetizioni" :key="index" c-bind="r">
                     <td class="col-md-1">{{index+1}}</td>
                     <td class="col-md-2">{{r.docente.nome}} {{r.docente.cognome}}</td>
@@ -54,13 +70,13 @@
                     <td class="col-md-5">
                         <button v-on:click="prenRip(r,index)" type="button" class="btn btn-primary">Prenota</button>
                     </td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
 <div id="footer"></div>
-
 
     <script>
         var listR = new Vue({
@@ -87,6 +103,22 @@
             }
         })
     </script>
+
+<script>
+    function myFunction() {
+        var input = document.getElementById("myInput");
+        var filter = input.value.toUpperCase();
+        var table = document.getElementById("myTable");
+        var tr = table.getElementsByTagName("tr");
+        for (var i = 0; i < tr.length; i++) {
+            if (tr.textContent.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+</script>
 
 <script src="navbar-loader.js"></script>
 <script src="footer-loader.js"></script>
