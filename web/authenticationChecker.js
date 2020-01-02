@@ -8,10 +8,10 @@ var autenticationChecker = new Vue({
       var admin = sessionStorage.getItem("admin");
       var ospite = sessionStorage.getItem("ospite");
       console.log("user: " + user + " admin: " + admin + " ospite: " + ospite);
-      if(!user && !admin && !ospite) {
+      if(user===null && admin===null && ospite===null) {
          alert("Non hai effettuato il login. Verrai reindirizzato a breve");
          window.location.replace("/progetto_ium_tweb2/loginPage.html");
-      } else if(ospite==="true" || ospite==="ospite") {
+      } else if(ospite) {
          var isRedirect = window.location.search.search("redirect=");
          var path;
          console.log(isRedirect);

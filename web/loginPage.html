@@ -75,7 +75,7 @@
          login : function () {
             var self = this;
             var $label = $("#label");
-            $.post(this.link, {username: self.username, password: self.password}, data => {
+            $.post(this.link, {username: self.username, password: self.password, ospite: "false"}, data => {
                if (!data.result)
                   $label.text("Nome utente o password inseriti non corretti");
                else {
@@ -87,7 +87,7 @@
             });
          },
          ospite: function () {
-            $.post(this.link, {ospite: "ospite"}, data => {
+            $.post(this.link, {ospite: "true"}, data => {
                if(data.result) {
                   sessionStorage.setItem("ospite", data.ospite);
                   $("#redirect").submit();

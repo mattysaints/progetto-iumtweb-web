@@ -59,7 +59,7 @@ public class Login extends HttpServlet {
         String password = request.getParameter("password");
         String ospite = request.getParameter("ospite");
         JsonObject jsonObject = new JsonObject();
-        if(ospite!=null) { //accesso come ospite
+        if(ospite!=null && ospite.equalsIgnoreCase("true")) { //accesso come ospite
             HttpSession session = request.getSession();
             jsonObject.addProperty("result", true);
             jsonObject.addProperty("admin", false);
