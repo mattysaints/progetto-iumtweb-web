@@ -75,7 +75,7 @@ public class Login extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("username", utente.getAccount());
                 session.setAttribute("admin", utente.isAdmin());
-                session.setAttribute("ospite", true);
+                session.setAttribute("ospite", false);
                 jsonObject.addProperty("result", true);
                 jsonObject.addProperty("admin", utente.isAdmin());
             }
