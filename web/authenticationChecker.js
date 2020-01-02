@@ -11,7 +11,7 @@ var autenticationChecker = new Vue({
       if(user===null && admin===null && ospite===null) {
          alert("Non hai effettuato il login. Verrai reindirizzato a breve");
          window.location.replace("/progetto_ium_tweb2/loginPage.html");
-      } else if(ospite) {
+      } else if(ospite===null || ospite==="true") {
          var isRedirect = window.location.search.search("redirect=");
          var path;
          console.log(isRedirect);
@@ -25,17 +25,17 @@ var autenticationChecker = new Vue({
             case "/progetto_ium_tweb2/gestioneDocenti.html":
             case "/progetto_ium_tweb2/gestioneCorsi.html":
             case "progetto_ium_tweb2/gestioneStorico.html":
-               alert("Non hai i permessi per visualizzare le informazioni di questa pagina. Verrai reindirizzato alla homepage");
+               alert("Sei ospite! Non hai i permessi per visualizzare le informazioni di questa pagina. Verrai reindirizzato alla homepage");
                window.location.replace("/progetto_ium_tweb2/homepage.html");
                break;
          }
       }
-      else if (admin!==null && !admin) {
+      else if (admin===null || admin==="false") {
          switch (window.location.pathname) {
             case "/progetto_ium_tweb2/storicoGenerale.html":
             case "/progetto_ium_tweb2/gestioneDocenti.html":
             case "/progetto_ium_tweb2/gestioneCorsi.html":
-               alert("Non hai i permessi per visualizzare le informazioni di questa pagina. Verrai reindirizzato alla homepage");
+               alert("Non hai i permessi di admin per visualizzare le informazioni di questa pagina. Verrai reindirizzato alla homepage");
                window.location.replace("/progetto_ium_tweb2/homepage.html");
                break;
          }

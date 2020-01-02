@@ -78,6 +78,7 @@ public class Login extends HttpServlet {
                 session.setAttribute("ospite", false);
                 jsonObject.addProperty("result", true);
                 jsonObject.addProperty("admin", utente.isAdmin());
+                jsonObject.addProperty("ospite",false);
             }
         }
         out.print(gson.toJson(jsonObject));

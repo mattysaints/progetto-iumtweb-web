@@ -46,8 +46,8 @@
             <td>{{prenot.docente.cognome}} {{prenot.docente.nome}}</td>
             <td>{{prenot.corso.titolo}}</td>
             <td>{{prenot.utente.account}}</td>
-            <td>{{prenot.giorno}}</td>
-            <td>{{prenot.slot}}</td>
+            <td>{{giornoEsteso( prenot.giorno)}}</td>
+            <td>{{slotEsteso(prenot.slot)}}</td>
             <td>
                <span v-if="prenot.stato!=='attiva'">{{prenot.stato}} </span>
                <select aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
@@ -116,7 +116,37 @@
                      async:false,
                   });
 
-              } //end func
+              }, //end func
+              giornoEsteso(giorno) {
+                  switch(giorno) {
+                     case "LUN":
+                        return "lunedì";
+                     case "MAR":
+                        return "martedì";
+                     case "MER":
+                        return "mercoledì";
+                     case "GIO":
+                        return "giovedì";
+                     case "VEN":
+                        return "venerdì";
+                     default:
+                        return "";
+                  }
+              },
+              slotEsteso(slot) {
+                  switch (slot) {
+                     case "SLOT1":
+                        return "15-16";
+                     case "SLOT2":
+                        return "16-17";
+                     case "SLOT3":
+                        return "17-18";
+                     case "SLOT4":
+                        return "18-19";
+                     default:
+                        return "";
+                  }
+              }
            }
        })
    </script>
