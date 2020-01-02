@@ -10,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
  */
 @WebServlet(name = "OpSuPrenotazioni", urlPatterns = {"/OpSuPrenotazioni"})
 public class OpSuPrenotazioni extends HttpServlet {
-   private static final Gson json = new Gson();
+   private static final Gson gson = new Gson();
    @Override
    public void init() throws ServletException {
       super.init();
@@ -40,15 +39,25 @@ public class OpSuPrenotazioni extends HttpServlet {
     * @throws ServletException
     * @throws IOException
     */
-   private void esegui(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      HttpSession session = request.getSession(false);
-      List<String> ops = json.fromJson(request.getParameter("ops"), new TypeToken<List<String>>(){}.getType());
-      List<Prenotazione> prenots = json.fromJson(request.getParameter("prenotazioni"), new TypeToken<List<Prenotazione>>(){}.getType());
+   private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      // HttpSession session = request.getSession(false);
+      // if (session == null)
+      // return;
+
+      String tmp = request.getParameter("ops");
+      String tmp2 = request.getParameter("prenotazioni");
+      List<String> ops = gson.fromJson(tmp, new TypeToken<List<String>>() {
+      }.getType());
+      List<Prenotazione> prenotazioni = gson.fromJson(tmp2, new TypeToken<List<Prenotazione>>() {
+      }.getType());
+
+      response.setContentType("application/json");
       PrintWriter out = response.getWriter();
       boolean correct = true;
-      for (int i = 0; i < prenots.size(); i++) {
+
+      for (int i = 0; i < prenotazioni.size(); i++) {
          String op = ops.get(i);
-         Prenotazione prenot = prenots.get(i);
+         Prenotazione prenot = prenotazioni.get(i);
          switch (op) {
             case "prenotare":
                correct &= DAO.insertPrenotazione(prenot);
@@ -71,10 +80,10 @@ public class OpSuPrenotazioni extends HttpServlet {
 
    // <editor-fold defaultstate="collapsed" desc="- Metodi HttpServlet -">
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      esegui(request,response);
+      processRequest(request, response);
    }
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      esegui(request,response);
+      processRequest(request, response);
    }
    //   </editor-fold>
 
