@@ -34,8 +34,8 @@ public class OpSuPrenotazioni extends HttpServlet {
    }
 
    /**
-    * stampa un bool se la richiesta è stata eseguita correttamente
-    * @param request parametri: "op" assegnare uno tra "prenotare", "disdire" ed "effettuare"; "prenotazioni" assegnare array di oggetti json corrispondenti
+    * stampa un bool se le richieste sono state eseguite correttamente
+    * @param request parametri: "ops" lista di op tra "prenotare", "disdire" ed "effettuare"; "prenotazioni" assegnare array di oggetti json corrispondenti su cui effettuare le operazioni
     * @param response
     * @throws ServletException
     * @throws IOException

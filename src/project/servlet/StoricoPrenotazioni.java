@@ -33,7 +33,7 @@ public class StoricoPrenotazioni extends HttpServlet {
    /**
     *
     * @param request parametro: "utente" in formato json, se null si intende lo storico generale
-    * @param response
+    * @param response lista di prenotazioni in formato json
     * @throws ServletException
     * @throws IOException
     */
@@ -43,11 +43,11 @@ public class StoricoPrenotazioni extends HttpServlet {
       response.setContentType("application/json");
       PrintWriter out = response.getWriter();
       List<Prenotazione> storico;
+      Boolean admin = (Boolean) session.getAttribute("admin");
       if(u==null){
          //restituisco storico generale (solo admin)
-         assert session != null;
-         if ((boolean) session.getAttribute("admin"))
-          storico = DAO.getStoricoPrenotazioni();
+         if (admin!= null && admin)
+            storico = DAO.getStoricoPrenotazioni();
          else
             throw new ServletException("Non hai i permessi di admin!");
 

@@ -27,9 +27,9 @@ public class GestioneInsegnamenti extends HttpServlet {
    }
 
    /**
-    * visualizza la lista dei corsi insegnati da un docente, opure ne inserisce uno o lo elimina
-    * @param request parametro "op" a scelta tra: "inserire", "eliminare", "visualizzare"; parametro "docente": oggetto json (nell'ultimo caso null)
-    * @param response
+    * visualizza la lista dei corsi insegnati da un docente, oppure ne inserisce uno o lo elimina
+    * @param request parametro "op" a scelta tra: "inserire", "eliminare", "visualizzare"; parametro "docente": oggetto json (nell'ultimo caso null); parametro "corso" da inserire o eliminare (altrimenti null)
+    * @param response stampa un oggetto json che contiene una proprietà bool con il successo dell'operazione e una lista di corsi (null quando l'op è di inserimento o eliminazione)
     * @throws ServletException
     * @throws IOException
     */
@@ -65,7 +65,7 @@ public class GestioneInsegnamenti extends HttpServlet {
             }
             break;
          default:
-            throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
+            throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'inserire', 'eliminare', 'visualizzare')");
       }
       rispostaJson.addProperty("successo", corretto);
       rispostaJson.add("corsi", corsi);

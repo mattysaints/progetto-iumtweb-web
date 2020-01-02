@@ -27,7 +27,7 @@ public class GestioneDocenti extends HttpServlet {
    /**
     *
     * @param request parametro "op" a scelta tra: "inserire", "eliminare", "visualizzare"; parametro "docente": oggetto json (nell'ultimo caso null)
-    * @param response stampa nei primi due casi un bool, nell'ultimo l'oggetto json richiesto
+    * @param response stampa un oggetto json che contiene una proprietà bool con il successo dell'operazione e una lista di docenti (null quando l'op è di inserimento o eliminazione)
     * @throws ServletException
     * @throws IOException
     */
@@ -59,8 +59,7 @@ public class GestioneDocenti extends HttpServlet {
             docenti = json.toJsonTree(doc, new TypeToken<List<Docente>>(){}.getType());
             break;
          default:
-            throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'prenotare', 'disdire', 'effettuare')");
-      }
+            throw new ServletException("L'operazione richiesta non è tra quelle servite (scegliere tra 'inserire', 'eliminare', 'visualizzare')");      }
       rispostaJson.addProperty("successo", corretto);
       rispostaJson.add("docenti", docenti);
       out.print(rispostaJson);
