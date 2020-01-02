@@ -199,14 +199,14 @@
                         $(this).hide();
                     }
                 } else if ($(this).find('td:eq(4)').text() != '' || $(this).find('td:eq(5)').text() != '') {
-                    if (country != 'all') {
+                    if (giorno != 'all') {
                         if (rowGiorno.toUpperCase() == giorno.toUpperCase()) {
                             $(this).show();
                         } else {
                             $(this).hide();
                         }
                     }
-                    if (age != 'all') {
+                    if (ora != 'all') {
                         if (rowOra == ora) {
                             $(this).show();
                         }
@@ -241,7 +241,6 @@
             }
         }
     }
-
 
 </script>
 
