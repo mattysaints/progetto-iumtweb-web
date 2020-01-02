@@ -113,51 +113,11 @@
                     $.post(this.link, {ops:"prenotare",prenotazioni:JSON.stringify(prenotazione)}, data => {
                         self.ripetizioni.splice(index,1);
                     });
-                },
-                computed: {
-                    condition() {
-                        this.docente.nome;
-                        this.docente.cognome;
-                        this.corso.titolo;
-                        this.giorno;
-                        this.ora;
-                        return this.docente.nome == getDocente() || this.docente.cognome == getDocente() || this.corso.titolo == getCorso() || this.giorno == getGiorno() || this.ora == getOra();
-                    }
                 }
             }
         })
     </script>
 
-<script>
-    function getDocente(){
-        var inputVal = document.getElementById("searchDoc").value;
-        return inputVal;
-    }
-    function getCorso(){
-        var inputVal = document.getElementById("searchc").value;
-        return inputVal;
-    }
-    function getGiorno(sel) {
-        var opt;
-        for ( var i = 0, len = sel.options.length; i < len; i++ ) {
-            opt = sel.options[i];
-            if ( opt.selected === true ) {
-                break;
-            }
-        }
-        return opt;
-    }
-    function getOra(sel) {
-        var opt;
-        for ( var i = 0, len = sel.options.length; i < len; i++ ) {
-            opt = sel.options[i];
-            if ( opt.selected === true ) {
-                break;
-            }
-        }
-        return opt;
-    }
-</script>
 
 <script>
     $(document).ready(function(){
@@ -178,69 +138,14 @@
         });
     });
 
-    $(document).ready(function () {
-        $("#giorno,#ddlAge").on("change", function () {
-            var giorno = $('#giorno').find("option:selected").val();
-            var ora = $('#ora').find("option:selected").val();
-            SearchData(giorno, ora)
+    $(document).ready(function(){
+        $("#giorno").change(function(){
+            var value = $(this).children("option:selected").val();
+            $("#myTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
         });
     });
-    function SearchData(giorno, ora) {
-        if (giorno.toUpperCase() == 'ALL' && ora.toUpperCase() == 'ALL') {
-            $('#listRip tbody tr').show();
-        } else {
-            $('#listRip tbody tr:has(td)').each(function () {
-                var rowGiorno = $.trim($(this).find('td:eq(4)').text());
-                var rowOra = $.trim($(this).find('td:eq(5)').text());
-                if (giorno.toUpperCase() != 'ALL' && ora.toUpperCase() != 'ALL') {
-                    if (rowGiorno.toUpperCase() == giorno.toUpperCase() && rowOra == ora) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                } else if ($(this).find('td:eq(4)').text() != '' || $(this).find('td:eq(5)').text() != '') {
-                    if (giorno != 'all') {
-                        if (rowGiorno.toUpperCase() == giorno.toUpperCase()) {
-                            $(this).show();
-                        } else {
-                            $(this).hide();
-                        }
-                    }
-                    if (ora != 'all') {
-                        if (rowOra == ora) {
-                            $(this).show();
-                        }
-                        else {
-                            $(this).hide();
-                        }
-                    }
-                }
-
-            });
-        }
-    }
-
-    function daySelect() {
-        // Variables
-        let dropdown, table, rows, cells, country, filter;
-        dropdown = document.getElementById("giorno");
-        table = document.getElementById("listRip");
-        rows = table.getElementsByTagName("tr");
-        filter = dropdown.value;
-
-        // Loops through rows and hides those with day that don't match the filter
-        for (let row of rows) { // `for...of` loops through the NodeList
-            cells = row.getElementsByTagName("td");
-            giorno = cells[4] || null; // gets the 4nd `td` or nothing
-            // this is the header row, or 4nd `td` text matches filter
-            if (!giorno || (filter === giorno.textContent)) {
-                row.style.display = ""; // shows this row
-            }
-            else {
-                row.style.display = "none"; // hides this row
-            }
-        }
-    }
 
 </script>
 
