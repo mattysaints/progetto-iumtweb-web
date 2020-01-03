@@ -15,8 +15,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 /**
@@ -57,8 +55,11 @@ public class RipetizioniDisponibili extends HttpServlet {
         Type type = new TypeToken<List<Prenotazione>>(){}.getType();
         String jsonObject = gson.toJson(disponibili, type);
 
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.println(jsonObject);
+        out.print(jsonObject);
+        out.flush();
+        out.close();
     }
     // <editor-fold defaultstate="collapsed" desc="- Metodi HttpServlet -">
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

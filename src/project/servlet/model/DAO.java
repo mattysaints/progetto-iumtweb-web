@@ -378,7 +378,7 @@ public class DAO {
             statement.setString(4, prenotazione.getGiorno().toString());
             statement.setString(5, prenotazione.getDocente().getNome());
             statement.setString(6, prenotazione.getDocente().getCognome());
-            statement.setString(6, prenotazione.getCorso().toString());
+            statement.setString(7, prenotazione.getCorso().getTitolo());
             result = statement.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();
