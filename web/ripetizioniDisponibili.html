@@ -126,17 +126,17 @@
                 <th scope="col">Corso</th>
                 <th scope="col">Giorno</th>
                 <th scope="col">Ora</th>
-                <th scope="col"></th>
+                <th scope="col" v-if="!ospite"></th>
             </tr>
             </thead>
             <tbody>
             <tr :key="index" v-for="(r, index) in ripetizioni">
-                <td class="col-md-1">{{index+1}}</td>
-                <td class="col-md-2">{{r.docente.nome}} {{r.docente.cognome}}</td>
-                <td class="col-md-3">{{r.corso.titolo}}</td>
-                <td class="col-md-4">{{r.giorno}}</td>
-                <td class="col-md-4">{{r.slot}}</td>
-                <td class="col-md-5">
+                <td class="col-md-1">{{ index + 1 }}</td>
+                <td class="col-md-2">{{ r.docente.nome }} {{ r.docente.cognome }}</td>
+                <td class="col-md-3">{{ r.corso.titolo }}</td>
+                <td class="col-md-4">{{ giornoLabel(r.giorno) }}</td>
+                <td class="col-md-4">{{ slotLabel(r.slot) }}</td>
+                <td class="col-md-5" v-if="!ospite">
                     <button class="btn btn-primary" v-on:click="prenotaRipetizione(r, index)">Prenota</button>
                 </td>
             </tr>
@@ -164,7 +164,8 @@
             cognomeDocente: "",
             corso: "",
             giorno: "",
-            ora: ""
+            ora: "",
+            ospite: sessionStorage.getItem("ospite") === "true"
         },
         mounted() {
             this.getRipetizioniDisponibili();
@@ -208,6 +209,37 @@
                     (this.giorno === "" || this.giorno === rip.giorno) &&
                     (this.ora === "" || this.ora === rip.slot)
                 )
+            },
+
+            slotLabel: function (slot) {
+                switch (slot) {
+                    case "SLOT1":
+                        return "15 - 16";
+                    case "SLOT2":
+                        return "16 - 17";
+                    case "SLOT3":
+                        return "17 - 18";
+                    case "SLOT4":
+                        return "18 - 19";
+                    default:
+                        return "ERRORE";
+                }
+            },
+            giornoLabel: function (giorno) {
+                switch (giorno) {
+                    case "LUN":
+                        return "Lunedì";
+                    case "MAR":
+                        return "Martedì";
+                    case "MER":
+                        return "Mercoledì";
+                    case "GIO":
+                        return "Giovedì";
+                    case "VEN":
+                        return "Venerdì";
+                    default:
+                        return "ERRORE";
+                }
             }
         },
         watch: {
