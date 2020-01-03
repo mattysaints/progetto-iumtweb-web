@@ -24,9 +24,9 @@
    <div class="container-fluid mt-5 w-50" >
    <div id="loginCard" class="card">
       <article class="card-body">
-         <h4 class="card-title text-center mb-4 mt-1">Login</h4>
+          <h1 class="text-center mb-4 mt-1">Ripetizioni</h1>
          <hr>
-         <p class="text-success text-center">Ripetizioni</p>
+          <p class="text-primary card-title text-center">Login</p>
          <form id="app" action="javascript:app.login()">
             <p id="label" class="text-danger"></p>
             <div class="form-group">
@@ -42,16 +42,20 @@
                   <div class="input-group-prepend">
                      <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                   </div>
-                  <input name="password" v-model="password" class="form-control" placeholder="******" type="password" aria-required="true" required aria-label="passwordInput">
+                   <input aria-label="passwordInput" aria-required="true" class="form-control" id="password"
+                          name="password" placeholder="******" required type="password" v-model="password">
                </div> <!-- input-group.// -->
             </div> <!-- form-group// -->
             <div class="form-group">
                <button type="submit" class="btn btn-primary btn-block" aria-label="buttonAccess"> Accedi </button>
             </div> <!-- form-group// -->
             <hr>
-            <a @click="ospite()" > <p class="text-sm-center" data-toggle="tooltip" title="Accedi come ospite per vedere comunque le ripetizioni disponibili">
-               Non hai un account?
-            </p></a>
+             <div class="text-center">
+                 <a @click="ospite()" class="mx-auto text-sm-center" data-toggle="tooltip" href="javascript:void(0)"
+                    title="Accedi come ospite per visualizzare le ripetizioni disponibili">
+                     Non hai un account?
+                 </a>
+             </div>
          </form>
       </article>
    </div> <!-- card.// -->
@@ -76,9 +80,10 @@
             var self = this;
             var $label = $("#label");
             $.post(this.link, {username: self.username, password: self.password, ospite: "false"}, data => {
-               if (!data.result)
+                if (!data.result) {
                   $label.text("Nome utente o password inseriti non corretti");
-               else {
+                    $("#password").val("");
+                } else {
                   sessionStorage.setItem("username", self.username);
                   sessionStorage.setItem("admin", data.admin);
                   sessionStorage.setItem("ospite", data.ospite);
