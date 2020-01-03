@@ -17,7 +17,7 @@ import java.util.List;
 
 @WebServlet(name = "StoricoPrenotazioni", urlPatterns = {"/StoricoPrenotazioni"})
 public class StoricoPrenotazioni extends HttpServlet {
-   private static final Gson json = new Gson();
+    private static final Gson gson = new Gson();
    @Override
    public void init() throws ServletException {
       super.init();
@@ -39,12 +39,12 @@ public class StoricoPrenotazioni extends HttpServlet {
     */
    private void esegui(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       HttpSession session = request.getSession(false);
-      Utente u = json.fromJson(request.getParameter("utente"), Utente.class);
+       String utente = request.getParameter("utente");
       response.setContentType("application/json");
       PrintWriter out = response.getWriter();
       List<Prenotazione> storico;
       Boolean admin = (Boolean) session.getAttribute("admin");
-      if(u==null){
+       if (utente == null) {
          //restituisco storico generale (solo admin)
          if (admin!= null && admin)
             storico = DAO.getStoricoPrenotazioni();
@@ -52,9 +52,9 @@ public class StoricoPrenotazioni extends HttpServlet {
             throw new ServletException("Non hai i permessi di admin!");
 
       } else {
-         storico = DAO.getStoricoPrenotazioni(u);
+           storico = DAO.getStoricoPrenotazioni(new Utente(utente, null, null));
       }
-      String stor = json.toJson(storico);
+       String stor = gson.toJson(storico);
       out.print(stor);
       out.flush();
       out.close();

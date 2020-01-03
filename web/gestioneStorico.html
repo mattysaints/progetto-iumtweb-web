@@ -14,24 +14,22 @@
     <script src="jquery/jquery.min.js"></script>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-    <style type="text/css" media="screen">
-        #selected {
-            text-decoration-color: yellow;
-        }
-        div#listDoc ul {
-            text-align-all: right;
-        }
-    </style>
     <title>Gestione Storico</title>
 
 </head>
 <body>
 
-<div id="navbar" id-active-page="prenota"></div>
+<div id="navbar" id-active-page="storico"></div>
 
 <!-- Storico Ripetizioni -->
 <div id="listR">
-    <div class="container-fluid card w-50 mx-auto my-5">
+
+    <div class="container-fluid card w-75 mt-5">
+        <h1 class="text-center my-4">Storico ripetizioni</h1>
+    </div>
+
+
+    <div class="container-fluid card w-75 mx-auto my-5">
         <p class="text-primary my-3">Storico Ripetizioni: </p>
         <table class="table table-striped">
             <thead>
@@ -41,20 +39,31 @@
                 <th scope="col">Corso</th>
                 <th scope="col">Giorno</th>
                 <th scope="col">Ora</th>
-                <th scope="col"></th>
+                <th scope="col">Stato</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(r, index) in ripetizioni" :key="index">
-                <td class="col-md-1">{{index+1}}</td>
-                <td class="col-md-2">{{r.docente.nome}} {{r.docente.cognome}}</td>
-                <td class="col-md-3">{{r.corso.titolo}}</td>
-                <td class="col-md-4">{{r.giorno}}</td>
-                <td class="col-md-4">{{r.slot}}</td>
-                <td class="col-md-5">
-                    <span v-if = "r.stato == 'effettuata'" class="badge badge-primary">Effettuata</span>
-                    <span v-if = "r.stato == 'disdetta'" class="badge badge-primary">Disdetta</span>
-                    <button id="myBtn" v-else onclick="disabilitaB(this)" v-on:click="disdiciRip(r, index)" type="button" class="btn btn-primary">Disdici</button>
+                <td>{{ index + 1 }}</td>
+                <td>{{ r.docente.nome }} {{ r.docente.cognome }}</td>
+                <td>{{ r.corso.titolo }}</td>
+                <td>{{ giornoLabel(r.giorno) }}</td>
+                <td>{{ slotLabel(r.slot) }}</td>
+                <td class="col-3">
+                    <p v-if="r.stato !== 'attiva'">{{ r.stato.charAt(0).toUpperCase() + r.stato.substring(1) }}</p>
+                    <div class="form-inline" v-else>
+                        <select :id="'select-' + index" aria-label="StatoPrenotazione" class="form-control"
+                                v-model="select[index]">
+                            <option selected value="attiva">Attiva</option>
+                            <option value="effettuata">Effettuata</option>
+                            <option value="disdetta">Disdetta</option>
+                        </select>
+                        <button :id="'salva-' + index" class="btn btn-secondary btn-sm mx-1" disabled
+                                title="Salva lo stato della ripetizione" type="button"
+                                v-on:click="salvaStato(r, index)">
+                            <i class="fas fa-save"></i> Salva
+                        </button>
+                    </div>
                 </td>
             </tbody>
         </table>
@@ -64,19 +73,13 @@
 <div id="footer"></div>
 
 <script>
-    function disabilitaB(btn) {
-        document.getElementById("myBtn").disabled = true;
-    }
-</script>
-
-
-<script>
     var listR = new Vue({
         el: '#listR',
         data: {
             ripetizioni: [],
-            prenotazione: "",
-            username: null
+            select: [],
+            username: null,
+            link: "/progetto_ium_tweb2/OpSuPrenotazioni"
         },
         methods: {
             checkAutentication: function () {
@@ -89,25 +92,73 @@
             },
             getRipetizioni: function (utente) {
                 var self = this;
-                $.get(
+                $.post(
                       "/progetto_ium_tweb2/StoricoPrenotazioni",
-                      {
-                          account: utente,
-                          username:null,
-                          password: null
-                      },
+                    {utente: utente},
                       function(data) {
-                        console.log(data);
-                        self.ripetizioni = data;
+                          console.log(data);
+                          self.ripetizioni = data;
                       }
                 );
             },
-            disdiciRip: function (prenotazione,index) {
+            salvaStato: function (prenotazione, index) {
                 var self = this;
-                $.post("/progetto_ium_tweb2/StoricoPrenotazioni", {ops:["disdire"], prenotazioni: [prenotazione]}, (corretto) => {
-                    if(corretto)
-                        self.ripetizioni.splice(index,1);
-                })
+                var nuovoStato = $("#select-" + index).val();
+                var operazione = "";
+                switch (nuovoStato) {
+                    case "attiva":
+                        return;
+                    case "disdetta":
+                        operazione = "disdire";
+                        break;
+                    case "effettuata":
+                        operazione = "effettuare";
+                        break;
+                    default:
+                        alert("Errore");
+                }
+
+                $.post(this.link, {
+                    ops: JSON.stringify([operazione]),
+                    prenotazioni: JSON.stringify([prenotazione])
+                }, corretto => {
+                    if (corretto) {
+                        alert("Stato della ripetizione salvato");
+                        prenotazione.stato = nuovoStato;
+                        this.ripetizioni.splice(index, 1, prenotazione)
+                    } else
+                        alert("Errore nel salvataggio dello stato della ripetizione");
+                });
+            },
+            slotLabel: function (slot) {
+                switch (slot) {
+                    case "SLOT1":
+                        return "15 - 16";
+                    case "SLOT2":
+                        return "16 - 17";
+                    case "SLOT3":
+                        return "17 - 18";
+                    case "SLOT4":
+                        return "18 - 19";
+                    default:
+                        return "ERRORE";
+                }
+            },
+            giornoLabel: function (giorno) {
+                switch (giorno) {
+                    case "LUN":
+                        return "Lunedì";
+                    case "MAR":
+                        return "Martedì";
+                    case "MER":
+                        return "Mercoledì";
+                    case "GIO":
+                        return "Giovedì";
+                    case "VEN":
+                        return "Venerdì";
+                    default:
+                        return "ERRORE";
+                }
             }
         },
         mounted() {
@@ -115,9 +166,17 @@
             if(autenticated){
                 this.getRipetizioni(this.username);
             }
+        },
+        watch: {
+            select: function () {
+                for (var i = 0; i < this.select.length; i++) {
+                    if (this.select[i] !== "attiva")
+                        $("#salva-" + i).prop("disabled", false);
+                    else
+                        $("#salva-" + i).prop("disabled", true);
+                }
+            }
         }
-
-
     })
 </script>
 
