@@ -5,13 +5,13 @@ var autenticationChecker = new Vue({
    el: "#navbarSupportedContent",
    data: function() {
       var user = sessionStorage.getItem("username");
-      var admin = sessionStorage.getItem("admin");
-      var ospite = sessionStorage.getItem("ospite");
+      var admin = JSON.parse(sessionStorage.getItem("admin"));
+      var ospite = JSON.parse(sessionStorage.getItem("ospite"));
       console.log("user: " + user + " admin: " + admin + " ospite: " + ospite);
       if(user===null && admin===null && ospite===null) {
          alert("Non hai effettuato il login. Verrai reindirizzato a breve");
          window.location.replace("/progetto_ium_tweb2/loginPage.html");
-      } else if(ospite===null || ospite==="true") {
+      } else if(ospite===null || ospite) {
          var isRedirect = window.location.search.search("redirect=");
          var path;
          console.log(isRedirect);
@@ -30,7 +30,7 @@ var autenticationChecker = new Vue({
                break;
          }
       }
-      else if (admin===null || admin==="false") {
+      else if (admin===null || !admin) {
          switch (window.location.pathname) {
             case "/progetto_ium_tweb2/storicoGenerale.html":
             case "/progetto_ium_tweb2/gestioneDocenti.html":

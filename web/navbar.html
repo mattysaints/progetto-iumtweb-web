@@ -24,12 +24,12 @@
             </li>
 
             <!-- link storico-->
-            <li class="nav-item" v-if="ospite!=='true'">
+            <li class="nav-item" v-if="ospite!==null && !ospite">
                 <a id="storico" class="nav-link" href="/progetto_ium_tweb2/Redirect?redirect=gestioneStorico" >Visualizza le tue prenotazioni</a>
             </li>
 
             <!-- sezione amministratori -->
-            <li id="sezioneAdmin" v-if="admin==='true'" class="nav-item dropdown">
+            <li id="sezioneAdmin" v-if="admin!==null && admin" class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Amministratore</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
