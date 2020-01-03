@@ -92,9 +92,10 @@
             },
             getRipetizioni: function (utente) {
                 var self = this;
+                var ut = {account: utente, password: null, admin:null};
                 $.post(
                       "/progetto_ium_tweb2/StoricoPrenotazioni",
-                    {utente: utente},
+                      {utente: JSON.stringify(ut)},
                       function(data) {
                           console.log(data);
                           self.ripetizioni = data;
