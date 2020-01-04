@@ -8,13 +8,14 @@
  * - home
  * - storico
  * - prenota
+ * - admin
  */
 $( document ).ready(function () {
     var $navbar = $("#navbar");
     $navbar.load("navbar.html", () => {
         var idActivePage = $navbar.attr("id-active-page");
         $navbar.addClass("fixed-top");
-        $(idActivePage).addClass("active") //dava errore con # davanti
+        $("#" + idActivePage).addClass("active")
     });
     $("body").addClass("pt-5");
 });
