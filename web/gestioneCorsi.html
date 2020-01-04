@@ -48,9 +48,9 @@
             </thead>
             <tbody>
             <tr v-for="(c, index) in data" :key="index">
-                <td class="col-md-1">{{index+1}}</td>
-                <td>{{c.titolo}}</td>
-                <td class="align-content-center col-md-3">
+                <td>{{index+1}}</td>
+                <td class="col-5">{{c.titolo}}</td>
+                <td class="text-right">
                     <button v-on:click="delCorso(c.titolo, index)" class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i></button>
                 </td>
             </tr>
