@@ -80,17 +80,23 @@ var listDoc = new Vue({
                docente: JSON.stringify(thiz.docente),
             },
             success: function (data) {
-               if (data.successo)
+               if (data.successo) {
                   thiz.docenti.push({
-                     docente: {cognome: thiz.docente.cognome, nome: thiz.docente.nome},
+                     docente: {
+                        cognome: thiz.docente.cognome,
+                        nome: thiz.docente.nome
+                     },
                      corsiInsegnati: []
                   });
+                  thiz.docente.nome="";
+                  thiz.docente.cognome="";
+                  window.location.reload();
+               }
                else
                   alert("Errore nell'inserimento del docente");
             },
-            async: false,
+            async: true,
          });
-         window.location.reload();
       },
       aggiungiCorso: function (docente, index, corso) {
          var thiz = this;
@@ -104,12 +110,13 @@ var listDoc = new Vue({
                   docente: JSON.stringify(docente),
                },
                success: function(data) {
-                  if (data.successo)
+                  if (data.successo) {
                      thiz.docenti[index].corsiInsegnati.push({titolo: corso});
+                  }
                   else
                      window.alert("Errore nell'inserimento del corso");
                },
-               async: false,
+               async: true,
             });
          } else
             window.alert("Errore nell'inserimento del corso");
@@ -179,7 +186,7 @@ Vue.component('insegnamenti', {
                <div class="mx-auto d-flex d-inline">
                   <select class="ml-2 form-control" aria-required="true" v-model="corso" >
                      <option value="" selected disabled hidden>Scegli corso</option>
-                     <option v-for="(cor, indexCor) in corsiAggiungibili" :value="cor" :selected="indexCor===1">{{cor}}</option>
+                     <option v-for="(cor, indexCor) in corsiAggiungibili" :value="cor">{{cor}}</option>
                   </select>
                   <button title="Inserisci un nuovo insegnamento" class="btn btn-primary ml-5 w-auto" @click="$root.aggiungiCorso(docente, indexDoc, corso)">Inserisci</button>    
                </div>

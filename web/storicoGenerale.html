@@ -30,36 +30,40 @@
 
    <!-- lista storico prenotazioni -->
    <div id="listStor" class="container-fluid card w-75 mx-auto mt-5">
-      <table class="table table-striped">
-         <thead>
-            <tr>
-               <th scope="col">Docente</th>
-               <th scope="col">Corso</th>
-               <th scope="col">Utente</th>
-               <th scope="col">Giorno</th>
-               <th scope="col">Ora</th>
-               <th scope="col">Stato</th>
+      <h1 class="text-center my-4">Gestione storico prenotazioni</h1>
+      <div v-if="prenotazioni.length!==0">
+         <table class="table table-striped" >
+            <thead>
+               <tr>
+                  <th scope="col">Docente</th>
+                  <th scope="col">Corso</th>
+                  <th scope="col">Utente</th>
+                  <th scope="col">Giorno</th>
+                  <th scope="col">Ora</th>
+                  <th scope="col">Stato</th>
+               </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(prenot, index) in prenotazioni">
+               <td>{{prenot.docente.cognome}} {{prenot.docente.nome}}</td>
+               <td>{{prenot.corso.titolo}}</td>
+               <td>{{prenot.utente.account}}</td>
+               <td>{{giornoEsteso( prenot.giorno)}}</td>
+               <td>{{slotEsteso(prenot.slot)}}</td>
+               <td>
+                  <span v-if="prenot.stato!=='attiva'">{{prenot.stato}} </span>
+                  <select aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
+                     <option value="attiva" selected >Attiva</option>
+                     <option value="effettuata">Effettuata</option>
+                     <option value="disdetta">Disdetta</option>
+                  </select>
+               </td>
             </tr>
-         </thead>
-         <tbody>
-         <tr v-for="(prenot, index) in prenotazioni">
-            <td>{{prenot.docente.cognome}} {{prenot.docente.nome}}</td>
-            <td>{{prenot.corso.titolo}}</td>
-            <td>{{prenot.utente.account}}</td>
-            <td>{{giornoEsteso( prenot.giorno)}}</td>
-            <td>{{slotEsteso(prenot.slot)}}</td>
-            <td>
-               <span v-if="prenot.stato!=='attiva'">{{prenot.stato}} </span>
-               <select aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
-                  <option value="attiva" selected >Attiva</option>
-                  <option value="effettuata">Effettuata</option>
-                  <option value="disdetta">Disdetta</option>
-               </select>
-            </td>
-         </tr>
-         </tbody>
-      </table>
-      <button v-on:click="salvaPrenotazioni()" class="btn btn-success btn-lg align-self-end px-5" >Salva</button>
+            </tbody>
+         </table>
+         <button v-on:click="salvaPrenotazioni()" class="btn btn-success btn-lg align-self-end px-5" >Salva</button>
+      </div>
+      <p v-else class="border-top pt-2">Nessun corso da visualizzare</p>
    </div>
 
 <div id="footer"></div>
@@ -71,7 +75,6 @@
                link: "/progetto_ium_tweb2/StoricoPrenotazioni",
                prenotazioni: [],
                statoAggiornato: [],
-               risultato: true,
            },
            mounted() {
                this.getPrenot();

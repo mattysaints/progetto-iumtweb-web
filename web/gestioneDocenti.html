@@ -36,43 +36,43 @@
          <div class="collapse m-2" id="collapseAggiungi" data-parent="#listDoc">
             <div class="card-body mx-auto w-75">
                <div class="container">
-                  <div class="row my-2">
-                     <div class="col text-right">
-                        <label class="text-primary" for="cognome">Cognome: </label>
+                  <form action="javascript:listDoc.aggiungiDocente()">
+                     <div class="row my-2">
+                        <div class="col text-right">
+                           <label class="text-primary" for="cognome">Cognome: </label>
+                        </div>
+                        <div class="col text-left">
+                           <input aria-required="true" id="cognome" placeholder="Cognome docente" required type="text"
+                                  v-model="docente.cognome"/>
+                        </div>
                      </div>
-                     <div class="col text-left">
-                        <input aria-required="true" id="cognome" placeholder="Cognome docente" required type="text"
-                               v-model="docente.cognome"/>
+                     <div class="row my-2">
+                        <div class="col text-right">
+                           <label class="text-primary" for="nome">Nome: </label>
+                        </div>
+                        <div class="col text-left">
+                           <input aria-required="true" id="nome" placeholder="Nome docente" required type="text"
+                                  v-model="docente.nome"/>
+                        </div>
                      </div>
-                  </div>
-                  <div class="row my-2">
-                     <div class="col text-right">
-                        <label class="text-primary" for="nome">Nome: </label>
+                     <div class="row my-2">
+                        <div class="col"></div>
+                        <div class="col w-100">
+                           <button type="submit" class="btn btn-primary w-100" title="Inserisci un nuovo docente">Inserisci
+                           </button>
+                        </div>
                      </div>
-                     <div class="col text-left">
-                        <input aria-required="true" id="nome" placeholder="Nome docente" required type="text"
-                               v-model="docente.nome"/>
-                     </div>
-                  </div>
-                  <div class="row my-2">
-                     <div class="col"></div>
-                     <div class="col w-100">
-                        <button @click="aggiungiDocente()" class="btn btn-primary w-100"
-                                title="Inserisci un nuovo docente">Inserisci
-                        </button>
-                     </div>
-                  </div>
+                  </form>
                </div>
             </div>
          </div>
       </div>
    <hr>
 
-      <!-- lista docenti -->
-   <div>
-      <box-docente :i="index" :key="index" id="docente" v-bind.sync="doc" v-for="(doc, index) in docenti"></box-docente>
-      </div>
-   </div>
+   <!-- lista docenti -->
+   <box-docente v-if="docenti.length!==0" :i="index" :key="index" id="docente" v-bind.sync="doc" v-for="(doc, index) in docenti"></box-docente>
+   <p v-else class="pt-2">Nessun docente da visualizzare</p>
+</div>
 
 <div id="footer"></div>
 
