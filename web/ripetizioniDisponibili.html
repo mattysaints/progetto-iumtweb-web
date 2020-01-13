@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- librerie bootstrap -->
-    <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
-    <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
-    <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
-    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- development version, includes helpful console warnings -->
-    <script src="vue/vue.js"></script>
-    <!-- librerie jquery -->
-    <script src="jquery/jquery.min.js"></script>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!-- librerie bootstrap -->
+   <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
+   <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
+   <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+   <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+   <!-- development version, includes helpful console warnings -->
+   <script src="vue/vue.js"></script>
+   <!-- librerie jquery -->
+   <script src="jquery/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-    <title>Ripetizioni Disponibili</title>
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+   <title>Ripetizioni Disponibili</title>
 </head>
 <body>
 
@@ -22,244 +22,247 @@
 
 
 <div id="listR">
-    <!-- lista delle Ripetizioni Disponibili -->
-    <div class="container-fluid card w-50 mt-5">
-        <h1 class="text-center my-4">Prenota una ripetizione</h1>
-        <hr>
+   <!-- lista delle Ripetizioni Disponibili -->
+   <div class="container-fluid card w-50 mt-5">
+      <h1 class="text-center my-4">Prenota una ripetizione</h1>
+      <hr>
 
 
-        <div class="accordion mb-3" id="filtri">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="mb-0">
-                        <button aria-controls="collapse" aria-expanded="false" class="btn btn-link btn-block"
-                                data-target="#collapse" data-toggle="collapse" type="button">
-                            Filtri di ricerca
-                        </button>
-                    </h2>
-                </div>
-
-                <div aria-labelledby="Filtri" class="collapse" data-parent="#filtri" id="collapse">
-                    <div class="card-body">
-
-                        <label class="text-secondary" for="nomeDocente">Nome docente: </label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                                </div>
-                            </div>
-                            <input class="form-control" id="nomeDocente" placeholder="Cerca per nome docente.."
-                                   type="text" v-model="nomeDocente">
-                        </div>
-
-                        <label class="text-secondary" for="cognomeDocente">Cognome docente: </label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                                </div>
-                            </div>
-                            <input class="form-control" id="cognomeDocente" placeholder="Cerca per cognome docente.."
-                                   type="text" v-model="cognomeDocente">
-                        </div>
-
-                        <label class="text-secondary" for="corso">Corso: </label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                                </div>
-                            </div>
-                            <input class="form-control" id="corso" placeholder="Cerca per corso.." type="text"
-                                   v-model="corso">
-                        </div>
-
-                        <label class="text-secondary" for="giorno">Giorno: </label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
-                                </div>
-                            </div>
-                            <select class="form-control" data-col="4" id="giorno" title="Scegli un giorno"
-                                    v-model="giorno">
-                                <option selected value="">Qualsiasi giorno</option>
-                                <optgroup label="Giorno">
-                                    <option value="LUN">Lunedì</option>
-                                    <option value="MAR">Martedì</option>
-                                    <option value="MER">Mercoledì</option>
-                                    <option value="GIO">Gioveì</option>
-                                    <option value="VEN">Venerdì</option>
-                                </optgroup>
-                            </select>
-                        </div>
-
-                        <label class="text-secondary" for="ora">Ora: </label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
-                                </div>
-                            </div>
-                            <select class="form-control" data-col="5" id="ora" title="Scegli un'ora" v-model="ora">
-                                <option value="">A qualsiasi ora</option>
-                                <optgroup label="Ora">
-                                    <option value="SLOT1">15 - 16</option>
-                                    <option value="SLOT2">16 - 17</option>
-                                    <option value="SLOT3">17 - 18</option>
-                                    <option value="SLOT4">18 - 19</option>
-                                </optgroup>
-                            </select>
-                        </div>
-
-                    </div>
-                </div>
+      <div class="accordion mb-3" id="filtri">
+         <div class="card">
+            <div class="card-header">
+               <h2 class="mb-0">
+                  <button aria-controls="collapse" aria-expanded="false" class="btn btn-link btn-block"
+                          data-target="#collapse" data-toggle="collapse" type="button">
+                     Filtri di ricerca
+                  </button>
+               </h2>
             </div>
-        </div>
-    </div>
 
-    <div class="container-fluid card w-50 mx-auto my-5">
-        <div class="text-center card-title text-primary my-3">
-            Lista delle ripetizioni disponibili:
-        </div>
-        <table class="table table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Docente</th>
-                <th scope="col">Corso</th>
-                <th scope="col">Giorno</th>
-                <th scope="col">Ora</th>
-                <th scope="col" v-if="!ospite"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr :key="index" v-for="(r, index) in ripetizioni">
-                <td class="col-md-1">{{ index + 1 }}</td>
-                <td class="col-md-2">{{ r.docente.nome }} {{ r.docente.cognome }}</td>
-                <td class="col-md-3">{{ r.corso.titolo }}</td>
-                <td class="col-md-4">{{ giornoLabel(r.giorno) }}</td>
-                <td class="col-md-4">{{ slotLabel(r.slot) }}</td>
-                <td class="col-md-5" v-if="!ospite">
-                    <button class="btn btn-primary" v-on:click="prenotaRipetizione(r, index)">Prenota</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+            <div aria-labelledby="Filtri" class="collapse" data-parent="#filtri" id="collapse">
+               <div class="card-body">
+
+                  <label class="text-secondary" for="nomeDocente">Nome docente: </label>
+                  <div class="input-group mb-3">
+                     <div class="input-group-prepend">
+                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                        </div>
+                     </div>
+                     <input class="form-control" id="nomeDocente" placeholder="Cerca per nome docente.."
+                            type="text" v-model="nomeDocente">
+                  </div>
+
+                  <label class="text-secondary" for="cognomeDocente">Cognome docente: </label>
+                  <div class="input-group mb-3">
+                     <div class="input-group-prepend">
+                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                        </div>
+                     </div>
+                     <input class="form-control" id="cognomeDocente" placeholder="Cerca per cognome docente.."
+                            type="text" v-model="cognomeDocente">
+                  </div>
+
+                  <label class="text-secondary" for="corso">Corso: </label>
+                  <div class="input-group mb-3">
+                     <div class="input-group-prepend">
+                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                        </div>
+                     </div>
+                     <input class="form-control" id="corso" placeholder="Cerca per corso.." type="text"
+                            v-model="corso">
+                  </div>
+
+                  <label class="text-secondary" for="giorno">Giorno: </label>
+                  <div class="input-group mb-3">
+                     <div class="input-group-prepend">
+                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
+                        </div>
+                     </div>
+                     <select class="form-control" data-col="4" id="giorno" title="Scegli un giorno"
+                             v-model="giorno">
+                        <option selected value="">Qualsiasi giorno</option>
+                        <optgroup label="Giorno">
+                           <option value="LUN">Lunedì</option>
+                           <option value="MAR">Martedì</option>
+                           <option value="MER">Mercoledì</option>
+                           <option value="GIO">Gioveì</option>
+                           <option value="VEN">Venerdì</option>
+                        </optgroup>
+                     </select>
+                  </div>
+
+                  <label class="text-secondary" for="ora">Ora: </label>
+                  <div class="input-group">
+                     <div class="input-group-prepend">
+                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
+                        </div>
+                     </div>
+                     <select class="form-control" data-col="5" id="ora" title="Scegli un'ora" v-model="ora">
+                        <option value="">A qualsiasi ora</option>
+                        <optgroup label="Ora">
+                           <option value="SLOT1">15 - 16</option>
+                           <option value="SLOT2">16 - 17</option>
+                           <option value="SLOT3">17 - 18</option>
+                           <option value="SLOT4">18 - 19</option>
+                        </optgroup>
+                     </select>
+                  </div>
+
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="container-fluid card w-50 mx-auto my-5">
+      <div class="text-center card-title text-primary my-3">
+         Lista delle ripetizioni disponibili:
+      </div>
+      <table class="table table-striped">
+         <thead class="thead-dark">
+         <tr>
+            <th scope="col">#</th>
+            <th scope="col">Docente</th>
+            <th scope="col">Corso</th>
+            <th scope="col">Giorno</th>
+            <th scope="col">Ora</th>
+            <th scope="col" v-if="!ospite"></th>
+         </tr>
+         </thead>
+         <tbody>
+         <tr :key="index" v-for="(r, index) in ripetizioni">
+            <td class="col-md-1">{{ index + 1 }}</td>
+            <td class="col-md-2">{{ r.docente.nome }} {{ r.docente.cognome }}</td>
+            <td class="col-md-3">{{ r.corso.titolo }}</td>
+            <td class="col-md-4">{{ giornoLabel(r.giorno) }}</td>
+            <td class="col-md-4">{{ slotLabel(r.slot) }}</td>
+            <td class="col-md-5" v-if="!ospite">
+               <button class="btn btn-primary" v-on:click="prenotaRipetizione(r, index)">Prenota</button>
+            </td>
+         </tr>
+         </tbody>
+      </table>
+   </div>
 </div>
 
 <div id="footer"></div>
 
 <script>
-    var listR = new Vue({
-        el: '#listR',
-        data: {
-            linkRipetizioniDisponibili: "/progetto_ium_tweb2/RipetizioniDisponibili",
-            linkOpSuPrenotazioni: "/progetto_ium_tweb2/OpSuPrenotazioni",
+   var listR = new Vue({
+      el: '#listR',
+      data: {
+         linkRipetizioniDisponibili: "/progetto_ium_tweb2/RipetizioniDisponibili",
+         linkOpSuPrenotazioni: "/progetto_ium_tweb2/OpSuPrenotazioni",
 
-            // lista renderizzata eventualmente con filtri
-            ripetizioni: [],
+         // lista renderizzata eventualmente con filtri
+         ripetizioni: [],
 
-            // lista completa di ripetizioni disponibili
-            data: [],
+         // lista completa di ripetizioni disponibili
+         data: [],
+         //filtri
+         nomeDocente: "",
+         cognomeDocente: "",
+         corso: "",
+         giorno: "",
+         ora: "",
+         ospite: sessionStorage.getItem("ospite") === "true"
+      },
+      mounted() {
+         this.getRipetizioniDisponibili();
+      },
+      methods: {
+         getRipetizioniDisponibili: function () {
+            var self = this;
+            $.get(this.linkRipetizioniDisponibili, data => {
+               self.ripetizioni = data;
+               self.data = data
+            });
+         },
+         prenotaRipetizione: function (prenotazione, index) {
+            var p = {
+               utente: {account: sessionStorage.getItem("username")},
+               docente: prenotazione.docente,
+               corso: prenotazione.corso,
+               giorno: prenotazione.giorno,
+               slot: prenotazione.slot
+            };
+            var self = this;
+            $.post(
+               this.linkOpSuPrenotazioni,
+               {
+                  ops: JSON.stringify(["prenotare"]),
+                  prenotazioni: JSON.stringify([p])
+               },
+               success => {
+                  console.log("prenotazione avvenuta con successo" + success);
+                  if (success) {
+                     alert("Prenotazione avvenuta con successo");
+                     self.ripetizioni.splice(index, 1);
+                     self.data.splice(index, 1)
+                  } else
+                     alert("Errore nella prenotazione")
+               }
+            );
+         },
+         updateSearch: function () {
+            this.ripetizioni = this.data.filter(rip =>
+               (this.nomeDocente === "" || this.nomeDocente.toLocaleLowerCase() === rip.docente.nome.toLocaleLowerCase()) &&
+               (this.cognomeDocente === "" || this.cognomeDocente.toLocaleLowerCase() === rip.docente.cognome.toLocaleLowerCase()) &&
+               (this.corso === "" || this.corso.toLocaleLowerCase() === rip.corso.titolo.toLocaleLowerCase()) &&
+               (this.giorno === "" || this.giorno === rip.giorno) &&
+               (this.ora === "" || this.ora === rip.slot)
+            )
+         },
 
-            nomeDocente: "",
-            cognomeDocente: "",
-            corso: "",
-            giorno: "",
-            ora: "",
-            ospite: sessionStorage.getItem("ospite") === "true"
-        },
-        mounted() {
-            this.getRipetizioniDisponibili();
-        },
-        methods: {
-            getRipetizioniDisponibili: function () {
-                var self = this;
-                $.get(this.linkRipetizioniDisponibili, data => {
-                    self.ripetizioni = data;
-                    self.data = data
-                });
-            },
-            prenotaRipetizione: function (prenotazione, index) {
-                var p = {
-                    utente: {account: sessionStorage.getItem("username")},
-                    docente: prenotazione.docente,
-                    corso: prenotazione.corso,
-                    giorno: prenotazione.giorno,
-                    slot: prenotazione.slot
-                };
-                var self = this;
-                $.post(this.linkOpSuPrenotazioni, {
-                        ops: JSON.stringify(["prenotare"]),
-                        prenotazioni: JSON.stringify([p])
-                    },
-                    success => {
-                        if (success) {
-                            alert("Prenotazione avvenuta con successo");
-                            self.ripetizioni.splice(index, 1);
-                            self.data.splice(index, 1)
-                        } else
-                            alert("Errore nella prenotazione")
-                    }
-                );
-            },
-            updateSearch: function () {
-                this.ripetizioni = this.data.filter(rip =>
-                    (this.nomeDocente === "" || this.nomeDocente === rip.docente.nome) &&
-                    (this.cognomeDocente === "" || this.cognomeDocente === rip.docente.cognome) &&
-                    (this.corso === "" || this.corso === rip.corso.titolo) &&
-                    (this.giorno === "" || this.giorno === rip.giorno) &&
-                    (this.ora === "" || this.ora === rip.slot)
-                )
-            },
-
-            slotLabel: function (slot) {
-                switch (slot) {
-                    case "SLOT1":
-                        return "15 - 16";
-                    case "SLOT2":
-                        return "16 - 17";
-                    case "SLOT3":
-                        return "17 - 18";
-                    case "SLOT4":
-                        return "18 - 19";
-                    default:
-                        return "ERRORE";
-                }
-            },
-            giornoLabel: function (giorno) {
-                switch (giorno) {
-                    case "LUN":
-                        return "Lunedì";
-                    case "MAR":
-                        return "Martedì";
-                    case "MER":
-                        return "Mercoledì";
-                    case "GIO":
-                        return "Giovedì";
-                    case "VEN":
-                        return "Venerdì";
-                    default:
-                        return "ERRORE";
-                }
+         slotLabel: function (slot) {
+            switch (slot) {
+               case "SLOT1":
+                  return "15 - 16";
+               case "SLOT2":
+                  return "16 - 17";
+               case "SLOT3":
+                  return "17 - 18";
+               case "SLOT4":
+                  return "18 - 19";
+               default:
+                  return "ERRORE";
             }
-        },
-        watch: {
-            nomeDocente: function () {
-                this.updateSearch()
-            },
-            cognomeDocente: function () {
-                this.updateSearch()
-            },
-            corso: function () {
-                this.updateSearch()
-            },
-            giorno: function () {
-                this.updateSearch()
-            },
-            ora: function () {
-                this.updateSearch()
+         },
+         giornoLabel: function (giorno) {
+            switch (giorno) {
+               case "LUN":
+                  return "Lunedì";
+               case "MAR":
+                  return "Martedì";
+               case "MER":
+                  return "Mercoledì";
+               case "GIO":
+                  return "Giovedì";
+               case "VEN":
+                  return "Venerdì";
+               default:
+                  return "ERRORE";
             }
-        }
-    })
+         }
+      },
+      watch: {
+         nomeDocente: function () {
+            this.updateSearch()
+         },
+         cognomeDocente: function () {
+            this.updateSearch()
+         },
+         corso: function () {
+            this.updateSearch()
+         },
+         giorno: function () {
+            this.updateSearch()
+         },
+         ora: function () {
+            this.updateSearch()
+         }
+      }
+   })
 </script>
 
 <script src="navbar-loader.js"></script>

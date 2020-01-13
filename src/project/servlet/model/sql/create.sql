@@ -15,8 +15,8 @@ CREATE TABLE ripetizioni.corso (
 
 CREATE TABLE ripetizioni.docente (
     id CHAR(36), -- NOTA: 36 caratteri perchè cosi possiamo utilizzare UUID.randomUUID() per generare un id univoco
-    nome VARCHAR(30) NOT NULL,
-    cognome VARCHAR(30) NOT NULL,
+    nome VARCHAR(30),
+    cognome VARCHAR(30),
     CONSTRAINT pk_docente PRIMARY KEY (id),
     CONSTRAINT un_docente UNIQUE (nome, cognome)
 );
@@ -60,10 +60,14 @@ CREATE TABLE ripetizioni.prenotazione (
     giorno CHAR(5) NOT NULL,
     stato ENUM ('attiva', 'effettuata', 'disdetta') NOT NULL DEFAULT 'attiva',
     CONSTRAINT pk_prenotazione PRIMARY KEY (id),
-    CONSTRAINT fk_prenotazione_insegnamento FOREIGN KEY (docente, corso) REFERENCES insegnamento(docente, corso) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT unique_doc_giorno_ora_stato UNIQUE (docente, giorno, ora, stato),
+    CONSTRAINT fk_prenotazione_docente FOREIGN KEY (docente) REFERENCES docente(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_prenotazione_corso FOREIGN KEY (corso) REFERENCES corso(titolo) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_prenotazione_insegnamento FOREIGN KEY (docente, corso) REFERENCES insegnamento(docente, corso) ON DELETE NO ACTION ON UPDATE CASCADE,
     CONSTRAINT fk_prenotazione_utente FOREIGN KEY (utente) REFERENCES utente(account) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_prenotazione_ora FOREIGN KEY (ora) REFERENCES slot(ora) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT fk_prenotazione_giorno FOREIGN KEY (giorno) REFERENCES giorno(giorno) ON DELETE NO ACTION ON UPDATE NO ACTION
+
 );
 
 COMMIT;

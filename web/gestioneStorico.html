@@ -82,14 +82,6 @@
             link: "/progetto_ium_tweb2/OpSuPrenotazioni"
         },
         methods: {
-            checkAutentication: function () {
-                this.username =  sessionStorage.getItem("username");
-                if(this.username === null) {
-                    window.location.replace("/progetto_ium_tweb2/loginPage.html");
-                    return false;
-                } else
-                    return true;
-            },
             getRipetizioni: function (utente) {
                 var self = this;
                 var ut = {account: utente, password: null, admin:null};
@@ -97,7 +89,6 @@
                       "/progetto_ium_tweb2/StoricoPrenotazioni",
                       {utente: JSON.stringify(ut)},
                       function(data) {
-                          console.log(data);
                           self.ripetizioni = data;
                       }
                 );
@@ -124,7 +115,7 @@
                     prenotazioni: JSON.stringify([prenotazione])
                 }, corretto => {
                     if (corretto) {
-                        alert("Stato della ripetizione salvato");
+                        //non serve alert, vue cambia già la visualizzazione
                         prenotazione.stato = nuovoStato;
                         this.ripetizioni.splice(index, 1, prenotazione)
                     } else
@@ -163,10 +154,7 @@
             }
         },
         mounted() {
-            var autenticated = this.checkAutentication();
-            if(autenticated){
-                this.getRipetizioni(this.username);
-            }
+            this.getRipetizioni(this.username);
         },
         watch: {
             select: function () {

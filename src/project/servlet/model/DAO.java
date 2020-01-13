@@ -150,7 +150,7 @@ public class DAO {
         boolean result = false;
         try {
             connection = DriverManager.getConnection(url, user, password);
-            PreparedStatement statement = connection.prepareStatement("DELETE  FROM ripetizioni.docente WHERE nome=? and cognome=?;");
+            PreparedStatement statement = connection.prepareStatement("UPDATE ripetizioni.docente SET nome=NULL, cognome=NULL WHERE nome=? and cognome=?;");
             statement.setString(1,docente.getNome());
             statement.setString(2,docente.getCognome());
             result = statement.executeUpdate() == 1;
@@ -405,14 +405,21 @@ public class DAO {
         try {
             connection = DriverManager.getConnection(url, user, password);
             PreparedStatement statement = connection.prepareStatement("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
-                    "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
+                    "FROM ripetizioni.prenotazione LEFT JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
                     "WHERE utente=?;");
             statement.setString(1, utente.getAccount());
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()){
-                Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
-                Corso corso = new Corso(rs.getString("corso"));
+                String doc_nome = rs.getString("nome");
+                String doc_cognome = rs.getString("cognome");
+                Docente docente=null;
+                if(doc_cognome!=null && doc_nome!=null)
+                    docente = new Docente(doc_nome,doc_cognome);
+                String cor  =rs.getString("corso");
+                Corso corso=null;
+                if (cor!=null)
+                    corso = new Corso(cor);
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Stato stato = Stato.valueOf(rs.getString("stato"));
@@ -516,7 +523,8 @@ public class DAO {
             ResultSet rs = statement.executeQuery("SELECT * FROM ripetizioni.docente;");
             while (rs.next()){
                 Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
-                result.add(docente);
+                if(docente.getCognome()!=null || docente.getNome()!=null)
+                    result.add(docente);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -618,6 +626,4 @@ public class DAO {
         }
         return result;
     }
-
-
 }
