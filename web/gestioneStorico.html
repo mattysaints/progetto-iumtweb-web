@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- librerie bootstrap -->
-    <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
-    <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
-    <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
-    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- development version, includes helpful console warnings -->
-    <script src="vue/vue.js"></script>
-    <!-- librerie jquery -->
-    <script src="jquery/jquery.min.js"></script>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!-- librerie bootstrap -->
+   <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
+   <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
+   <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+   <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+   <!-- development version, includes helpful console warnings -->
+   <script src="vue/vue.js"></script>
+   <!-- librerie jquery -->
+   <script src="jquery/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-    <title>Gestione Storico</title>
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+   <title>Gestione Storico</title>
 
 </head>
 <body>
@@ -24,150 +24,150 @@
 <!-- Storico Ripetizioni -->
 <div id="listR">
 
-    <div class="container-fluid card w-75 mt-5">
-        <h1 class="text-center my-4">Storico ripetizioni</h1>
-    </div>
+   <div class="container-fluid card w-75 mt-5">
+      <h1 class="text-center my-4">Storico ripetizioni</h1>
+   </div>
 
 
-    <div class="container-fluid card w-75 mx-auto my-5">
-        <p class="text-primary my-3">Storico Ripetizioni: </p>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Docente</th>
-                <th scope="col">Corso</th>
-                <th scope="col">Giorno</th>
-                <th scope="col">Ora</th>
-                <th scope="col">Stato</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(r, index) in ripetizioni" :key="index">
-                <td>{{ index + 1 }}</td>
-                <td>{{ r.docente.nome }} {{ r.docente.cognome }}</td>
-                <td>{{ r.corso.titolo }}</td>
-                <td>{{ giornoLabel(r.giorno) }}</td>
-                <td>{{ slotLabel(r.slot) }}</td>
-                <td class="col-3">
-                    <p v-if="r.stato !== 'attiva'">{{ r.stato.charAt(0).toUpperCase() + r.stato.substring(1) }}</p>
-                    <div class="form-inline" v-else>
-                        <select :id="'select-' + index" aria-label="StatoPrenotazione" class="form-control"
-                                v-model="select[index]">
-                            <option selected value="attiva">Attiva</option>
-                            <option value="effettuata">Effettuata</option>
-                            <option value="disdetta">Disdetta</option>
-                        </select>
-                        <button :id="'salva-' + index" class="btn btn-secondary btn-sm mx-1" disabled
-                                title="Salva lo stato della ripetizione" type="button"
-                                v-on:click="salvaStato(r, index)">
-                            <i class="fas fa-save"></i> Salva
-                        </button>
-                    </div>
-                </td>
-            </tbody>
-        </table>
-    </div>
+   <div class="container-fluid card w-75 mx-auto my-5">
+      <p class="text-primary my-3">Storico Ripetizioni: </p>
+      <table class="table table-striped">
+         <thead>
+         <tr>
+            <th scope="col">#</th>
+            <th scope="col">Docente</th>
+            <th scope="col">Corso</th>
+            <th scope="col">Giorno</th>
+            <th scope="col">Ora</th>
+            <th scope="col">Stato</th>
+         </tr>
+         </thead>
+         <tbody>
+         <tr v-for="(r, index) in ripetizioni" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ r.docente.nome }} {{ r.docente.cognome }}</td>
+            <td>{{ r.corso.titolo }}</td>
+            <td>{{ giornoLabel(r.giorno) }}</td>
+            <td>{{ slotLabel(r.slot) }}</td>
+            <td class="col-3">
+               <p v-if="r.stato !== 'attiva'">{{ r.stato.charAt(0).toUpperCase() + r.stato.substring(1) }}</p>
+               <div class="form-inline" v-else>
+                  <select :id="'select-' + index" aria-label="StatoPrenotazione" class="form-control"
+                          v-model="select[index]">
+                     <option selected value="attiva">Attiva</option>
+                     <option value="effettuata">Effettuata</option>
+                     <option value="disdetta">Disdetta</option>
+                  </select>
+                  <button :id="'salva-' + index" class="btn btn-secondary btn-sm mx-1" disabled
+                          title="Salva lo stato della ripetizione" type="button"
+                          v-on:click="salvaStato(r, index)">
+                     <i class="fas fa-save"></i> Salva
+                  </button>
+               </div>
+            </td>
+         </tbody>
+      </table>
+   </div>
 </div>
 
 <div id="footer"></div>
 
 <script>
-    var listR = new Vue({
-        el: '#listR',
-        data: {
-            ripetizioni: [],
-            select: [],
-            username: null,
-            link: "/progetto_ium_tweb2/OpSuPrenotazioni"
-        },
-        methods: {
-            getRipetizioni: function (utente) {
-                var self = this;
-                var ut = {account: utente, password: null, admin:null};
-                $.post(
-                      "/progetto_ium_tweb2/StoricoPrenotazioni",
-                      {utente: JSON.stringify(ut)},
-                      function(data) {
-                          console.log(data);
-                          self.ripetizioni = data;
-                      }
-                );
-            },
-            salvaStato: function (prenotazione, index) {
-                var self = this;
-                var nuovoStato = $("#select-" + index).val();
-                var operazione = "";
-                switch (nuovoStato) {
-                    case "attiva":
-                        return;
-                    case "disdetta":
-                        operazione = "disdire";
-                        break;
-                    case "effettuata":
-                        operazione = "effettuare";
-                        break;
-                    default:
-                        alert("Errore");
-                }
+   var listR = new Vue({
+      el: '#listR',
+      data: {
+         ripetizioni: [],
+         select: [],
+         username: null,
+         link: "/progetto_ium_tweb2/OpSuPrenotazioni"
+      },
+      methods: {
+         getRipetizioni: function (utente) {
+            var self = this;
+            var ut = {account: utente, password: null, admin:null};
+            $.post(
+               "/progetto_ium_tweb2/StoricoPrenotazioni",
+               {utente: JSON.stringify(ut)},
+               function(data) {
+                  console.log(data);
+                  self.ripetizioni = data;
+               }
+            );
+         },
+         salvaStato: function (prenotazione, index) {
+            var self = this;
+            var nuovoStato = $("#select-" + index).val();
+            var operazione = "";
+            switch (nuovoStato) {
+               case "attiva":
+                  return;
+               case "disdetta":
+                  operazione = "disdire";
+                  break;
+               case "effettuata":
+                  operazione = "effettuare";
+                  break;
+               default:
+                  alert("Errore");
+            }
 
-                $.post(this.link, {
-                    ops: JSON.stringify([operazione]),
-                    prenotazioni: JSON.stringify([prenotazione])
-                }, corretto => {
-                    if (corretto) {
-                        //non serve alert, vue cambia già la visualizzazione
-                        prenotazione.stato = nuovoStato;
-                        this.ripetizioni.splice(index, 1, prenotazione)
-                    } else
-                        alert("Errore nel salvataggio dello stato della ripetizione");
-                });
-            },
-            slotLabel: function (slot) {
-                switch (slot) {
-                    case "SLOT1":
-                        return "15 - 16";
-                    case "SLOT2":
-                        return "16 - 17";
-                    case "SLOT3":
-                        return "17 - 18";
-                    case "SLOT4":
-                        return "18 - 19";
-                    default:
-                        return "ERRORE";
-                }
-            },
-            giornoLabel: function (giorno) {
-                switch (giorno) {
-                    case "LUN":
-                        return "Lunedì";
-                    case "MAR":
-                        return "Martedì";
-                    case "MER":
-                        return "Mercoledì";
-                    case "GIO":
-                        return "Giovedì";
-                    case "VEN":
-                        return "Venerdì";
-                    default:
-                        return "ERRORE";
-                }
+            $.post(this.link, {
+               ops: JSON.stringify([operazione]),
+               prenotazioni: JSON.stringify([prenotazione])
+            }, corretto => {
+               if (corretto) {
+                  //non serve alert, vue cambia già la visualizzazione
+                  prenotazione.stato = nuovoStato;
+                  this.ripetizioni.splice(index, 1, prenotazione)
+               } else
+                  alert("Errore nel salvataggio dello stato della ripetizione");
+            });
+         },
+         slotLabel: function (slot) {
+            switch (slot) {
+               case "SLOT1":
+                  return "15 - 16";
+               case "SLOT2":
+                  return "16 - 17";
+               case "SLOT3":
+                  return "17 - 18";
+               case "SLOT4":
+                  return "18 - 19";
+               default:
+                  return "ERRORE";
             }
-        },
-        mounted() {
-            this.getRipetizioni(this.username);
-        },
-        watch: {
-            select: function () {
-                for (var i = 0; i < this.select.length; i++) {
-                    if (this.select[i] !== "attiva")
-                        $("#salva-" + i).prop("disabled", false);
-                    else
-                        $("#salva-" + i).prop("disabled", true);
-                }
+         },
+         giornoLabel: function (giorno) {
+            switch (giorno) {
+               case "LUN":
+                  return "Lunedì";
+               case "MAR":
+                  return "Martedì";
+               case "MER":
+                  return "Mercoledì";
+               case "GIO":
+                  return "Giovedì";
+               case "VEN":
+                  return "Venerdì";
+               default:
+                  return "ERRORE";
             }
-        }
-    })
+         }
+      },
+      mounted() {
+         this.getRipetizioni(sessionStorage.getItem("username"));
+      },
+      watch: {
+         select: function () {
+            for (var i = 0; i < this.select.length; i++) {
+               if (this.select[i] !== "attiva")
+                  $("#salva-" + i).prop("disabled", false);
+               else
+                  $("#salva-" + i).prop("disabled", true);
+            }
+         }
+      }
+   })
 </script>
 
 <script src="navbar-loader.js"></script>
