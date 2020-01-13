@@ -4,4 +4,4 @@ WHERE (i.docente, i.corso, s.ora, g.giorno) NOT IN (
     SELECT docente, corso, ora, giorno
     FROM ripetizioni.prenotazione
     WHERE stato='attiva'
-    );
+    ) and (d.nome IS NOT NULL OR d.cognome IS NOT NULL);

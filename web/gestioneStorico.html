@@ -89,6 +89,7 @@
                       "/progetto_ium_tweb2/StoricoPrenotazioni",
                       {utente: JSON.stringify(ut)},
                       function(data) {
+                          console.log(data);
                           self.ripetizioni = data;
                       }
                 );

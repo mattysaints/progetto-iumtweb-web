@@ -245,13 +245,13 @@ public class DAO {
         List<Prenotazione> result = new ArrayList<>();
         try {
             connection = DriverManager.getConnection(url, user, password);
-            String query = "SELECT DISTINCT d.nome, d.cognome, i.corso, g.giorno, s.ora " +
-                        "FROM ripetizioni.insegnamento i JOIN ripetizioni.docente d ON i.docente=d.id, slot s, giorno g " +
-                        "WHERE (i.docente, i.corso, s.ora, g.giorno) NOT IN (" +
-                        "    SELECT docente, corso, ora, giorno " +
-                        "    FROM ripetizioni.prenotazione " +
-                        "    WHERE stato='attiva'" +
-                        "    );";
+            String query = "SELECT DISTINCT d.nome, d.cognome, i.corso, g.giorno, s.ora\n" +
+                  "FROM ripetizioni.insegnamento i JOIN ripetizioni.docente d ON i.docente=d.id, slot s, giorno g\n" +
+                  "WHERE (i.docente, i.corso, s.ora, g.giorno) NOT IN (\n" +
+                  "    SELECT docente, corso, ora, giorno\n" +
+                  "    FROM ripetizioni.prenotazione\n" +
+                  "    WHERE stato='attiva'\n" +
+                  "    ) and (d.nome IS NOT NULL OR d.cognome IS NOT NULL);";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()){
@@ -405,21 +405,14 @@ public class DAO {
         try {
             connection = DriverManager.getConnection(url, user, password);
             PreparedStatement statement = connection.prepareStatement("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
-                    "FROM ripetizioni.prenotazione LEFT JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
+                  "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
                     "WHERE utente=?;");
             statement.setString(1, utente.getAccount());
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()){
-                String doc_nome = rs.getString("nome");
-                String doc_cognome = rs.getString("cognome");
-                Docente docente=null;
-                if(doc_cognome!=null && doc_nome!=null)
-                    docente = new Docente(doc_nome,doc_cognome);
-                String cor  =rs.getString("corso");
-                Corso corso=null;
-                if (cor!=null)
-                    corso = new Corso(cor);
+                Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
+                Corso corso = new Corso(rs.getString("corso"));
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Stato stato = Stato.valueOf(rs.getString("stato"));
@@ -436,6 +429,44 @@ public class DAO {
              e.printStackTrace();
           }
        }
+        return result;
+    }
+
+    /**
+     * Restituisce la lista delle prenotazioni nello storico di tutti gli utenti
+     *
+     * @return lista delle prenotazioni (degli utenti si estrae solo il nome utente)
+     */
+    public static List<Prenotazione> getStoricoPrenotazioni() {
+        Connection connection = null;
+        List<Prenotazione> result = new ArrayList<>();
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
+                  "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id;");
+
+            while (rs.next()){
+                Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
+                Corso corso = new Corso(rs.getString("corso"));
+                Utente utente = new Utente(rs.getString("utente"), null, null);
+                Slot ora = Slot.fromInt(rs.getInt("ora"));
+                Giorno giorno = Giorno.fromString(rs.getString("giorno"));
+                Stato stato = Stato.valueOf(rs.getString("stato"));
+
+                result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return result;
     }
 
@@ -457,44 +488,6 @@ public class DAO {
                 Stato stato = Stato.valueOf(state);
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Utente utente = new Utente(rs.getString("utente"),null,null);
-                result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Restituisce la lista delle prenotazioni nello storico di tutti gli utenti
-     *
-     * @return lista delle prenotazioni (degli utenti si estrae solo il nome utente)
-     */
-    public static List<Prenotazione> getStoricoPrenotazioni() {
-        Connection connection = null;
-        List<Prenotazione> result = new ArrayList<>();
-        try {
-            connection = DriverManager.getConnection(url, user, password);
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
-                    "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id;");
-
-            while (rs.next()){
-                Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
-                Corso corso = new Corso(rs.getString("corso"));
-                Utente utente = new Utente(rs.getString("utente"), null, null);
-                Slot ora = Slot.fromInt(rs.getInt("ora"));
-                Giorno giorno = Giorno.fromString(rs.getString("giorno"));
-                Stato stato = Stato.valueOf(rs.getString("stato"));
-
                 result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
             }
 

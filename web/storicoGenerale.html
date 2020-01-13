@@ -28,131 +28,132 @@
 
 <div id="navbar" id-active-page="admin"></div>
 
-   <!-- lista storico prenotazioni -->
-   <div id="listStor" class="container-fluid card w-75 mx-auto mt-5">
-      <h1 class="text-center my-4">Gestione storico prenotazioni</h1>
-      <div v-if="prenotazioni.length!==0">
-         <table class="table table-striped" >
-            <thead>
-               <tr>
-                  <th scope="col">Docente</th>
-                  <th scope="col">Corso</th>
-                  <th scope="col">Utente</th>
-                  <th scope="col">Giorno</th>
-                  <th scope="col">Ora</th>
-                  <th scope="col">Stato</th>
-               </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(prenot, index) in prenotazioni">
-               <td>{{prenot.docente.cognome}} {{prenot.docente.nome}}</td>
-               <td>{{prenot.corso.titolo}}</td>
-               <td>{{prenot.utente.account}}</td>
-               <td>{{giornoEsteso( prenot.giorno)}}</td>
-               <td>{{slotEsteso(prenot.slot)}}</td>
-               <td>
-                  <span v-if="prenot.stato!=='attiva'">{{prenot.stato}} </span>
-                  <select aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
-                     <option value="attiva" selected >Attiva</option>
-                     <option value="effettuata">Effettuata</option>
-                     <option value="disdetta">Disdetta</option>
-                  </select>
-               </td>
-            </tr>
-            </tbody>
-         </table>
-         <button v-on:click="salvaPrenotazioni()" class="btn btn-success btn-lg align-self-end px-5" >Salva</button>
-      </div>
-      <p v-else class="border-top pt-2">Nessun corso da visualizzare</p>
+<!-- lista storico prenotazioni -->
+<div id="listStor" class="container-fluid card w-75 mx-auto mt-5">
+   <h1 class="text-center my-4">Gestione storico prenotazioni</h1>
+   <div v-if="prenotazioni.length!==0">
+      <table class="table table-striped" >
+         <thead>
+         <tr>
+            <th scope="col">Docente</th>
+            <th scope="col">Corso</th>
+            <th scope="col">Utente</th>
+            <th scope="col">Giorno</th>
+            <th scope="col">Ora</th>
+            <th scope="col">Stato</th>
+         </tr>
+         </thead>
+         <tbody>
+         <tr v-for="(prenot, index) in prenotazioni">
+            <td>{{prenot.docente.cognome}} {{prenot.docente.nome}}</td>
+            <td>{{prenot.corso.titolo}}</td>
+            <td>{{prenot.utente.account}}</td>
+            <td>{{giornoEsteso( prenot.giorno)}}</td>
+            <td>{{slotEsteso(prenot.slot)}}</td>
+            <td>
+               <span v-if="prenot.stato!=='attiva'">{{prenot.stato}} </span>
+               <select aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
+                  <option value="attiva" selected >Attiva</option>
+                  <option value="effettuata">Effettuata</option>
+                  <option value="disdetta">Disdetta</option>
+               </select>
+            </td>
+         </tr>
+         </tbody>
+      </table>
+      <button v-on:click="salvaPrenotazioni()" class="btn btn-success btn-lg align-self-end px-5" >Salva</button>
    </div>
+   <p v-else class="border-top pt-2">Nessun corso da visualizzare</p>
+</div>
 
 <div id="footer"></div>
 
-   <script>
-      var listStor = new Vue({
-           el: '#listStor',
-           data: {
-               link: "/progetto_ium_tweb2/StoricoPrenotazioni",
-               prenotazioni: [],
-               statoAggiornato: [],
-           },
-           mounted() {
-               this.getPrenot();
-           },
-           methods: {
-               getPrenot: function () {
-                   var self = this;
-                   $.get(self.link, function(data) {
-                       self.prenotazioni = data ;
-                       for(var i=0; i<data.length; i++) {
-                          self.statoAggiornato.push(data[i].stato);
-                       }
-                   });
+<script>
+   var listStor = new Vue({
+      el: '#listStor',
+      data: {
+         link: "/progetto_ium_tweb2/StoricoPrenotazioni",
+         prenotazioni: [],
+         statoAggiornato: [],
+      },
+      mounted() {
+         this.getPrenot();
+      },
+      methods: {
+         getPrenot: function () {
+            var self = this;
+            $.get(self.link, function(data) {
+               console.log(data);
+               self.prenotazioni = data ;
+               for(var i=0; i<data.length; i++) {
+                  self.statoAggiornato.push(data[i].stato);
+               }
+            });
+         },
+         salvaPrenotazioni: function () {
+            var thiz = this;
+            var oldPrenots= this.prenotazioni;
+            var newState = this.statoAggiornato;
+            var ops = [];
+            var sendPrenots = [];
+            for(var i=0; i<oldPrenots.length; i++) {
+               var oldState = oldPrenots[i].stato;
+               if(oldState !== newState[i]) {
+                  ops.push(newState[i]==="effettuata" ? "effettuare" : "disdire");
+                  sendPrenots.push(oldPrenots[i]);
+                  oldPrenots[i].stato = newState[i];
+               } //end if
+            } //end for
+            $.ajax({
+               type: 'POST',
+               url: "/progetto_ium_tweb2/OpSuPrenotazioni",
+               data: {
+                  "ops": JSON.stringify(ops),
+                  "prenotazioni": JSON.stringify(sendPrenots),
                },
-               salvaPrenotazioni: function () {
-                  var thiz = this;
-                  var oldPrenots= this.prenotazioni;
-                  var newState = this.statoAggiornato;
-                  var ops = [];
-                  var sendPrenots = [];
-                  for(var i=0; i<oldPrenots.length; i++) {
-                     var oldState = oldPrenots[i].stato;
-                     if(oldState !== newState[i]) {
-                        ops.push(newState[i]==="effettuata" ? "effettuare" : "disdire");
-                        sendPrenots.push(oldPrenots[i]);
-                        oldPrenots[i].stato = newState[i];
-                     } //end if
-                  } //end for
-                  $.ajax({
-                     type: 'POST',
-                     url: "/progetto_ium_tweb2/OpSuPrenotazioni",
-                     data: {
-                        "ops": JSON.stringify(ops),
-                        "prenotazioni": JSON.stringify(sendPrenots),
-                     },
-                     success: function (res) {
-                        if(thiz.risultato)
-                           window.alert("Operazione riuscita");
-                        else
-                           window.alert("operazione fallita!");
-                     },
-                     async:false,
-                  });
+               success: function (res) {
+                  if(thiz.risultato)
+                     window.alert("Operazione riuscita");
+                  else
+                     window.alert("operazione fallita!");
+               },
+               async:false,
+            });
 
-              }, //end func
-              giornoEsteso(giorno) {
-                  switch(giorno) {
-                     case "LUN":
-                        return "lunedì";
-                     case "MAR":
-                        return "martedì";
-                     case "MER":
-                        return "mercoledì";
-                     case "GIO":
-                        return "giovedì";
-                     case "VEN":
-                        return "venerdì";
-                     default:
-                        return "";
-                  }
-              },
-              slotEsteso(slot) {
-                  switch (slot) {
-                     case "SLOT1":
-                        return "15-16";
-                     case "SLOT2":
-                        return "16-17";
-                     case "SLOT3":
-                        return "17-18";
-                     case "SLOT4":
-                        return "18-19";
-                     default:
-                        return "";
-                  }
-              }
-           }
-       })
-   </script>
+         }, //end func
+         giornoEsteso(giorno) {
+            switch(giorno) {
+               case "LUN":
+                  return "lunedì";
+               case "MAR":
+                  return "martedì";
+               case "MER":
+                  return "mercoledì";
+               case "GIO":
+                  return "giovedì";
+               case "VEN":
+                  return "venerdì";
+               default:
+                  return "";
+            }
+         },
+         slotEsteso(slot) {
+            switch (slot) {
+               case "SLOT1":
+                  return "15-16";
+               case "SLOT2":
+                  return "16-17";
+               case "SLOT3":
+                  return "17-18";
+               case "SLOT4":
+                  return "18-19";
+               default:
+                  return "";
+            }
+         }
+      }
+   })
+</script>
 
 
 <script src="navbar-loader.js"></script>

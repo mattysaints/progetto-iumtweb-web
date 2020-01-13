@@ -48,6 +48,7 @@ var listDoc = new Vue({
                      }); //end ajax
                      thiz.docenti[i].corsiInsegnati = corsi;
                   } //end for
+                  console.log(this.docenti);
                } //end else
             } //end success
          }); //end ajax
