@@ -134,8 +134,8 @@
             <td class="col-md-1">{{ index + 1 }}</td>
             <td class="col-md-2">{{ r.docente.nome }} {{ r.docente.cognome }}</td>
             <td class="col-md-3">{{ r.corso.titolo }}</td>
-            <td class="col-md-4">{{ giornoLabel(r.giorno) }}</td>
-            <td class="col-md-4">{{ slotLabel(r.slot) }}</td>
+            <td class="col-md-4">{{ r.giorno | giornoEsteso }}</td>
+            <td class="col-md-4">{{ r.slot | slotEsteso }}</td>
             <td class="col-md-5" v-if="!ospite">
                <button class="btn btn-primary" v-on:click="prenotaRipetizione(r, index)">Prenota</button>
             </td>
@@ -167,6 +167,38 @@
          ora: "",
          ospite: sessionStorage.getItem("ospite") === "true"
       },
+      filters : {
+         giornoEsteso(giorno) {
+            switch(giorno) {
+               case "LUN":
+                  return "lunedì";
+               case "MAR":
+                  return "martedì";
+               case "MER":
+                  return "mercoledì";
+               case "GIO":
+                  return "giovedì";
+               case "VEN":
+                  return "venerdì";
+               default:
+                  return "";
+            }
+         },
+         slotEsteso(slot) {
+            switch (slot) {
+               case "SLOT1":
+                  return "15-16";
+               case "SLOT2":
+                  return "16-17";
+               case "SLOT3":
+                  return "17-18";
+               case "SLOT4":
+                  return "18-19";
+               default:
+                  return "";
+            }
+         }
+      },
       mounted() {
          this.getRipetizioniDisponibili();
       },
@@ -194,7 +226,6 @@
                   prenotazioni: JSON.stringify([p])
                },
                success => {
-                  console.log("prenotazione avvenuta con successo" + success);
                   if (success) {
                      alert("Prenotazione avvenuta con successo");
                      self.ripetizioni.splice(index, 1);
@@ -206,44 +237,13 @@
          },
          updateSearch: function () {
             this.ripetizioni = this.data.filter(rip =>
-               (this.nomeDocente === "" || this.nomeDocente.toLocaleLowerCase() === rip.docente.nome.toLocaleLowerCase()) &&
-               (this.cognomeDocente === "" || this.cognomeDocente.toLocaleLowerCase() === rip.docente.cognome.toLocaleLowerCase()) &&
-               (this.corso === "" || this.corso.toLocaleLowerCase() === rip.corso.titolo.toLocaleLowerCase()) &&
+               (this.nomeDocente === "" || rip.docente.nome.toLocaleLowerCase().includes(this.nomeDocente.toLocaleLowerCase())) &&
+               (this.cognomeDocente === "" || rip.docente.cognome.toLocaleLowerCase().includes(this.cognomeDocente.toLocaleLowerCase())) &&
+               (this.corso === "" || rip.corso.titolo.toLocaleLowerCase().includes(this.corso.toLocaleLowerCase())) &&
                (this.giorno === "" || this.giorno === rip.giorno) &&
                (this.ora === "" || this.ora === rip.slot)
             )
          },
-
-         slotLabel: function (slot) {
-            switch (slot) {
-               case "SLOT1":
-                  return "15 - 16";
-               case "SLOT2":
-                  return "16 - 17";
-               case "SLOT3":
-                  return "17 - 18";
-               case "SLOT4":
-                  return "18 - 19";
-               default:
-                  return "ERRORE";
-            }
-         },
-         giornoLabel: function (giorno) {
-            switch (giorno) {
-               case "LUN":
-                  return "Lunedì";
-               case "MAR":
-                  return "Martedì";
-               case "MER":
-                  return "Mercoledì";
-               case "GIO":
-                  return "Giovedì";
-               case "VEN":
-                  return "Venerdì";
-               default:
-                  return "ERRORE";
-            }
-         }
       },
       watch: {
          nomeDocente: function () {

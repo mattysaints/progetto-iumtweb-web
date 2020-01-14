@@ -1,6 +1,17 @@
 # PROGETTO IUM TWEB 2
 Cose da fare
 
+## Ultime cose da fare
+- Controllare le proprie view che funzionino correttamente e non diano problemi, errori
+- Aggiungere filtri a storico prenotazioni
+- home android (dawoz)
+- sistemare graficamente le view
+- elinare dove possibile gli alert e inserire del testo nella view
+- logout in android
+- ospite android
+- tweb storico prenotazioni. dentro il contenitore della select dovrebbe vedersi "Attiva"
+- controllare che le pagine si vedano correttamente al cambiamento della dimensione dello schermo (minWeight, maxWeight)
+
 ## Modello
 
 ### Database schema
@@ -162,3 +173,4 @@ Mattia:
 - visualizzare lo storico
 - cambiare lo stato di una prenotazione
 - filtri (opzionale: vedi prenotazioni disponibili)
+

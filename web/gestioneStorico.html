@@ -45,16 +45,16 @@
          <tbody>
          <tr v-for="(r, index) in ripetizioni" :key="index">
             <td>{{ index + 1 }}</td>
-            <td>{{ r.docente.nome }} {{ r.docente.cognome }}</td>
+            <td>{{ r.docente | notNull}}</td>
             <td>{{ r.corso.titolo }}</td>
-            <td>{{ giornoLabel(r.giorno) }}</td>
-            <td>{{ slotLabel(r.slot) }}</td>
+            <td>{{ r.giorno | giornoEsteso }}</td>
+            <td>{{ r.slot | slotEsteso }}</td>
             <td class="col-3">
                <p v-if="r.stato !== 'attiva'">{{ r.stato.charAt(0).toUpperCase() + r.stato.substring(1) }}</p>
                <div class="form-inline" v-else>
                   <select :id="'select-' + index" aria-label="StatoPrenotazione" class="form-control"
                           v-model="select[index]">
-                     <option selected value="attiva">Attiva</option>
+                     <option value="attiva" selected>Attiva</option>
                      <option value="effettuata">Effettuata</option>
                      <option value="disdetta">Disdetta</option>
                   </select>
@@ -80,6 +80,44 @@
          select: [],
          username: null,
          link: "/progetto_ium_tweb2/OpSuPrenotazioni"
+      },
+      filters : {
+         notNull : function (docente) {
+            if(docente.cognome && docente.nome) {
+               return docente.cognome + " " + docente.nome;
+            } else
+               return "Docente Eliminato";
+         },
+         giornoEsteso(giorno) {
+            switch(giorno) {
+               case "LUN":
+                  return "lunedì";
+               case "MAR":
+                  return "martedì";
+               case "MER":
+                  return "mercoledì";
+               case "GIO":
+                  return "giovedì";
+               case "VEN":
+                  return "venerdì";
+               default:
+                  return "";
+            }
+         },
+         slotEsteso(slot) {
+            switch (slot) {
+               case "SLOT1":
+                  return "15-16";
+               case "SLOT2":
+                  return "16-17";
+               case "SLOT3":
+                  return "17-18";
+               case "SLOT4":
+                  return "18-19";
+               default:
+                  return "";
+            }
+         }
       },
       methods: {
          getRipetizioni: function (utente) {
