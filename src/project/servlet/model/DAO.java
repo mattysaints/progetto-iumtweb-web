@@ -245,13 +245,12 @@ public class DAO {
         List<Prenotazione> result = new ArrayList<>();
         try {
             connection = DriverManager.getConnection(url, user, password);
-            String query = "SELECT DISTINCT d.nome, d.cognome, i.corso, g.giorno, s.ora\n" +
-                  "FROM ripetizioni.insegnamento i JOIN ripetizioni.docente d ON i.docente=d.id, slot s, giorno g\n" +
-                  "WHERE (i.docente, i.corso, s.ora, g.giorno) NOT IN (\n" +
-                  "    SELECT docente, corso, ora, giorno\n" +
-                  "    FROM ripetizioni.prenotazione\n" +
-                  "    WHERE stato='attiva'\n" +
-                  "    ) and (d.nome IS NOT NULL OR d.cognome IS NOT NULL);";
+            String query = "SELECT DISTINCT d.nome, d.cognome, i.corso, g.giorno, s.ora " +
+                    "FROM ripetizioni.insegnamento i JOIN ripetizioni.docente d ON i.docente=d.id, slot s, giorno g " +
+                    "WHERE (i.docente, i.corso, s.ora, g.giorno) NOT IN (" +
+                    "    SELECT docente, corso, ora, giorno " +
+                    "    FROM ripetizioni.prenotazione " +
+                    "    ) AND (d.nome IS NOT NULL OR d.cognome IS NOT NULL);";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()){
