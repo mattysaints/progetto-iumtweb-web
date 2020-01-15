@@ -130,7 +130,7 @@
          </tr>
          </thead>
          <tbody>
-         <tr :key="index" v-for="(r, index) in ripetizioni">
+         <tr :key="index" v-for="(r, index) in ripetizioni" v-show="ripetizioniVisibili[index]">
             <td class="col-md-1">{{ index + 1 }}</td>
             <td class="col-md-2">{{ r.docente.nome }} {{ r.docente.cognome }}</td>
             <td class="col-md-3">{{ r.corso.titolo }}</td>
@@ -158,7 +158,7 @@
          ripetizioni: [],
 
          // lista completa di ripetizioni disponibili
-         data: [],
+         ripetizioniVisibili: [],
          //filtri
          nomeDocente: "",
          cognomeDocente: "",
@@ -207,7 +207,7 @@
             var self = this;
             $.get(this.linkRipetizioniDisponibili, data => {
                self.ripetizioni = data;
-               self.data = data
+               self.ripetizioniVisibili = data.map(() =>  true);
             });
          },
          prenotaRipetizione: function (prenotazione, index) {
@@ -229,14 +229,14 @@
                   if (success) {
                      alert("Prenotazione avvenuta con successo");
                      self.ripetizioni.splice(index, 1);
-                     self.data.splice(index, 1)
+                     self.ripetizioniVisibili.splice(index, 1)
                   } else
                      alert("Errore nella prenotazione")
                }
             );
          },
          updateSearch: function () {
-            this.ripetizioni = this.data.filter(rip =>
+            this.ripetizioniVisibili = this.ripetizioni.map(rip =>
                (this.nomeDocente === "" || rip.docente.nome.toLocaleLowerCase().includes(this.nomeDocente.toLocaleLowerCase())) &&
                (this.cognomeDocente === "" || rip.docente.cognome.toLocaleLowerCase().includes(this.cognomeDocente.toLocaleLowerCase())) &&
                (this.corso === "" || rip.corso.titolo.toLocaleLowerCase().includes(this.corso.toLocaleLowerCase())) &&

@@ -283,15 +283,14 @@
                   if(thiz.risultato)
                      window.alert("Operazione riuscita");
                   else
-                     window.alert("operazione fallita!");
+                     window.alert("Operazione fallita!");
                },
                async:true,
             });
          }, //end func
          updateSearch: function () {
-            this.prenotazioni.forEach( (rip, index) => {
-               this.prenotVisibile[index] =
-                  (this.nomeDocente === "" || (rip.docente.nome!==undefined &&  rip.docente.nome.toLocaleLowerCase().includes(this.nomeDocente.toLocaleLowerCase()))) &&
+            this.prenotVisibile = this.prenotazioni.map( (rip) => {
+                  return (this.nomeDocente === "" || (rip.docente.nome!==undefined &&  rip.docente.nome.toLocaleLowerCase().includes(this.nomeDocente.toLocaleLowerCase()))) &&
                      (this.cognomeDocente === "" || (rip.docente.cognome!==undefined &&  rip.docente.cognome.toLocaleLowerCase().includes(this.cognomeDocente.toLocaleLowerCase()))) &&
                      (this.corso === "" || rip.corso.titolo.toLocaleLowerCase().includes(this.corso.toLocaleLowerCase())) &&
                      (this.giorno === "" || this.giorno === rip.giorno) &&
