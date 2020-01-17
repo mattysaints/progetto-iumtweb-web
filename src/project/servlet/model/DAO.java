@@ -258,7 +258,7 @@ public class DAO {
                 Corso corso = new Corso(rs.getString("corso"));
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
-                result.add(new Prenotazione(docente, corso,null, ora, giorno, Stato.attiva));
+                result.add(new Prenotazione(docente, corso, null, ora, giorno, Stato.ATTIVA));
             }
 
         } catch (SQLException e) {
@@ -414,7 +414,7 @@ public class DAO {
                 Corso corso = new Corso(rs.getString("corso"));
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
-                Stato stato = Stato.valueOf(rs.getString("stato"));
+                Stato stato = Stato.fromString(rs.getString("stato"));
                 result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
             }
 
@@ -451,7 +451,7 @@ public class DAO {
                 Utente utente = new Utente(rs.getString("utente"), null, null);
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
-                Stato stato = Stato.valueOf(rs.getString("stato"));
+                Stato stato = Stato.fromString(rs.getString("stato"));
 
                 result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
             }
@@ -484,7 +484,7 @@ public class DAO {
                 Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
                 Corso corso = new Corso(rs.getString("corso"));
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
-                Stato stato = Stato.valueOf(state);
+                Stato stato = Stato.fromString(state);
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Utente utente = new Utente(rs.getString("utente"),null,null);
                 result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
