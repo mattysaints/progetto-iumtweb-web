@@ -169,7 +169,7 @@
                <td>{{prenot.giorno | giornoEsteso}}</td>
                <td>{{prenot.slot | slotEsteso }}</td>
                <td>
-                  <span v-if="prenot.stato!=='attiva'">{{prenot.stato}} </span>
+                  <span v-if="prenot.stato!=='ATTIVA'">{{prenot.stato.charAt(0).toUpperCase() + prenot.stato.substring(1).toLowerCase()}} </span>
                   <select aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
                      <option value="attiva" selected >attiva</option>
                      <option value="effettuata">effettuata</option>
