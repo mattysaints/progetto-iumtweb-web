@@ -1,12 +1,19 @@
-#loginCard {
-    align-content: center;
-    alignment: center;
-}
-
 .bg {
     background-image: url("img/login_background.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
+}
+
+@media (min-width: 576px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+#loginCard {
+    /* align-content: center; */
+    /*alignment: center;*/
+    width: 75%;
 }
