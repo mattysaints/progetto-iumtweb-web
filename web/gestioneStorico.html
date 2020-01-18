@@ -50,11 +50,11 @@
             <td>{{ r.giorno | giornoEsteso }}</td>
             <td>{{ r.slot | slotEsteso }}</td>
             <td class="col-3">
-               <p v-if="r.stato !== 'attiva'">{{ r.stato.charAt(0).toUpperCase() + r.stato.substring(1) }}</p>
+               <p v-if="r.stato !== 'ATTIVA'">{{ r.stato.charAt(0).toUpperCase() + r.stato.substring(1).toLowerCase() }}</p>
                <div class="form-inline" v-else>
                   <select :id="'select-' + index" aria-label="StatoPrenotazione" class="form-control"
-                          v-model="select[index]">
-                     <option value="attiva" selected>Attiva</option>
+                          v-model="select[index]" autocomplete="off">
+                     <option selected value="attiva">Attiva</option>
                      <option value="effettuata">Effettuata</option>
                      <option value="disdetta">Disdetta</option>
                   </select>
