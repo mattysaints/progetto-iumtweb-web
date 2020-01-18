@@ -169,11 +169,11 @@
                <td>{{prenot.giorno | giornoEsteso}}</td>
                <td>{{prenot.slot | slotEsteso }}</td>
                <td>
-                  <span v-if="prenot.stato!=='ATTIVA'">{{prenot.stato.charAt(0).toUpperCase() + prenot.stato.substring(1).toLowerCase()}} </span>
+                  <span v-if="prenot.stato!=='ATTIVA'">{{prenot.stato | filterStato}} </span>
                   <select aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
-                     <option value="attiva" selected >attiva</option>
-                     <option value="effettuata">effettuata</option>
-                     <option value="disdetta">disdetta</option>
+                     <option value="ATTIVA" selected >Attiva</option>
+                     <option value="EFFETTUATA">Effettuata</option>
+                     <option value="DISDETTA">Disdetta</option>
                   </select>
                </td>
             </tr>
@@ -214,6 +214,18 @@
                return docente.cognome + " " + docente.nome;
             } else
                return "Docente Eliminato";
+         },
+         filterStato(stato) {
+            switch (stato) {
+               case "ATTIVA":
+                  return "Attiva";
+               case "EFFETTUATA":
+                  return "Effettuata";
+               case "DISDETTA":
+                  return "Disdetta";
+               default:
+                  return "";
+            }
          },
          giornoEsteso(giorno) {
             switch(giorno) {
@@ -267,7 +279,7 @@
             for(var i=0; i<oldPrenots.length; i++) {
                var oldState = oldPrenots[i].stato;
                if(oldState !== newState[i]) {
-                  ops.push(newState[i]==="effettuata" ? "effettuare" : "disdire");
+                  ops.push(newState[i]==="EFFETTUATA" ? "effettuare" : "disdire");
                   sendPrenots.push(oldPrenots[i]);
                   oldPrenots[i].stato = newState[i];
                } //end if
@@ -280,8 +292,8 @@
                   "prenotazioni": JSON.stringify(sendPrenots),
                },
                success: function (res) {
-                  if(thiz.risultato)
-                     window.alert("Operazione riuscita");
+                  if(res)
+                     window.alert("Operazione riuscita!");
                   else
                      window.alert("Operazione fallita!");
                },
