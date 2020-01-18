@@ -2,14 +2,15 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
     <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
     <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
     <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-
-    <script src="vue/vue.min.js"></script>
     <script src="jquery/jquery.min.js"></script>
+    <script src="vue/vue.min.js"></script>
+
     <title>Homepage</title>
 </head>
 <body>
@@ -60,36 +61,186 @@
     <div class="card" id="appProfilo">
         <div class="card-header text-sm-center text-secondary">Homepage</div>
         <div class="card-body">
-            <div class="px-5 py-2">
-                <h2 class="card-title">Profilo</h2>
-                <p class="font-weight-bold my-2">nome utente</p>
-            </div>
-            <div class="card-deck">
-                <div class="card">
-                    <h5 class="card-header">Prenotazioni</h5>
-                    <div class="card-body">
-                        <p class="text-secondary">Numero prenotazioni: <span class="text-dark">num</span></p>
-                        <p class="text-secondary">Attive: <span class="text-dark">num</span></p>
-                        <p class="text-secondary">Effettuate: <span class="text-dark">num</span></p>
-                        <p class="text-secondary">Disdette: <span class="text-dark">num</span></p>
-                        <p class="text-secondary">Numero corsi seguiti: <span class="text-dark">num</span></p>
+            <div v-if="!ospite">
+                <div class="px-5 py-2">
+                    <h2 class="card-title">Profilo</h2>
+                    <p class="font-weight-bold my-2">{{username}}
+                        <span class="badge badge-info" v-if="admin">Admin</span>
+                        <span class="badge badge-info" v-else>Cliente</span>
+                    </p>
+                </div>
+                <div class="card-deck">
+                    <div class="card">
+                        <h5 class="card-header">Prenotazioni</h5>
+                        <div class="card-body">
+                            <p class="text-secondary">Numero prenotazioni: <span
+                                    class="text-dark">{{numPrenotazioni}}</span></p>
+                            <p class="text-secondary">Attive: <span class="text-dark">{{numAttive}}</span></p>
+                            <p class="text-secondary">Effettuate: <span class="text-dark">{{numEffettuate}}</span></p>
+                            <p class="text-secondary">Disdette: <span class="text-dark">{{numDisdette}}</span></p>
+                            <p class="text-secondary">Numero corsi seguiti: <span class="text-dark">{{numCorsi}}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h5 class="card-header">Prossima prenotazione</h5>
+                        <div class="card-body">
+                            <div v-if="numAttive !== 0">
+                                <p class="text-secondary">Docente: <span class="text-dark">{{prossimaPrenotazione.docente.nome + " " + prossimaPrenotazione.docente.cognome}}</span>
+                                </p>
+                                <p class="text-secondary">Corso: <span class="text-dark">{{prossimaPrenotazione.corso.titolo}}</span>
+                                </p>
+                                <p class="text-secondary">Giorno: <span class="text-dark">{{prossimaPrenotazione.giorno | giornoEsteso}}</span>
+                                </p>
+                                <p class="text-secondary">Ora: <span class="text-dark">{{prossimaPrenotazione.slot | slotEsteso}}</span>
+                                </p>
+                            </div>
+                            <p class="text-info" v-else>Non hai prenotazioni attive</p>
+                        </div>
                     </div>
                 </div>
-                <div class="card">
-                    <h5 class="card-header">Prossima prenotazione</h5>
-                    <div class="card-body">
-                        <p class="text-secondary">Docente: <span class="text-dark">num</span></p>
-                        <p class="text-secondary">Corso: <span class="text-dark">num</span></p>
-                        <p class="text-secondary">Giorno: <span class="text-dark">num</span></p>
-                        <p class="text-secondary">Ora: <span class="text-dark">num</span></p>
-                    </div>
-                </div>
             </div>
+            <p class="text-info" v-else>Hai fatto accesso come ospite</p>
         </div>
     </div>
 </article>
 
 <div id="footer"></div>
+
+<script>
+    var appProfilo = new Vue({
+        el: "#appProfilo",
+        data: {
+            username: "",
+            admin: null,
+            ospite: null,
+            link: "/progetto_ium_tweb2/StoricoPrenotazioni",
+            prenotazioni: [],
+            numPrenotazioni: null,
+            numAttive: null,
+            numEffettuate: null,
+            numDisdette: null,
+            numCorsi: null,
+            prossimaPrenotazione: null,
+        },
+        methods: {
+            initInfoUtente: function () {
+                this.username = sessionStorage.getItem("username");
+                this.admin = sessionStorage.getItem("admin") === "true";
+                this.ospite = sessionStorage.getItem("ospite") === "true";
+            },
+            getPrenotazioniUtente: function () {
+                var self = this;
+                var utente = JSON.stringify({
+                    account: this.username,
+                    password: null,
+                    admin: null
+                });
+                $.get(this.link, {utente: utente}, function (data) {
+                    self.prenotazioni = data;
+                    self.initStatistics()
+                });
+            },
+            initStatistics: function () {
+                this.numPrenotazioni = this.prenotazioni.length;
+                this.numAttive = this.prenotazioni.filter(p => p.stato === "ATTIVA").length;
+                this.numEffettuate = this.prenotazioni.filter(p => p.stato === "EFFETTUATA").length;
+                this.numDisdette = this.prenotazioni.filter(p => p.stato === "DISDETTA").length;
+                this.numCorsi = new Set(this.prenotazioni.map(p => p.corso.titolo)).size;
+                this.prossimaPrenotazione = this.nextPrenotazione(this.getGiorno(), this.getOra());
+            },
+            getGiorno: function () {
+                return (new Date().getDay() + 6) % 7;
+            },
+            getOra: function () {
+                return new Date().getHours()
+            },
+            valueOfGiorno: function (giorno) {
+                switch (giorno) {
+                    case "LUN":
+                        return 0;
+                    case "MAR":
+                        return 1;
+                    case "MER":
+                        return 2;
+                    case "GIO":
+                        return 3;
+                    case "VEN":
+                        return 4;
+                }
+            },
+            valueOfSlot: function (slot) {
+                switch (slot) {
+                    case "SLOT1":
+                        return 0;
+                    case "SLOT2":
+                        return 1;
+                    case "SLOT3":
+                        return 2;
+                    case "SLOT4":
+                        return 3;
+                }
+            },
+            nextPrenotazione: function (currentGiorno, currentOra) {
+                if (currentOra < 15)
+                    currentOra = -1;
+                else if (currentOra > 19) {
+                    currentOra = -1;
+                    currentGiorno += 1
+                } else
+                    currentOra = currentOra % 15;
+                if (currentGiorno > 4)
+                    currentGiorno = -1;
+                var nextPrenotazione = this.prenotazioni[0];
+                for (var i = 1; i < this.prenotazioni.length; i++) {
+                    var valueGiorno = this.valueOfGiorno(this.prenotazioni[i].giorno);
+                    var valueOra = this.valueOfSlot(this.prenotazioni[i].slot);
+                    if (valueGiorno >= currentGiorno && valueGiorno <= this.valueOfGiorno(nextPrenotazione.giorno)
+                        && valueOra > currentOra && valueOra < this.valueOfSlot(nextPrenotazione.slot)
+                        || valueGiorno >= currentGiorno && valueGiorno < this.valueOfGiorno(nextPrenotazione.giorno))
+                        nextPrenotazione = this.prenotazioni[i];
+                }
+                return nextPrenotazione;
+            }
+        },
+        mounted() {
+            this.initInfoUtente();
+            this.getPrenotazioniUtente()
+        },
+        filters: {
+            giornoEsteso(giorno) {
+                switch (giorno) {
+                    case "LUN":
+                        return "Lunedì";
+                    case "MAR":
+                        return "Martedì";
+                    case "MER":
+                        return "Mercoledì";
+                    case "GIO":
+                        return "Giovedì";
+                    case "VEN":
+                        return "Venerdì";
+                    default:
+                        return "";
+                }
+            },
+            slotEsteso(slot) {
+                switch (slot) {
+                    case "SLOT1":
+                        return "15 - 16";
+                    case "SLOT2":
+                        return "16 - 17";
+                    case "SLOT3":
+                        return "17 - 18";
+                    case "SLOT4":
+                        return "18 - 19";
+                    default:
+                        return "";
+                }
+            }
+        }
+    });
+</script>
 
 <script src="footer-loader.js"></script>
 <script src="navbar-loader.js"></script>
