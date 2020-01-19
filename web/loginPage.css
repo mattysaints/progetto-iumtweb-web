@@ -17,3 +17,7 @@
     /*alignment: center;*/
     width: 75%;
 }
+
+#logo {
+    min-width: 350px;
+}
