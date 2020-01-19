@@ -1,100 +1,102 @@
 <!DOCTYPE html>
 <html lang="it">
-   <head>
-      <meta charset="UTF-8" >
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-      <link rel="stylesheet" href="loginPage.css" >
+<head>
+   <meta charset="UTF-8">
+   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+   <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+   <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+   <link href="loginPage.css" rel="stylesheet">
 
-      <!-- librerie bootstrap -->
-      <script src="bootstrap-4.4.1-dist/js/popper.min.js" ></script>
-      <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
-      <script src="bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
+   <!-- librerie bootstrap -->
+   <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
+   <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
+   <script src="bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
 
-      <script src="vue/vue.min.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="vue/vue.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-      <title>
-         Login
-      </title>
-   </head>
-   <body class="bg">
-   <div class="container-fluid mt-5">
+   <title>Login</title>
+</head>
+<body class="bg">
 
-      <div class="card-columns">
-
-         <div class="card mt-lg-5 d-block mx-auto" id="loginCard">
-            <article class="card-body">
-               <p class="text-dark card-title font-weight-bold text-lg-center">Login</p>
-               <form action="javascript:app.login()" id="app">
-                  <p class="text-danger" id="label"></p>
-                  <div class="form-group mx-3">
-                     <div class="input-group">
-                        <div class="input-group-prepend">
-                           <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-                        </div>
-                        <input aria-label="usernameInput" aria-required="true" autofocus="autofocus"
-                               class="form-control" name="username" placeholder="Username" required type="text"
-                               v-model="username">
-                     </div> <!-- input-group.// -->
-                  </div> <!-- form-group// -->
-                  <div class="form-group mx-3">
-                     <div class="input-group">
-                        <div class="input-group-prepend">
-                           <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                        </div>
-                        <input aria-label="passwordInput" aria-required="true" class="form-control" id="password"
-                               name="password" placeholder="******" required type="password" v-model="password">
-                     </div> <!-- input-group.// -->
-                  </div> <!-- form-group// -->
-                  <div class="form-group mx-3">
-                     <button aria-label="buttonAccess" class="btn btn-primary btn-block" type="submit"> Accedi</button>
-                  </div> <!-- form-group// -->
-                  <hr>
-                  <div class="text-center">
-                     <a @click="ospite()" class="mx-auto text-sm-center" data-toggle="tooltip" href="javascript:void(0)"
-                        title="Accedi come ospite per visualizzare le ripetizioni disponibili">
-                        Non hai un account? Accedi come ospite
-                     </a>
-                  </div>
-               </form>
-            </article>
-         </div> <!-- card.// -->
-
-         <div class="card border-dark">
-            <div class="card-header">Tutto quello che devi sapere</div>
-            <div class="card-body text-dark">
-               <h1 class="card-title text-center">Ripetizioni</h1>
-               <div class="card-text p-2">
-                  <p>
-                     Hai qualche lacuna nelle materie scolastiche? Vorresti fare delle lezioni private? Sei nel posto
-                     giusto!
-                  </p>
-                  <p>
-                     Accedi su <span class="font-weight-bold">Ripetizioni</span> per prenotarti agli appuntamenti, ed
-                     eventualmente disdire degli appuntamenti
-                     prenotati. Tutto questo con pochissimi click!
-                  </p>
-                  <p class="mt-2">Sulla piattaforma potrai:</p>
-                  <ul>
-                     <li>Prenotarti ad appuntamenti con un professore registrato, scegliendo comodamente giorno e ora
-                     </li>
-                     <li>Disdire una prenotazione, se non puoi più andare</li>
-                     <li>Visualizzare il tuo storico delle ripetizioni</li>
-                  </ul>
-               </div>
-            </div>
-         </div>
-
-      </div>
-
+<div class="text-center mt-2 mx-lg-5">
+   <img alt="Logo sito" class="img-fluid m-lg-3 w-75" id="logo" src="img/logo.png"
+        title="Ripetizioni: tutto quello di cui uno studente ha bisogno"/>
 </div>
 
-   <!-- form per redirect -->
+<div class="container-fluid mt-5">
+   <div class="card-columns">
+      <div class="card mt-lg-5 d-block mx-auto" id="loginCard">
+         <article class="card-body">
+            <p class="text-dark card-title font-weight-bold text-lg-center">Login</p>
+            <form action="javascript:app.login()" id="app">
+               <p class="text-danger" id="label"></p>
+               <div class="form-group mx-3">
+                  <div class="input-group">
+                     <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                     </div>
+                     <input aria-label="usernameInput" aria-required="true" autofocus="autofocus"
+                            class="form-control" name="username" placeholder="Username" required type="text"
+                            v-model="username"/>
+                  </div> <!-- input-group.// -->
+               </div> <!-- form-group// -->
+               <div class="form-group mx-3">
+                  <div class="input-group">
+                     <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                     </div>
+                     <input aria-label="passwordInput" aria-required="true" class="form-control" id="password"
+                            name="password" placeholder="******" required type="password" v-model="password">
+                  </div> <!-- input-group.// -->
+               </div> <!-- form-group// -->
+               <div class="form-group mx-3">
+                  <button aria-label="buttonAccess" class="btn btn-primary btn-block" type="submit"> Accedi</button>
+               </div> <!-- form-group// -->
+               <hr>
+               <div class="text-center">
+                  <a @click="ospite()" class="mx-auto text-sm-center" data-toggle="tooltip" href="javascript:void(0)"
+                     title="Accedi come ospite per visualizzare le ripetizioni disponibili">
+                     Non hai un account? Accedi come ospite
+                  </a>
+               </div>
+            </form>
+         </article>
+      </div> <!-- card.// -->
+
+      <div class="card border-dark">
+         <div class="card-header">Tutto quello che devi sapere</div>
+         <div class="card-body text-dark">
+            <h1 class="card-title text-center">Ripetizioni</h1>
+            <div class="card-text p-2">
+               <p>
+                  Hai qualche lacuna nelle materie scolastiche? Vorresti fare delle lezioni private? Sei nel posto
+                  giusto!
+               </p>
+               <p>
+                  Accedi su <span class="font-weight-bold">Ripetizioni</span> per prenotarti agli appuntamenti, ed
+                  eventualmente disdire degli appuntamenti
+                  prenotati. Tutto questo con pochissimi click!
+               </p>
+               <p class="mt-2">Sulla piattaforma potrai:</p>
+               <ul>
+                  <li>Prenotarti ad appuntamenti con un professore registrato, scegliendo comodamente giorno e ora
+                  </li>
+                  <li>Disdire una prenotazione, se non puoi più andare</li>
+                  <li>Visualizzare il tuo storico delle ripetizioni</li>
+               </ul>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- form per redirect -->
 <form method="post" id="redirect" action="Redirect" hidden>
-   <input type="text" name="redirect" value="homepage"/>
+   <input name="redirect" type="text" value="homepage"/>
 </form>
+
+<div id="footer"></div>
 
 <script>
    var app = new Vue({
@@ -132,13 +134,7 @@
    })
 </script>
 
-<!--
-questo funziona, anche senza import
-<svg class="bi bi-chevron-right" width="32" height="32" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z" clip-rule="evenodd"/></svg>
-questo non funziona
-<svg class="docs/static/assets/img/bootstrap.svg" width="32" height="32" title="Bootstrap" />
--->
-
+<script src="footer-loader.js"></script>
 
 </body>
 </html>
