@@ -3,26 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="jquery/jquery.min.js"></script>
+    <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
+    <script src="bootstrap-4.4.1-dist/js/bootstrap.bundle.js"></script>
     <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
     <link rel="stylesheet" href="gestioneCorsi.css" >
 
-    <!-- librerie bootstrap -->
-    <script src="bootstrap-4.4.1-dist/js/popper.min.js" ></script>
-    <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
-    <script src="bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
-    <!-- librerie jquery -->
-    <script src="jquery/jquery.min.js" ></script>
-    <!-- librerie vue -->
     <script src="vue/vue.min.js" ></script>
 
     <title>Gestione Corsi</title>
 </head>
-
 <body class="bg">
 
 <div id="navbar" id-active-page="admin"></div>
-
 
 <div id="appCorso">
     <div class="container-fluid card w-50 mx-auto mt-5">
@@ -30,9 +26,16 @@
         <hr>
         <form action="javascript:appCorso.addCorso()">
             <div class="mx-auto text-center">
-                <p class="text-primary">Nuovo corso:<input class="ml-2" aria-required="true" v-model="corso" type="text" placeholder="Corso" required/> <button title="Inserisci un nuovo corso" type="submit" class="btn btn-primary ml-5 w-auto">Inserisci</button></p>
+                <p class="text-primary">
+                    Nuovo corso:
+                    <input aria-required="true" class="ml-2" id="inputCorso" placeholder="Corso" required type="text"
+                           v-model="corso"/>
+                    <button class="btn btn-primary ml-5 w-auto" title="Inserisci un nuovo corso" type="submit">
+                        Inserisci
+                    </button>
+                </p>
             </div>
-            </form>
+        </form>
     </div>
 
     <div class="container-fluid card w-50 mx-auto mt-5">
@@ -51,7 +54,10 @@
                 <td>{{index+1}}</td>
                 <td class="col-5">{{c.titolo}}</td>
                 <td class="text-right">
-                    <button v-on:click="delCorso(c.titolo, index)" class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i></button>
+                    <button class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"
+                            v-on:click="delCorso(c.titolo, index)">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </td>
             </tr>
             </tbody>
@@ -82,31 +88,39 @@
                 var self = this;
                 $.post(this.link, {op: "inserire", corso: this.corso}, data => {
                     self.result = data.result;
-                    if (self.result === "success")
+                    $("#inputCorso").val("");
+                    if (self.result === "success") {
                         self.data.push({titolo: self.corso});
-                    else
-                        alert("Errore nell'inserimento del corso")
+                        makeToast("text-success", "Successo", "Corso inserito correttamente")
+                    } else {
+                        makeToast("text-danger", "Errore", "Impossibile inserire il corso");
+                    }
                 })
             },
             delCorso: function (corso, index) {
-                var self = this;
-                $.post(this.link, {op: "eliminare", corso: corso}, data => {
-                    self.result = data.result;
-                    if (self.result === "success")
-                        self.data.splice(index, 1);
-                    else
-                        alert("Errore nell'eliminazione del corso")
-                })
+                if (confirm("Sei sicuro di voler eliminare il corso selezionato?")) {
+                    var self = this;
+                    $.post(this.link, {op: "eliminare", corso: corso}, function (data) {
+                        self.result = data.result;
+                        $("#inputCorso").val("");
+                        if (self.result === "success") {
+                            self.data.splice(index, 1);
+                            makeToast("text-success", "Successo", "Corso eliminato correttamente")
+                        } else
+                            makeToast("text-danger", "Errore", "Impossibile eliminare: ci sono docenti che offrono ripetizioni del corso selezionato")
+                    })
+                }
             }
         },
         mounted() {
-            this.getCorsi()
+            this.getCorsi();
         }
     })
 </script>
 
 <script src="navbar-loader.js"></script>
 <script src="footer-loader.js"></script>
+<script src="toast-loader.js"></script>
 
 </body>
 </html>
