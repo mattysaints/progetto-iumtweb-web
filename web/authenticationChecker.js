@@ -24,7 +24,7 @@ var autenticationChecker = new Vue({
             case "/progetto_ium_tweb2/storicoGenerale.html":
             case "/progetto_ium_tweb2/gestioneDocenti.html":
             case "/progetto_ium_tweb2/gestioneCorsi.html":
-            case "progetto_ium_tweb2/gestioneStorico.html":
+            case "/progetto_ium_tweb2/gestioneStorico.html":
                alert("Sei ospite! Non hai i permessi per visualizzare le informazioni di questa pagina. Verrai reindirizzato alla homepage");
                window.location.replace("/progetto_ium_tweb2/homepage.html");
                break;
