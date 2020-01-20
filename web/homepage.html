@@ -191,24 +191,25 @@
             },
             nextPrenotazione: function (currentGiorno, currentOra) {
                 if (currentOra < 15)
-                    currentOra = -1;
-                else if (currentOra > 19) {
-                    currentOra = -1;
-                    currentGiorno += 1
+                    currentOra = -1; // minimo
+                else if (currentOra >= 19) {
+                    currentOra = -1; // minimo
+                    currentGiorno += 1 // giorno incrementato
                 } else
-                    currentOra = currentOra % 15;
+                    currentOra = currentOra % 15; // value of slot
                 if (currentGiorno > 4)
-                    currentGiorno = -1;
-                var nextPrenotazione = this.prenotazioni[0];
-                for (var i = 1; i < this.prenotazioni.length; i++) {
-                    var valueGiorno = this.valueOfGiorno(this.prenotazioni[i].giorno);
-                    var valueOra = this.valueOfSlot(this.prenotazioni[i].slot);
-                    if (valueGiorno >= currentGiorno && valueGiorno <= this.valueOfGiorno(nextPrenotazione.giorno)
-                        && valueOra > currentOra && valueOra < this.valueOfSlot(nextPrenotazione.slot)
-                        || valueGiorno >= currentGiorno && valueGiorno < this.valueOfGiorno(nextPrenotazione.giorno))
-                        nextPrenotazione = this.prenotazioni[i];
-                }
-                return nextPrenotazione;
+                    currentGiorno = -1; // next is monday
+
+                return this.prenotazioni
+                    .filter(p => this.valueOfGiorno(p.giorno) >= currentGiorno && this.valueOfSlot(p.slot) > currentOra)
+                    // filtra le minori
+                    .sort((p1, p2) => {
+                        const compareGiorno = this.valueOfGiorno(p1.giorno) - this.valueOfGiorno(p2.giorno);
+                        if (compareGiorno === 0)
+                            return this.valueOfSlot(p1.slot) - this.valueOfSlot(p2.slot);
+                        else
+                            return compareGiorno;
+                    })[0]; // poi ordina e restituisce la minore
             }
         },
         mounted() {
