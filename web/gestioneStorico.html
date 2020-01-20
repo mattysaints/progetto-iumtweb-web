@@ -45,8 +45,8 @@
          <tbody>
          <tr v-for="(r, index) in ripetizioni" :key="index">
             <td>{{ index + 1 }}</td>
-            <td>{{ r.docente | notNull}}</td>
-            <td>{{ r.corso.titolo }}</td>
+            <td>{{ r.docente | docenteNotNull}}</td>
+            <td>{{ r.corso.titolo | corsoNotNull}}</td>
             <td>{{ r.giorno | giornoEsteso }}</td>
             <td>{{ r.slot | slotEsteso }}</td>
             <td class="col-3">
@@ -82,11 +82,16 @@
          link: "/progetto_ium_tweb2/OpSuPrenotazioni"
       },
       filters : {
-         notNull : function (docente) {
+         docenteNotNull : function (docente) {
             if(docente.cognome && docente.nome) {
                return docente.cognome + " " + docente.nome;
             } else
                return "Docente Eliminato";
+         },
+         corsoNotNull(titolo) {
+            if(titolo===null)
+               return "Corso Eliminato";
+            else return titolo;
          },
          giornoEsteso(giorno) {
             switch(giorno) {

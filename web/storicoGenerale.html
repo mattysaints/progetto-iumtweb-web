@@ -163,8 +163,8 @@
             </thead>
             <tbody>
             <tr v-for="(prenot, index) in prenotazioni" v-show="prenotVisibile[index]">
-               <td>{{prenot.docente | notNull}}</td>
-               <td>{{prenot.corso.titolo}}</td>
+               <td>{{prenot.docente | docenteNotNull}}</td>
+               <td>{{prenot.corso.titolo | corsoNotNull}}</td>
                <td>{{prenot.utente.account}}</td>
                <td>{{prenot.giorno | giornoEsteso}}</td>
                <td>{{prenot.slot | slotEsteso }}</td>
@@ -209,11 +209,16 @@
          this.getPrenot();
       },
       filters : {
-         notNull : function (docente) {
+         docenteNotNull : function (docente) {
             if(docente.cognome && docente.nome) {
                return docente.cognome + " " + docente.nome;
             } else
                return "Docente Eliminato";
+         },
+         corsoNotNull : function(titolo) {
+            if(titolo===null)
+               return "Corso Eliminato";
+            else return titolo;
          },
          filterStato(stato) {
             switch (stato) {
