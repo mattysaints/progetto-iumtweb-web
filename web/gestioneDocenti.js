@@ -23,7 +23,7 @@ var listDoc = new Vue({
             },
             success: function(data) {
                if (!data.successo)
-                  window.alert("Errore nel caricamento dei docenti");
+                  makeToast("text-danger","Errore nel caricamento dei docenti", "");
                else {
                   for (var i = 0; i < data.docenti.length; i++) {
                      thiz.docenti.push({
@@ -42,7 +42,7 @@ var listDoc = new Vue({
                            if (dati.successo) {
                               corsi = dati.corsi;
                            } else
-                              window.alert("Errore nel caricamento degli insegnamenti");
+                              makeToast("text-danger","Errore nel caricamento degli insegnamenti","");
                         },
                         async: false,
                      }); //end ajax
@@ -66,7 +66,7 @@ var listDoc = new Vue({
                if (data.successo)
                   thiz.docenti.splice(index, 1);
                else
-                  alert("Errore nell'eliminazione del docente");
+                  makeToast("text-danger","Errore nell'eliminazione del docente","");
             },
             async: false,
          });
@@ -94,7 +94,7 @@ var listDoc = new Vue({
                   window.location.reload();
                }
                else
-                  alert("Errore nell'inserimento del docente");
+                  makeToast("text-danger","Errore nell'inserimento del docente","");
             },
             async: true,
          });
@@ -115,12 +115,12 @@ var listDoc = new Vue({
                      thiz.docenti[index].corsiInsegnati.push({titolo: corso});
                   }
                   else
-                     window.alert("Errore nell'inserimento del corso");
+                     makeToast("text-danger","Errore nell'inserimento del corso","");
                },
                async: true,
             });
          } else
-            window.alert("Errore nell'inserimento del corso");
+            makeToast("text-danger","Errore nell'inserimento del corso","");
       },
       eliminaCorso: function (docente, indexD, corso, indexC) {
          var thiz = this;
@@ -136,7 +136,7 @@ var listDoc = new Vue({
                if (data.successo)
                   thiz.docenti[indexD].corsiInsegnati.splice(indexC, 1);
                else
-                  window.alert("Errore nell'eliminazione del corso");
+                  makeToast("text-danger","Errore nell'eliminazione del corso","");
             },
             async: false,
          })

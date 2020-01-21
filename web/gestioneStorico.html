@@ -3,15 +3,17 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <!-- librerie jquery -->
+   <script src="jquery/jquery.js"></script>
    <!-- librerie bootstrap -->
    <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
-   <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
    <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
    <!-- development version, includes helpful console warnings -->
    <script src="vue/vue.js"></script>
-   <!-- librerie jquery -->
-   <script src="jquery/jquery.min.js"></script>
+   <script src="toast-loader.js" ></script>
+
 
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
    <title>Gestione Storico</title>
@@ -96,15 +98,15 @@
          giornoEsteso(giorno) {
             switch(giorno) {
                case "LUN":
-                  return "lunedì";
+                  return "Lunedì";
                case "MAR":
-                  return "martedì";
+                  return "Martedì";
                case "MER":
-                  return "mercoledì";
+                  return "Mercoledì";
                case "GIO":
-                  return "giovedì";
+                  return "Giovedì";
                case "VEN":
-                  return "venerdì";
+                  return "Venerdì";
                default:
                   return "";
             }

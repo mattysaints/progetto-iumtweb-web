@@ -3,15 +3,17 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <!-- librerie jquery -->
+   <script src="jquery/jquery.js"> </script>
    <!-- librerie bootstrap -->
    <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
-   <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
    <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
    <!-- development version, includes helpful console warnings -->
    <script src="vue/vue.js"></script>
-   <!-- librerie jquery -->
-   <script src="jquery/jquery.js"> </script>
+   <script src="toast-loader.js" ></script>
+
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
 
    <!-- script e css nostri -->
@@ -95,8 +97,7 @@
                         <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
                         </div>
                      </div>
-                     <select class="form-control" data-col="4" id="giorno" title="Scegli un giorno"
-                             v-model="giorno">
+                     <select class="form-control" data-col="4" id="giorno" title="Scegli un giorno" v-model="giorno">
                         <option selected value="">Qualsiasi giorno</option>
                         <optgroup label="Giorno">
                            <option value="LUN">Lunedì</option>
@@ -170,7 +171,7 @@
                <td>{{prenot.slot | slotEsteso }}</td>
                <td>
                   <span v-if="prenot.stato!=='ATTIVA'">{{prenot.stato | filterStato}} </span>
-                  <select aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
+                  <select class="form-control-sm" aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
                      <option value="ATTIVA" selected >Attiva</option>
                      <option value="EFFETTUATA">Effettuata</option>
                      <option value="DISDETTA">Disdetta</option>
@@ -235,15 +236,15 @@
          giornoEsteso(giorno) {
             switch(giorno) {
                case "LUN":
-                  return "lunedì";
+                  return "Lunedì";
                case "MAR":
-                  return "martedì";
+                  return "Martedì";
                case "MER":
-                  return "mercoledì";
+                  return "Mercoledì";
                case "GIO":
-                  return "giovedì";
+                  return "Giovedì";
                case "VEN":
-                  return "venerdì";
+                  return "Venerdì";
                default:
                   return "";
             }
@@ -298,9 +299,9 @@
                },
                success: function (res) {
                   if(res)
-                     window.alert("Operazione riuscita!");
+                     makeToast("text-success","Operazione riuscita!","");
                   else
-                     window.alert("Operazione fallita!");
+                     makeToast("text-danger","Operazione fallita!","");
                },
                async:true,
             });
