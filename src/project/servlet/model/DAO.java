@@ -92,6 +92,10 @@ public class DAO {
         boolean result = false;
         try {
             connection = DriverManager.getConnection(url, user, password);
+            PreparedStatement update = connection.prepareStatement("UPDATE ripetizioni.prenotazione SET stato='disdetta' WHERE corso=? AND stato='attiva';");
+            update.setString(1, corso.getTitolo());
+            update.executeUpdate();
+
             PreparedStatement statement = connection.prepareStatement("DELETE FROM ripetizioni.corso WHERE titolo = ?;");
             statement.setString(1, corso.getTitolo());
             result = statement.executeUpdate() == 1;
@@ -150,7 +154,12 @@ public class DAO {
         boolean result = false;
         try {
             connection = DriverManager.getConnection(url, user, password);
-            PreparedStatement statement = connection.prepareStatement("UPDATE ripetizioni.docente SET nome=NULL, cognome=NULL WHERE nome=? and cognome=?;");
+            PreparedStatement update = connection.prepareStatement("UPDATE ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente=docente.id SET stato='disdetta' WHERE nome=? AND cognome=? AND stato='attiva';");
+            update.setString(1, docente.getNome());
+            update.setString(2, docente.getCognome());
+            update.executeUpdate();
+
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM ripetizioni.docente WHERE nome=? and cognome=?;");
             statement.setString(1,docente.getNome());
             statement.setString(2,docente.getCognome());
             result = statement.executeUpdate() == 1;
@@ -213,6 +222,14 @@ public class DAO {
         boolean result = false;
         try {
             connection = DriverManager.getConnection(url, user, password);
+            PreparedStatement update = connection.prepareStatement("UPDATE ripetizioni.prenotazione " +
+                    "JOIN ripetizioni.docente ON prenotazione.docente=docente.id " +
+                    "SET stato='disdetta' WHERE nome=? AND cognome=? AND corso=? AND stato='attiva';");
+            update.setString(1, docente.getNome());
+            update.setString(2, docente.getCognome());
+            update.setString(3, corso.getTitolo());
+            update.executeUpdate();
+
             PreparedStatement statement = connection.prepareStatement("DELETE FROM ripetizioni.insegnamento WHERE docente = (" +
                     "SELECT docente.id " +
                     "FROM ripetizioni.docente " +

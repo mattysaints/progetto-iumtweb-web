@@ -52,21 +52,21 @@ INSERT INTO giorno VALUES ('gio');
 INSERT INTO giorno VALUES ('ven');
 
 CREATE TABLE ripetizioni.prenotazione (
-    id CHAR(36),
-    docente CHAR(36),
-    corso VARCHAR(30),
-    utente VARCHAR(30),
-    ora SMALLINT NOT NULL,
-    giorno CHAR(5) NOT NULL,
-    stato ENUM ('attiva', 'effettuata', 'disdetta') NOT NULL DEFAULT 'attiva',
-    CONSTRAINT pk_prenotazione PRIMARY KEY (id),
-    CONSTRAINT unique_doc_giorno_ora_stato UNIQUE (docente, giorno, ora, stato),
-    CONSTRAINT fk_prenotazione_docente FOREIGN KEY (docente) REFERENCES docente(id) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT fk_prenotazione_corso FOREIGN KEY (corso) REFERENCES corso(titolo) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT fk_prenotazione_insegnamento FOREIGN KEY (docente, corso) REFERENCES insegnamento(docente, corso) ON DELETE NO ACTION ON UPDATE CASCADE,
-    CONSTRAINT fk_prenotazione_utente FOREIGN KEY (utente) REFERENCES utente(account) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT fk_prenotazione_ora FOREIGN KEY (ora) REFERENCES slot(ora) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    CONSTRAINT fk_prenotazione_giorno FOREIGN KEY (giorno) REFERENCES giorno(giorno) ON DELETE NO ACTION ON UPDATE NO ACTION
+                                          id CHAR(36),
+                                          docente CHAR(36),
+                                          corso VARCHAR(30),
+                                          utente VARCHAR(30),
+                                          ora SMALLINT NOT NULL,
+                                          giorno CHAR(5) NOT NULL,
+                                          stato ENUM ('attiva', 'effettuata', 'disdetta') NOT NULL DEFAULT 'attiva',
+                                          CONSTRAINT pk_prenotazione PRIMARY KEY (id),
+                                          CONSTRAINT unique_doc_giorno_ora_stato UNIQUE (docente, giorno, ora, stato),
+                                          CONSTRAINT fk_prenotazione_docente FOREIGN KEY (docente) REFERENCES docente(id) ON DELETE SET NULL ON UPDATE CASCADE,
+                                          CONSTRAINT fk_prenotazione_corso FOREIGN KEY (corso) REFERENCES corso(titolo) ON DELETE SET NULL ON UPDATE CASCADE,
+                                          CONSTRAINT fk_prenotazione_insegnamento FOREIGN KEY (docente, corso) REFERENCES insegnamento (docente, corso) ON DELETE SET NULL ON UPDATE CASCADE,
+                                          CONSTRAINT fk_prenotazione_utente FOREIGN KEY (utente) REFERENCES utente(account) ON DELETE SET NULL ON UPDATE CASCADE,
+                                          CONSTRAINT fk_prenotazione_ora FOREIGN KEY (ora) REFERENCES slot(ora) ON DELETE NO ACTION ON UPDATE NO ACTION,
+                                          CONSTRAINT fk_prenotazione_giorno FOREIGN KEY (giorno) REFERENCES giorno(giorno) ON DELETE NO ACTION ON UPDATE NO ACTION
 
 );
 
