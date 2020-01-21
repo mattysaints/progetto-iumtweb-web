@@ -11,7 +11,11 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
     <link href="gestioneCorsi.css" rel="stylesheet">
-    <link href="toast.css" rel="stylesheet">
+    <!-- <link href="toast.css" rel="stylesheet"> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.js"></script>
 
     <script src="vue/vue.min.js" ></script>
 
@@ -92,13 +96,36 @@
                     $("#inputCorso").val("");
                     if (self.result === "success") {
                         self.data.push({titolo: self.corso});
-                        makeToast("text-success", "Successo", "Corso inserito correttamente")
+                        // makeToast("text-success", "Successo", "Corso inserito correttamente")
+                        toastr.success("Corso inserito correttamente", "Successo")
                     } else {
-                        makeToast("text-danger", "Errore", "Impossibile inserire il corso");
+                        // makeToast("text-danger", "Errore", "Impossibile inserire il corso");
+                        toastr.error("Impossibile inserire il corso", "Errore");
                     }
                 })
             },
             delCorso: function (corso, index) {
+                var self = this;
+                bootbox.confirm({
+                    message: "Sei sicuro di voler eliminare il corso selezionato?",
+                    locale: "it",
+                    callback: function (confirmed) {
+                        if (confirmed) {
+                            $.post(self.link, {op: "eliminare", corso: corso}, function (data) {
+                                self.result = data.result;
+                                $("#inputCorso").val("");
+                                if (self.result === "success") {
+                                    self.data.splice(index, 1);
+                                    // makeToast("text-success", "Successo", "Corso eliminato correttamente")
+                                    toastr.success("Corso eliminato correttamente", "Successo")
+                                } else
+                                // makeToast("text-danger", "Errore", "Impossibile eliminare: ci sono docenti che offrono ripetizioni del corso selezionato")
+                                    toastr.error("Errore nell'eliminazione del corso", "Errore")
+                            })
+                        }
+                    }
+                });
+                /*
                 if (confirm("Sei sicuro di voler eliminare il corso selezionato?")) {
                     var self = this;
                     $.post(this.link, {op: "eliminare", corso: corso}, function (data) {
@@ -106,22 +133,34 @@
                         $("#inputCorso").val("");
                         if (self.result === "success") {
                             self.data.splice(index, 1);
-                            makeToast("text-success", "Successo", "Corso eliminato correttamente")
+                            // makeToast("text-success", "Successo", "Corso eliminato correttamente")
+                            toastr["success"]("Corso eliminato correttamente", "Successo")
                         } else
-                            makeToast("text-danger", "Errore", "Impossibile eliminare: ci sono docenti che offrono ripetizioni del corso selezionato")
+                            // makeToast("text-danger", "Errore", "Impossibile eliminare: ci sono docenti che offrono ripetizioni del corso selezionato")
+                            toastr["error"]("Errore nell'eliminazione del corso", "Errore")
                     })
                 }
+                 */
             }
         },
         mounted() {
             this.getCorsi();
+            toastr.options.closeButton = true;
+            toastr.options.positionClass = "toast-bottom-right";
+            toastr.options.newestOnTop = false;
+            var it = {
+                OK: 'Ok',
+                CONFIRM: 'Ok',
+                CANCEL: 'Cancella'
+            };
+            bootbox.addLocale("it", it);
         }
     })
 </script>
 
 <script src="navbar-loader.js"></script>
 <script src="footer-loader.js"></script>
-<script src="toast-loader.js"></script>
+<!-- <script src="toast-loader.js"></script> -->
 
 </body>
 </html>
