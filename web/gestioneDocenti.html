@@ -70,6 +70,8 @@
       </div>
    <hr>
 
+   <p class="mx-2 text-primary">Lista docenti:</p>
+
    <!-- lista docenti -->
    <box-docente v-if="docenti.length!==0" :i="index" :key="index" id="docente" v-bind.sync="doc" v-for="(doc, index) in docenti"></box-docente>
    <p v-else class="pt-2">Nessun docente da visualizzare</p>

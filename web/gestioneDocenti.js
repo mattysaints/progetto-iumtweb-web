@@ -91,7 +91,7 @@ var listDoc = new Vue({
                   });
                   thiz.docente.nome="";
                   thiz.docente.cognome="";
-                  window.location.reload();
+                  // window.location.reload();
                }
                else
                   makeToast("text-danger","Errore nell'inserimento del docente","");
@@ -160,14 +160,14 @@ Vue.component("box-docente", {
 Vue.component('docente', {
    template:
       `
-      <button class="btn btn-light btn-block btn-lg" >
+      <button class="btn btn-light" >
          <div class="row">
-            <div class="col text-center">
+            <div class="col">
                 {{docente.cognome}} {{docente.nome}}
                 <span class="badge badge-primary rounded" data-toggle="tooltip" title="n° di corsi insegnati">{{corsiInsegnati.length}}</span>
             </div> 
             <div class="col text-center">
-                <button class="btn btn-danger collapse" :id="'collapseDoc' + indexDoc" data-parent="#listDoc" @click="$root.eliminaDocente(docente,indexDoc)"><i class="fas fa-times"></i> Elimina docente
+                <button class="btn btn-danger btn-sm collapse" :id="'collapseDoc' + indexDoc" data-parent="#listDoc" @click="$root.eliminaDocente(docente,indexDoc)"><i class="fas fa-times"></i> Elimina
                 </button>
             </div>
          </div>
@@ -178,43 +178,44 @@ Vue.component('docente', {
 
 Vue.component('insegnamenti', {
    template:
-      `
-      <div id="insegnamenti" class="card-body" >
-         <div class="container-fluid">
-             <div class="mx-auto">
-             
-               <p class="text-primary">Nuovo insegnamento:</p>
-               <div class="mx-auto d-flex d-inline">
-                  <select class="ml-2 form-control" aria-required="true" v-model="corso" >
-                     <option value="" selected disabled hidden>Scegli corso</option>
-                     <option v-for="(cor, indexCor) in corsiAggiungibili" :value="cor">{{cor}}</option>
-                  </select>
-                  <button title="Inserisci un nuovo insegnamento" class="btn btn-primary ml-5 w-auto" @click="$root.aggiungiCorso(docente, indexDoc, corso)">Inserisci</button>    
+       `<div>
+         <div id="insegnamenti" class="card-body" >
+            <div class="container-fluid">
+                <div class="mx-auto">
+                
+                  <p class="text-primary">Nuovo insegnamento:</p>
+                  <div class="mx-auto d-flex d-inline">
+                     <select class="ml-2 form-control" aria-required="true" v-model="corso" >
+                        <option value="" selected disabled hidden>Scegli corso</option>
+                        <option v-for="(cor, indexCor) in corsiAggiungibili" :value="cor">{{cor}}</option>
+                     </select>
+                     <button title="Inserisci un nuovo insegnamento" class="btn btn-primary ml-5 w-auto" @click="$root.aggiungiCorso(docente, indexDoc, corso)">Inserisci</button>    
+                  </div>
                </div>
             </div>
-         </div>
-
-         <div class="container-fluid card mt-3">
-            <p class="text-primary my-3">Lista corsi insegnati: </p>
-            <p v-if="corsi.length === 0" class="border-top pt-2">Nessun corso da visualizzare</p>
-            <table v-else class="table table-striped">
-               <thead>
-                  <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Corso</th>
-                      <th scope="col"></th>
+   
+            <div class="container-fluid card mt-3">
+               <p class="text-primary my-3">Lista corsi insegnati: </p>
+               <p v-if="corsi.length === 0" class="border-top pt-2">Nessun corso da visualizzare</p>
+               <table v-else class="table table-striped">
+                  <thead>
+                     <tr>
+                         <th scope="col">#</th>
+                         <th scope="col">Corso</th>
+                         <th scope="col"></th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="(c, indexCor) in corsi" :key="indexCor">
+                      <td class="col-md-1">{{indexCor+1}}</td>
+                      <td>{{c.titolo}}</td>
+                      <td class="align-content-center col-md-3">
+                          <button v-on:click="$root.eliminaCorso(docente, indexDoc, c, indexCor)" class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i></button>
+                      </td>
                   </tr>
-               </thead>
-               <tbody>
-               <tr v-for="(c, indexCor) in corsi" :key="indexCor">
-                   <td class="col-md-1">{{indexCor+1}}</td>
-                   <td>{{c.titolo}}</td>
-                   <td class="align-content-center col-md-3">
-                       <button v-on:click="$root.eliminaCorso(docente, indexDoc, c, indexCor)" class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"><i class="fas fa-times"></i></button>
-                   </td>
-               </tr>
-               </tbody>
-            </table>
+                  </tbody>
+               </table>
+            </div>
          </div>
       </div>
       `,
