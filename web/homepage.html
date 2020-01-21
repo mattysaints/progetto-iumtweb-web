@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
-    <script src="bootstrap-4.4.1-dist/js/jquery-slim.min.js"></script>
+    <script src="jquery/jquery.min.js"></script>
     <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
     <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-    <script src="jquery/jquery.min.js"></script>
     <script src="vue/vue.min.js"></script>
 
     <title>Homepage</title>
@@ -94,7 +93,7 @@
                         <h5 class="card-header">Prossima prenotazione</h5>
                         <div class="card-body">
                             <div v-if="numAttive !== 0">
-                                <p class="text-secondary">Docente: <span class="text-dark">{{prossimaPrenotazione.docente.nome + " " + prossimaPrenotazione.docente.cognome}}</span>
+                                <p class="text-secondary">Docente: <span class="text-dark">{{docente}}</span>
                                 </p>
                                 <p class="text-secondary">Corso: <span class="text-dark">{{prossimaPrenotazione.corso.titolo}}</span>
                                 </p>
@@ -201,8 +200,10 @@
                     currentGiorno = -1; // next is monday
 
                 return this.prenotazioni
-                    .filter(p => this.valueOfGiorno(p.giorno) >= currentGiorno && this.valueOfSlot(p.slot) > currentOra)
-                    // filtra le minori
+                    .filter(p => p.stato === "ATTIVA"
+                        && this.valueOfGiorno(p.giorno) > currentGiorno
+                        || this.valueOfGiorno(p.giorno) === currentGiorno && this.valueOfSlot(p.slot) > currentOra)
+                    // filtra le prossime prenotazioni
                     .sort((p1, p2) => {
                         const compareGiorno = this.valueOfGiorno(p1.giorno) - this.valueOfGiorno(p2.giorno);
                         if (compareGiorno === 0)
@@ -246,6 +247,17 @@
                     default:
                         return "";
                 }
+            }
+        },
+        computed: {
+            docente: function () {
+                var nome = this.prossimaPrenotazione.docente.nome;
+                var cognome = this.prossimaPrenotazione.docente.cognome;
+                if (nome === undefined)
+                    nome = "Docente";
+                if (cognome === undefined)
+                    cognome = "eliminato";
+                return nome + " " + cognome;
             }
         }
     });
