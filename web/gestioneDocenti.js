@@ -150,7 +150,7 @@ Vue.component("box-docente", {
       <div class="card">
          <docente class="card-header align-items-start text-left pl-lg-5" data-toggle="collapse" :data-target="'#collapseDoc' + i" v-bind:docente="docente" v-bind:indexDoc="i" v-bind:corsiInsegnati="corsiInsegnati">
          </docente>
-         <insegnamenti class="collapse" :id="'collapseDoc' + i" data-parent="#listDoc" v-bind:docente="docente" v-bind:corsi.sync="corsiInsegnati" :indexDoc="i">
+         <insegnamenti class="collapse" :id="'collapseDoc' + i" data-parent="#lista" v-bind:docente="docente" v-bind:corsi.sync="corsiInsegnati" :indexDoc="i">
          </insegnamenti>
       </div>
    `,
@@ -167,7 +167,7 @@ Vue.component('docente', {
                 <span class="badge badge-primary rounded" data-toggle="tooltip" title="n° di corsi insegnati">{{corsiInsegnati.length}}</span>
             </div> 
             <div class="col text-center">
-                <button class="btn btn-danger btn-sm collapse" :id="'collapseDoc' + indexDoc" data-parent="#listDoc" @click="$root.eliminaDocente(docente,indexDoc)"><i class="fas fa-times"></i> Elimina
+                <button class="btn btn-danger btn-sm collapse" :id="'collapseDoc' + indexDoc" data-parent="#lista" @click="$root.eliminaDocente(docente,indexDoc)"><i class="fas fa-times"></i> Elimina
                 </button>
             </div>
          </div>
