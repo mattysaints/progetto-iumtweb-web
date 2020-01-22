@@ -55,21 +55,23 @@ var listDoc = new Vue({
       },
       eliminaDocente: function(docente, index) {
          var thiz = this;
-         $.ajax({
-            method: 'post',
-            url: thiz.link,
-            data: {
-               op: "eliminare",
-               docente: JSON.stringify(docente),
-            },
-            success: function (data) {
-               if (data.successo)
-                  thiz.docenti.splice(index, 1);
-               else
-                  makeToast("text-danger","Errore nell'eliminazione del docente","");
-            },
-            async: false,
-         });
+         if(window.confirm("Sei sicuro di voler eliminare il docente " + docente.cognome + " " + docente.nome + "?")) {
+            $.ajax({
+               method: 'post',
+               url: thiz.link,
+               data: {
+                  op: "eliminare",
+                  docente: JSON.stringify(docente),
+               },
+               success: function (data) {
+                  if (data.successo)
+                     thiz.docenti.splice(index, 1);
+                  else
+                     makeToast("text-danger", "Errore nell'eliminazione del docente", "");
+               },
+               async: false,
+            });
+         }
       },
       aggiungiDocente: function() {
          var thiz = this;
@@ -124,22 +126,24 @@ var listDoc = new Vue({
       },
       eliminaCorso: function (docente, indexD, corso, indexC) {
          var thiz = this;
-         $.ajax({
-            url: thiz.linkCorsi,
-            method: 'post',
-            data: {
-               op: "eliminare",
-               docente: JSON.stringify(docente),
-               corso: JSON.stringify(corso),
-            },
-            success: function(data) {
-               if (data.successo)
-                  thiz.docenti[indexD].corsiInsegnati.splice(indexC, 1);
-               else
-                  makeToast("text-danger","Errore nell'eliminazione del corso","");
-            },
-            async: false,
-         })
+         if (window.confirm("Sei sicuro di voler eliminare l'insegnamento di " + corso.titolo + " del docente " + docente.cognome + " " + docente.nome + "?")) {
+            $.ajax({
+               url: thiz.linkCorsi,
+               method: 'post',
+               data: {
+                  op: "eliminare",
+                  docente: JSON.stringify(docente),
+                  corso: JSON.stringify(corso),
+               },
+               success: function (data) {
+                  if (data.successo)
+                     thiz.docenti[indexD].corsiInsegnati.splice(indexC, 1);
+                  else
+                     makeToast("text-danger", "Errore nell'eliminazione del corso", "");
+               },
+               async: false,
+            })
+         }
       }
    },
 });
