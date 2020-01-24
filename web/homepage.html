@@ -199,18 +199,20 @@
                 if (currentGiorno > 4)
                     currentGiorno = -1; // next is monday
 
-                return this.prenotazioni
-                    .filter(p => p.stato === "ATTIVA"
-                        && this.valueOfGiorno(p.giorno) > currentGiorno
-                        || this.valueOfGiorno(p.giorno) === currentGiorno && this.valueOfSlot(p.slot) > currentOra)
-                    // filtra le prossime prenotazioni
-                    .sort((p1, p2) => {
-                        const compareGiorno = this.valueOfGiorno(p1.giorno) - this.valueOfGiorno(p2.giorno);
-                        if (compareGiorno === 0)
-                            return this.valueOfSlot(p1.slot) - this.valueOfSlot(p2.slot);
-                        else
-                            return compareGiorno;
-                    })[0]; // poi ordina e restituisce la minore
+                var comparator = (p1, p2) => {
+                    const compareGiorno = this.valueOfGiorno(p1.giorno) - this.valueOfGiorno(p2.giorno);
+                    return (compareGiorno === 0) ? this.valueOfSlot(p1.slot) - this.valueOfSlot(p2.slot) : compareGiorno;
+                };
+                this.prenotazioni.sort(comparator);
+
+                var prossimePrenotazioni = this.prenotazioni.filter(p =>
+                    p.stato === "ATTIVA" && this.valueOfGiorno(p.giorno) > currentGiorno
+                    || this.valueOfGiorno(p.giorno) === currentGiorno && this.valueOfSlot(p.slot) > currentOra);
+
+                if (prossimePrenotazioni.length === 0)
+                    return this.prenotazioni.filter(p => p.stato === "ATTIVA")[0];
+                else
+                    return prossimePrenotazioni[0];
             }
         },
         mounted() {
