@@ -55,21 +55,23 @@ var listDoc = new Vue({
       },
       eliminaDocente: function(docente, index) {
          var thiz = this;
-         $.ajax({
-            method: 'post',
-            url: thiz.link,
-            data: {
-               op: "eliminare",
-               docente: JSON.stringify(docente),
-            },
-            success: function (data) {
-               if (data.successo)
-                  thiz.docenti.splice(index, 1);
-               else
-                  makeToast("text-danger","Errore nell'eliminazione del docente","");
-            },
-            async: false,
-         });
+         if(window.confirm("Sei sicuro di voler eliminare il docente " + docente.cognome + " " + docente.nome + "?")) {
+            $.ajax({
+               method: 'post',
+               url: thiz.link,
+               data: {
+                  op: "eliminare",
+                  docente: JSON.stringify(docente),
+               },
+               success: function (data) {
+                  if (data.successo)
+                     thiz.docenti.splice(index, 1);
+                  else
+                     makeToast("text-danger", "Errore nell'eliminazione del docente", "");
+               },
+               async: false,
+            });
+         }
       },
       aggiungiDocente: function() {
          var thiz = this;
@@ -124,22 +126,24 @@ var listDoc = new Vue({
       },
       eliminaCorso: function (docente, indexD, corso, indexC) {
          var thiz = this;
-         $.ajax({
-            url: thiz.linkCorsi,
-            method: 'post',
-            data: {
-               op: "eliminare",
-               docente: JSON.stringify(docente),
-               corso: JSON.stringify(corso),
-            },
-            success: function(data) {
-               if (data.successo)
-                  thiz.docenti[indexD].corsiInsegnati.splice(indexC, 1);
-               else
-                  makeToast("text-danger","Errore nell'eliminazione del corso","");
-            },
-            async: false,
-         })
+         if (window.confirm("Sei sicuro di voler eliminare l'insegnamento di " + corso.titolo + " del docente " + docente.cognome + " " + docente.nome + "?")) {
+            $.ajax({
+               url: thiz.linkCorsi,
+               method: 'post',
+               data: {
+                  op: "eliminare",
+                  docente: JSON.stringify(docente),
+                  corso: JSON.stringify(corso),
+               },
+               success: function (data) {
+                  if (data.successo)
+                     thiz.docenti[indexD].corsiInsegnati.splice(indexC, 1);
+                  else
+                     makeToast("text-danger", "Errore nell'eliminazione del corso", "");
+               },
+               async: false,
+            })
+         }
       }
    },
 });
@@ -150,7 +154,7 @@ Vue.component("box-docente", {
       <div class="card">
          <docente class="card-header align-items-start text-left pl-lg-5" data-toggle="collapse" :data-target="'#collapseDoc' + i" v-bind:docente="docente" v-bind:indexDoc="i" v-bind:corsiInsegnati="corsiInsegnati">
          </docente>
-         <insegnamenti class="collapse" :id="'collapseDoc' + i" data-parent="#listDoc" v-bind:docente="docente" v-bind:corsi.sync="corsiInsegnati" :indexDoc="i">
+         <insegnamenti class="collapse" :id="'collapseDoc' + i" data-parent="#lista" v-bind:docente="docente" v-bind:corsi.sync="corsiInsegnati" :indexDoc="i">
          </insegnamenti>
       </div>
    `,
@@ -167,7 +171,7 @@ Vue.component('docente', {
                 <span class="badge badge-primary rounded" data-toggle="tooltip" title="n° di corsi insegnati">{{corsiInsegnati.length}}</span>
             </div> 
             <div class="col text-center">
-                <button class="btn btn-danger btn-sm collapse" :id="'collapseDoc' + indexDoc" data-parent="#listDoc" @click="$root.eliminaDocente(docente,indexDoc)"><i class="fas fa-times"></i> Elimina
+                <button class="btn btn-danger btn-sm collapse" :id="'collapseDoc' + indexDoc" data-parent="#lista" @click="$root.eliminaDocente(docente,indexDoc)"><i class="fas fa-times"></i> Elimina
                 </button>
             </div>
          </div>

@@ -111,23 +111,42 @@
          login : function () {
             var self = this;
             var $label = $("#label");
-            $.post(this.link, {username: self.username, password: self.password, ospite: "false"}, data => {
-                if (!data.result) {
-                  $label.text("Nome utente o password inseriti non corretti");
-                    $("#password").val("");
-                } else {
-                  sessionStorage.setItem("username", self.username);
-                  sessionStorage.setItem("admin", data.admin);
-                  sessionStorage.setItem("ospite", data.ospite);
-                  $("#redirect").submit();
+            $.ajax({
+               url:this.link,
+               data:
+                  {username: self.username, password: self.password, ospite: "false"},
+               success: data => {
+                  if (!data.result) {
+                     $label.text("Nome utente o password inseriti non corretti");
+                     $("#password").val("");
+                  } else {
+                     sessionStorage.setItem("username", self.username);
+                     sessionStorage.setItem("admin", data.admin);
+                     sessionStorage.setItem("ospite", data.ospite);
+                     $("#redirect").submit();
+                  }
+               },
+               error: function(xhr, status, error) {
+                  if(status!==200) {
+                     alert("Il server non risponde");
+                  }
                }
             });
          },
          ospite: function () {
-            $.post(this.link, {ospite: "true"}, data => {
-               if(data.result) {
-                  sessionStorage.setItem("ospite", data.ospite);
-                  $("#redirect").submit();
+            $.post({
+               url:this.link,
+               data: {ospite: "true"},
+               success: data => {
+                  if (data.result) {
+                     sessionStorage.setItem("ospite", data.ospite);
+                     $("#redirect").submit();
+                  }
+               },
+               error: function(xhr, status, error) {
+                  if(status!==200) {
+                     alert("Il server non risponde");
+                  }
                }
             });
          }
