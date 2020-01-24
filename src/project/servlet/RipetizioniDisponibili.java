@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import project.servlet.model.DAO;
 import project.servlet.model.Prenotazione;
+import project.servlet.model.Utente;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -50,7 +51,8 @@ public class RipetizioniDisponibili extends HttpServlet {
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("Login");
             requestDispatcher.include(request, response);
         }
-        List<Prenotazione> disponibili = DAO.getRipetizioniDisponibili();
+        String account = request.getParameter("account");
+        List<Prenotazione> disponibili = DAO.getRipetizioniDisponibili(new Utente(account, null, null));
         Gson gson = new Gson();
         Type type = new TypeToken<List<Prenotazione>>(){}.getType();
         String jsonObject = gson.toJson(disponibili, type);

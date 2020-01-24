@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 public class DAO {
-    private final static String url = "jdbc:mysql://localhost:3306/ripetizioni";
-    private final static String user = "root";
-    private final static String password = "";
+    private final static String URL = "jdbc:mysql://localhost:3306/ripetizioni";
+    private final static String USER = "root";
+    private final static String PASSWORD = "";
 
     /**
      * Registra il Driver JDBC
@@ -32,7 +32,7 @@ public class DAO {
         Connection connection = null;
         Utente result = null;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM ripetizioni.utente WHERE BINARY account =? AND BINARY password =?;");
             statement.setString(1, utente.getAccount());
             statement.setString(2, utente.getPassword());
@@ -63,7 +63,7 @@ public class DAO {
         Connection connection = null;
         boolean result = false;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("INSERT INTO ripetizioni.corso VALUES (?);");
             statement.setString(1, corso.getTitolo());
             result = statement.executeUpdate() == 1;
@@ -91,7 +91,7 @@ public class DAO {
         Connection connection = null;
         boolean result = false;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement update = connection.prepareStatement("UPDATE ripetizioni.prenotazione SET stato='disdetta' WHERE corso=? AND stato='attiva';");
             update.setString(1, corso.getTitolo());
             update.executeUpdate();
@@ -123,7 +123,7 @@ public class DAO {
         Connection connection = null;
         boolean result = false;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("INSERT INTO ripetizioni.docente VALUES (?,?,?);");
             statement.setString(1, UUID.randomUUID().toString());
             statement.setString(2, docente.getNome());
@@ -153,12 +153,13 @@ public class DAO {
         Connection connection = null;
         boolean result = false;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            //disdico prima tutte le prenotazioni con il docente
             PreparedStatement update = connection.prepareStatement("UPDATE ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente=docente.id SET stato='disdetta' WHERE nome=? AND cognome=? AND stato='attiva';");
             update.setString(1, docente.getNome());
             update.setString(2, docente.getCognome());
             update.executeUpdate();
-
+            //infine elimino il docente
             PreparedStatement statement = connection.prepareStatement("DELETE FROM ripetizioni.docente WHERE nome=? and cognome=?;");
             statement.setString(1,docente.getNome());
             statement.setString(2,docente.getCognome());
@@ -187,7 +188,7 @@ public class DAO {
         Connection connection = null;
         boolean result = false;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("INSERT INTO ripetizioni.insegnamento (docente, corso) " +
                     "SELECT id, titolo " +
                     "FROM ripetizioni.docente, ripetizioni.corso " +
@@ -221,7 +222,7 @@ public class DAO {
         Connection connection = null;
         boolean result = false;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement update = connection.prepareStatement("UPDATE ripetizioni.prenotazione " +
                     "JOIN ripetizioni.docente ON prenotazione.docente=docente.id " +
                     "SET stato='disdetta' WHERE nome=? AND cognome=? AND corso=? AND stato='attiva';");
@@ -254,30 +255,40 @@ public class DAO {
 
     /**
      * Estrae la lista di ripetizioni disponibili dal database
-     *
+     * @param utente, se null le restituisco tutte
      * @return lista delle ripetizioni disponibili
      */
-    public static List<Prenotazione> getRipetizioniDisponibili() {
+    public static List<Prenotazione> getRipetizioniDisponibili(Utente utente) {
         Connection connection = null;
         List<Prenotazione> result = new ArrayList<>();
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             String query = "SELECT DISTINCT d.nome, d.cognome, i.corso, g.giorno, s.ora " +
                     "FROM ripetizioni.insegnamento i JOIN ripetizioni.docente d ON i.docente=d.id, slot s, giorno g " +
-                    "WHERE (i.docente, i.corso, s.ora, g.giorno) NOT IN (" +
+                    "WHERE ((i.docente, i.corso, s.ora, g.giorno) NOT IN (" +
                     "    SELECT docente, corso, ora, giorno " +
-                    "    FROM ripetizioni.prenotazione " +
-                    "    ) AND (d.nome IS NOT NULL OR d.cognome IS NOT NULL);";
+                    "    FROM ripetizioni.prenotazione p" +
+                    "    WHERE p.stato='attiva' or p.stato='effettuata')) ";
+
             Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(query);
+            ResultSet rs;
+            if(utente!=null) {
+                //aggiunta per evitare che l'utente prenoti per se stesso due pren lo stesso giorno e ora
+                String queryPlusUtente = "AND ((s.ora, g.giorno) NOT IN (" +
+                      "    SELECT ora, giorno " +
+                      "    FROM ripetizioni.prenotazione p" +
+                      "    WHERE p.stato='attiva' and  p.utente='" + utente.getAccount() + "'));";
+                rs = st.executeQuery(query + queryPlusUtente);
+            }
+            else
+                rs = st.executeQuery(query);
             while (rs.next()){
                 Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
                 Corso corso = new Corso(rs.getString("corso"));
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Slot ora = Slot.fromInt(rs.getInt("ora"));
-                result.add(new Prenotazione(docente, corso, null, ora, giorno, Stato.ATTIVA));
+                result.add(new Prenotazione(docente, corso, null, ora, giorno, null));
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -301,7 +312,7 @@ public class DAO {
         Connection connection = null;
         boolean result = false;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("UPDATE ripetizioni.prenotazione SET stato = 'disdetta' WHERE id = ( " +
                     "SELECT id " +
                     "FROM ripetizioni.prenotazione " +
@@ -333,7 +344,7 @@ public class DAO {
     }
 
     /**
-     * Contrassegna una prenotazione come effettuata, se nel daatabase esiste
+     * Contrassegna una prenotazione come effettuata, se nel database esiste
      *
      * @param prenotazione: prenotazione da modificare
      * @return true se l'operazione è stata effettuata con successo
@@ -342,7 +353,7 @@ public class DAO {
         Connection connection = null;
         boolean result = false;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("UPDATE ripetizioni.prenotazione SET stato ='effettuata' WHERE id = (" +
                     "SELECT id " +
                     "FROM ripetizioni.prenotazione " +
@@ -381,31 +392,72 @@ public class DAO {
     public static boolean insertPrenotazione(Prenotazione prenotazione){
         Connection connection = null;
         boolean result = false;
-        try {
-            connection = DriverManager.getConnection(url, user, password);
-            // eventualmente si può sfruttare la query ripetizioni disponibili
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO ripetizioni.prenotazione (id, docente, corso, utente, ora, giorno, stato) " +
-                    "SELECT ?, insegnamento.docente, insegnamento.corso, ?, ?, ?, 'attiva' " +
-                    "FROM ripetizioni.docente JOIN ripetizioni.insegnamento ON docente.id = insegnamento.docente " +
-                    "WHERE docente.nome=? AND docente.cognome=? AND insegnamento.corso=?;");
-            statement.setString(1, UUID.randomUUID().toString());
-            statement.setString(2, prenotazione.getUtente().getAccount());
-            statement.setInt(3, prenotazione.getSlot().getValue());
-            statement.setString(4, prenotazione.getGiorno().toString());
-            statement.setString(5, prenotazione.getDocente().getNome());
-            statement.setString(6, prenotazione.getDocente().getCognome());
-            statement.setString(7, prenotazione.getCorso().getTitolo());
-            result = statement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
+        PreparedStatement statement = null;
+        if(prenotazione.getDocente()!=null && prenotazione.getUtente()!=null && prenotazione.getSlot()!= null && prenotazione.getGiorno()!=null && prenotazione.getCorso()!=null) {
             try {
-                if (connection != null)
-                    connection.close();
+                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+                boolean error = false;
+                //verifico che l'utente non abbia già una prenotazione a quell'ora e giorno
+                List<Prenotazione> storico = getStoricoPrenotazioni(prenotazione.getUtente());
+                for (Prenotazione p : storico) {
+                    if(p.getStato()==Stato.ATTIVA)
+                        error = p.getGiorno() == prenotazione.getGiorno() && p.getSlot() == prenotazione.getSlot();
+                }
+                //verifico che il docente non abbia già una prenotazione a quell'ora e giorno
+                if(!error)
+                    error = !docenteDisponibile(connection, statement,prenotazione.getDocente(),prenotazione.getGiorno(), prenotazione.getSlot());
+                //inserisco la prenotazione
+                if(!error) {
+                    statement = connection.prepareStatement("INSERT INTO ripetizioni.prenotazione (id, docente, corso, utente, ora, giorno, stato) " +
+                          "SELECT ?, insegnamento.docente, insegnamento.corso, ?, ?, ?, 'attiva' " +
+                          "FROM ripetizioni.docente JOIN ripetizioni.insegnamento ON docente.id = insegnamento.docente " +
+                          "WHERE docente.nome=? AND docente.cognome=? AND insegnamento.corso=?;");
+                    statement.setString(1, UUID.randomUUID().toString());
+                    statement.setString(2, prenotazione.getUtente().getAccount());
+                    statement.setInt(3, prenotazione.getSlot().getValue());
+                    statement.setString(4, prenotazione.getGiorno().toString());
+                    statement.setString(5, prenotazione.getDocente().getNome());
+                    statement.setString(6, prenotazione.getDocente().getCognome());
+                    statement.setString(7, prenotazione.getCorso().getTitolo());
+                    result = statement.executeUpdate() == 1;
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (connection != null)
+                        connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
+        return result;
+    }
+
+    /**
+     * restituisce true se il docente è libero quel giorno a quell'ora
+     *
+     * @param connection
+     * @param statement
+     * @param docente
+     * @param giorno
+     * @param slot
+     * @return
+     */
+    private static boolean docenteDisponibile(Connection connection, PreparedStatement statement, Docente docente, Giorno giorno, Slot slot) throws SQLException {
+        boolean result = false;
+            statement = connection.prepareStatement("SELECT docente.nome, docente.cognome " +
+                  "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
+                  "WHERE docente.cognome=? and docente.nome and giorno=? and ora=?;");
+            statement.setString(1, docente.getCognome());
+            statement.setString(2, docente.getNome());
+            statement.setString(3, giorno.name().toLowerCase());
+            statement.setString(1, Integer.toString(slot.getValue()));
+            ResultSet rs = statement.executeQuery();
+
+            if(!rs.next()) //se non ha corrispondenza
+                result=true;
         return result;
     }
 
@@ -419,7 +471,7 @@ public class DAO {
         Connection connection = null;
         List<Prenotazione> result = new ArrayList<>();
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
                   "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
                     "WHERE utente=?;");
@@ -457,7 +509,7 @@ public class DAO {
         Connection connection = null;
         List<Prenotazione> result = new ArrayList<>();
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
                   "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id;");
@@ -490,7 +542,7 @@ public class DAO {
         Connection connection = null;
         List<Prenotazione> result = new ArrayList<>();
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
                     "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
                     "WHERE stato=?;");
@@ -527,7 +579,7 @@ public class DAO {
         Connection connection = null;
         List<Docente> result = new ArrayList<>();
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM ripetizioni.docente;");
             while (rs.next()){
@@ -555,7 +607,7 @@ public class DAO {
         Connection connection = null;
         List<Corso> result = new ArrayList<>();
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM ripetizioni.corso;");
             while (rs.next()){
@@ -582,7 +634,7 @@ public class DAO {
         Connection connection = null;
         List<Corso> result = new ArrayList<>();
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("SELECT corso FROM " +
                     "ripetizioni.insegnamento JOIN ripetizioni.docente ON insegnamento.docente = docente.id " +
                     "where docente.nome=? AND docente.cognome=?;");
@@ -613,7 +665,7 @@ public class DAO {
         Connection connection = null;
         List<Docente> result = new ArrayList<>();
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("SELECT docente.nome,docente.cognome FROM " +
                     "ripetizioni.insegnamento JOIN ripetizioni.docente ON insegnamento.docente = docente.id " +
                     "where insegnamento.corso=?;");

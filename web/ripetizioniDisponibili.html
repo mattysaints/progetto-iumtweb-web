@@ -168,7 +168,8 @@
          corso: "",
          giorno: "",
          ora: "",
-         ospite: sessionStorage.getItem("ospite") === "true"
+         ospite: sessionStorage.getItem("ospite") === "true",
+         account: sessionStorage.getItem("username"),
       },
       filters : {
          giornoEsteso(giorno) {
@@ -208,14 +209,14 @@
       methods: {
          getRipetizioniDisponibili: function () {
             var self = this;
-            $.get(this.linkRipetizioniDisponibili, data => {
+            $.get(this.linkRipetizioniDisponibili, {account: self.account}, data => {
                self.ripetizioni = data;
                self.ripetizioniVisibili = data.map(() =>  true);
             });
          },
          prenotaRipetizione: function (prenotazione, index) {
             var p = {
-               utente: {account: sessionStorage.getItem("username")},
+               utente: {account: this.account},
                docente: prenotazione.docente,
                corso: prenotazione.corso,
                giorno: prenotazione.giorno,
