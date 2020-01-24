@@ -1,0 +1,15 @@
+table tbody {
+    display: block;
+    max-height: 450px;
+    overflow-y: scroll;
+}
+
+table thead, table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+body {
+    background: rgb(120, 197, 227);
+}
