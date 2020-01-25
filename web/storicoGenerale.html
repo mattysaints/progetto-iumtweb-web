@@ -1,30 +1,33 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-   <!-- librerie jquery -->
-   <script src="jquery/jquery.js"> </script>
-   <!-- librerie bootstrap -->
-   <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
-   <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
-   <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-   <!-- development version, includes helpful console warnings -->
-   <script src="vue/vue.js"></script>
+    <!-- librerie jquery -->
+    <script src="jquery/jquery.js"></script>
+    <!-- librerie bootstrap -->
+    <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
+    <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- development version, includes helpful console warnings -->
+    <script src="vue/vue.js"></script>
 
-   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.js"></script>
+    <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
 
-   <!-- script e css nostri -->
-   <link href="gestioneCorsi.css" rel="stylesheet">
-   <style>
-      #listStor {
-         min-width: 650px;
-      }
-   </style>
-   <title>
-      Prenotazioni Utenti
-   </title>
+    <!-- script e css nostri -->
+    <link href="gestioneCorsi.css" rel="stylesheet">
+    <style>
+        #listStor {
+            min-width: 650px;
+        }
+    </style>
+    <title>
+        Prenotazioni Utenti
+    </title>
 </head>
 <body class="bg">
 
@@ -32,316 +35,352 @@
 
 <!-- lista storico prenotazioni -->
 <div id="listStor" class="container-fluid">
-   <div class="container-fluid card w-75 mx-auto mt-5" >
-      <h1 class="text-center my-4">Gestione storico prenotazioni</h1>
-      <hr/>
-      <!-- FILTRI -->
-      <div class="accordion mb-3" id="filtri">
-         <div class="card">
-            <div class="card-header">
-               <h2 class="mb-0">
-                  <button aria-controls="collapse" aria-expanded="false" class="btn btn-link btn-block"
-                          data-target="#collapse" data-toggle="collapse" type="button">
-                     Filtri di ricerca
-                  </button>
-               </h2>
+    <div class="container-fluid card w-75 mx-auto mt-5">
+        <h1 class="text-center my-4">Gestione storico prenotazioni</h1>
+        <hr/>
+        <!-- FILTRI -->
+        <div class="accordion mb-3" id="filtri">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <button aria-controls="collapse" aria-expanded="false" class="btn btn-link btn-block"
+                                data-target="#collapse" data-toggle="collapse" type="button">
+                            Filtri di ricerca
+                        </button>
+                    </h2>
+                </div>
+
+                <div aria-labelledby="Filtri" class="collapse" data-parent="#filtri" id="collapse">
+                    <div class="card-body">
+
+                        <label class="text-secondary" for="nomeDocente">Nome docente: </label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                                </div>
+                            </div>
+                            <input class="form-control" id="nomeDocente" placeholder="Cerca per nome docente.."
+                                   type="text" v-model="nomeDocente">
+                        </div>
+
+                        <label class="text-secondary" for="cognomeDocente">Cognome docente: </label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                                </div>
+                            </div>
+                            <input class="form-control" id="cognomeDocente" placeholder="Cerca per cognome docente.."
+                                   type="text" v-model="cognomeDocente">
+                        </div>
+
+                        <label class="text-secondary" for="corso">Corso: </label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                                </div>
+                            </div>
+                            <input class="form-control" id="corso" placeholder="Cerca per corso.." type="text"
+                                   v-model="corso">
+                        </div>
+
+                        <label class="text-secondary" for="utente">Utente: </label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                                </div>
+                            </div>
+                            <input class="form-control" id="utente" placeholder="Cerca per utente.." type="text"
+                                   v-model="utente">
+                        </div>
+
+                        <label class="text-secondary" for="giorno">Giorno: </label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
+                                </div>
+                            </div>
+                            <select class="form-control" data-col="4" id="giorno" title="Scegli un giorno"
+                                    v-model="giorno">
+                                <option selected value="">Qualsiasi giorno</option>
+                                <optgroup label="Giorno">
+                                    <option value="LUN">Lunedì</option>
+                                    <option value="MAR">Martedì</option>
+                                    <option value="MER">Mercoledì</option>
+                                    <option value="GIO">Gioveì</option>
+                                    <option value="VEN">Venerdì</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <label class="text-secondary" for="ora">Ora: </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
+                                </div>
+                            </div>
+                            <select class="form-control" data-col="5" id="ora" title="Scegli un'ora" v-model="ora">
+                                <option value="">A qualsiasi ora</option>
+                                <optgroup label="Ora">
+                                    <option value="SLOT1">15 - 16</option>
+                                    <option value="SLOT2">16 - 17</option>
+                                    <option value="SLOT3">17 - 18</option>
+                                    <option value="SLOT4">18 - 19</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <label class="text-secondary" for="stato">Stato: </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
+                                </div>
+                            </div>
+                            <select class="form-control" data-col="5" id="stato" title="Scegli uno stato"
+                                    v-model="stato">
+                                <option value="">Qualsiasi stato</option>
+                                <optgroup label="Stato">
+                                    <option value="attiva">attiva</option>
+                                    <option value="disdetta">disdetta</option>
+                                    <option value="effettuata">effettuata</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-
-            <div aria-labelledby="Filtri" class="collapse" data-parent="#filtri" id="collapse">
-               <div class="card-body">
-
-                  <label class="text-secondary" for="nomeDocente">Nome docente: </label>
-                  <div class="input-group mb-3">
-                     <div class="input-group-prepend">
-                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                        </div>
-                     </div>
-                     <input class="form-control" id="nomeDocente" placeholder="Cerca per nome docente.."
-                            type="text" v-model="nomeDocente">
-                  </div>
-
-                  <label class="text-secondary" for="cognomeDocente">Cognome docente: </label>
-                  <div class="input-group mb-3">
-                     <div class="input-group-prepend">
-                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                        </div>
-                     </div>
-                     <input class="form-control" id="cognomeDocente" placeholder="Cerca per cognome docente.."
-                            type="text" v-model="cognomeDocente">
-                  </div>
-
-                  <label class="text-secondary" for="corso">Corso: </label>
-                  <div class="input-group mb-3">
-                     <div class="input-group-prepend">
-                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                        </div>
-                     </div>
-                     <input class="form-control" id="corso" placeholder="Cerca per corso.." type="text"
-                            v-model="corso">
-                  </div>
-
-                  <label class="text-secondary" for="utente">Utente: </label>
-                  <div class="input-group mb-3">
-                     <div class="input-group-prepend">
-                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                        </div>
-                     </div>
-                     <input class="form-control" id="utente" placeholder="Cerca per utente.." type="text"
-                            v-model="utente">
-                  </div>
-
-                  <label class="text-secondary" for="giorno">Giorno: </label>
-                  <div class="input-group mb-3">
-                     <div class="input-group-prepend">
-                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
-                        </div>
-                     </div>
-                     <select class="form-control" data-col="4" id="giorno" title="Scegli un giorno" v-model="giorno">
-                        <option selected value="">Qualsiasi giorno</option>
-                        <optgroup label="Giorno">
-                           <option value="LUN">Lunedì</option>
-                           <option value="MAR">Martedì</option>
-                           <option value="MER">Mercoledì</option>
-                           <option value="GIO">Gioveì</option>
-                           <option value="VEN">Venerdì</option>
-                        </optgroup>
-                     </select>
-                  </div>
-
-                  <label class="text-secondary" for="ora">Ora: </label>
-                  <div class="input-group">
-                     <div class="input-group-prepend">
-                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
-                        </div>
-                     </div>
-                     <select class="form-control" data-col="5" id="ora" title="Scegli un'ora" v-model="ora">
-                        <option value="">A qualsiasi ora</option>
-                        <optgroup label="Ora">
-                           <option value="SLOT1">15 - 16</option>
-                           <option value="SLOT2">16 - 17</option>
-                           <option value="SLOT3">17 - 18</option>
-                           <option value="SLOT4">18 - 19</option>
-                        </optgroup>
-                     </select>
-                  </div>
-
-                  <label class="text-secondary" for="stato">Stato: </label>
-                  <div class="input-group">
-                     <div class="input-group-prepend">
-                        <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
-                        </div>
-                     </div>
-                     <select class="form-control" data-col="5" id="stato" title="Scegli uno stato" v-model="stato">
-                        <option value="">Qualsiasi stato</option>
-                        <optgroup label="Stato">
-                           <option value="attiva">attiva</option>
-                           <option value="disdetta">disdetta</option>
-                           <option value="effettuata">effettuata</option>
-                        </optgroup>
-                     </select>
-                  </div>
-
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
+        </div>
+    </div>
 
 
-   <div class="container-fluid card w-75 mx-auto mt-5" >
-      <div v-if="prenotazioni.length!==0" id="listaPrenotazioni">
-         <table class="table table-striped"  >
-            <thead>
-            <tr>
-               <th scope="col">Docente</th>
-               <th scope="col">Corso</th>
-               <th scope="col">Utente</th>
-               <th scope="col">Giorno</th>
-               <th scope="col">Ora</th>
-               <th scope="col">Stato</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(prenot, index) in prenotazioni" v-show="prenotVisibile[index]">
-               <td>{{prenot.docente | docenteNotNull}}</td>
-               <td>{{prenot.corso.titolo | corsoNotNull}}</td>
-               <td>{{prenot.utente.account}}</td>
-               <td>{{prenot.giorno | giornoEsteso}}</td>
-               <td>{{prenot.slot | slotEsteso }}</td>
-               <td>
-                  <span v-if="prenot.stato!=='ATTIVA'">{{prenot.stato | filterStato}} </span>
-                  <select class="form-control-sm" aria-label="StatoPrenotazione" v-else v-model="statoAggiornato[index]">
-                     <option value="ATTIVA" selected >Attiva</option>
-                     <option value="EFFETTUATA">Effettuata</option>
-                     <option value="DISDETTA">Disdetta</option>
-                  </select>
-               </td>
-            </tr>
-            </tbody>
-         </table>
-         <button v-on:click="salvaPrenotazioni()" class="btn btn-success btn-lg align-self-end px-5" >Salva</button>
-      </div>
-      <p v-else class="border-top pt-2">Nessun corso da visualizzare</p>
-   </div>
+    <div class="container-fluid card w-75 mx-auto mt-5">
+        <div id="listaPrenotazioni" v-if="prenotazioni.length!==0">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Docente</th>
+                    <th scope="col">Corso</th>
+                    <th scope="col">Utente</th>
+                    <th scope="col">Giorno</th>
+                    <th scope="col">Ora</th>
+                    <th scope="col">Stato</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(prenot, index) in prenotazioni" v-show="prenotVisibile[index]">
+                    <td>{{prenot.docente | docenteNotNull}}</td>
+                    <td>{{prenot.corso.titolo | corsoNotNull}}</td>
+                    <td>{{prenot.utente.account}}</td>
+                    <td>{{prenot.giorno | giornoEsteso}}</td>
+                    <td>{{prenot.slot | slotEsteso }}</td>
+                    <td>
+                        <span v-if="prenot.stato!=='ATTIVA'">{{prenot.stato | filterStato}} </span>
+                        <select aria-label="StatoPrenotazione" class="form-control-sm" v-else
+                                v-model="statoAggiornato[index]">
+                            <option selected value="ATTIVA">Attiva</option>
+                            <option value="EFFETTUATA">Effettuata</option>
+                            <option value="DISDETTA">Disdetta</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-success btn-lg align-self-end px-5" v-on:click="salvaPrenotazioni()">Salva</button>
+        </div>
+        <p class="border-top pt-2" v-else>Nessun corso da visualizzare</p>
+    </div>
 </div>
 
 <div id="footer"></div>
 
 <script>
-   var listStor = new Vue({
-      el: '#listStor',
-      data: {
-         link: "/progetto_ium_tweb2/StoricoPrenotazioni",
-         prenotazioni: [],
-         statoAggiornato: [],
-         prenotVisibile: [], //di bool
+    var listStor = new Vue({
+        el: '#listStor',
+        data: {
+            link: "/progetto_ium_tweb2/StoricoPrenotazioni",
+            prenotazioni: [],
+            statoAggiornato: [],
+            prenotVisibile: [], //di bool
 
-         //per i filtri
-         nomeDocente: "",
-         cognomeDocente: "",
-         corso: "",
-         utente:"",
-         giorno: "",
-         ora: "",
-         stato: "",
-      },
-      mounted() {
-         this.getPrenot();
-      },
-      filters : {
-         docenteNotNull : function (docente) {
-            if(docente.cognome && docente.nome) {
-               return docente.cognome + " " + docente.nome;
-            } else
-               return "Docente Eliminato";
-         },
-         corsoNotNull : function(titolo) {
-            if(titolo===null)
-               return "Corso Eliminato";
-            else return titolo;
-         },
-         filterStato(stato) {
-            switch (stato) {
-               case "ATTIVA":
-                  return "Attiva";
-               case "EFFETTUATA":
-                  return "Effettuata";
-               case "DISDETTA":
-                  return "Disdetta";
-               default:
-                  return "";
+            //per i filtri
+            nomeDocente: "",
+            cognomeDocente: "",
+            corso: "",
+            utente: "",
+            giorno: "",
+            ora: "",
+            stato: "",
+        },
+        mounted() {
+            this.getPrenot();
+            this.initLibraries();
+        },
+        filters: {
+            docenteNotNull: function (docente) {
+                if (docente.cognome && docente.nome) {
+                    return docente.cognome + " " + docente.nome;
+                } else
+                    return "Docente Eliminato";
+            },
+            corsoNotNull: function (titolo) {
+                if (titolo === null)
+                    return "Corso Eliminato";
+                else return titolo;
+            },
+            filterStato(stato) {
+                switch (stato) {
+                    case "ATTIVA":
+                        return "Attiva";
+                    case "EFFETTUATA":
+                        return "Effettuata";
+                    case "DISDETTA":
+                        return "Disdetta";
+                    default:
+                        return "";
+                }
+            },
+            giornoEsteso(giorno) {
+                switch (giorno) {
+                    case "LUN":
+                        return "Lunedì";
+                    case "MAR":
+                        return "Martedì";
+                    case "MER":
+                        return "Mercoledì";
+                    case "GIO":
+                        return "Giovedì";
+                    case "VEN":
+                        return "Venerdì";
+                    default:
+                        return "";
+                }
+            },
+            slotEsteso(slot) {
+                switch (slot) {
+                    case "SLOT1":
+                        return "15-16";
+                    case "SLOT2":
+                        return "16-17";
+                    case "SLOT3":
+                        return "17-18";
+                    case "SLOT4":
+                        return "18-19";
+                    default:
+                        return "";
+                }
             }
-         },
-         giornoEsteso(giorno) {
-            switch(giorno) {
-               case "LUN":
-                  return "Lunedì";
-               case "MAR":
-                  return "Martedì";
-               case "MER":
-                  return "Mercoledì";
-               case "GIO":
-                  return "Giovedì";
-               case "VEN":
-                  return "Venerdì";
-               default:
-                  return "";
+        },
+        methods: {
+            initLibraries: function () {
+                toastr.options.closeButton = true;
+                toastr.options.positionClass = "toast-bottom-right";
+                toastr.options.newestOnTop = false;
+                var it = {
+                    OK: 'Ok',
+                    CONFIRM: 'Ok',
+                    CANCEL: 'Cancella'
+                };
+                bootbox.addLocale("it", it);
+            },
+            getPrenot: function () {
+                var self = this;
+                $.get(self.link, function (data) {
+                    console.log(data);
+                    self.prenotazioni = data;
+                    for (var i = 0; i < data.length; i++) {
+                        self.statoAggiornato.push(data[i].stato);
+                        self.prenotVisibile.push(true);
+                    }
+                });
+            },
+            modified: function () {
+                for (var i = 0; i < this.prenotazioni.length; i++)
+                    if (this.prenotazioni[i].stato !== this.statoAggiornato[i])
+                        return true;
+                return false;
+            },
+            salvaPrenotazioni: function () {
+                if (!this.modified()) {
+                    toastr.warning("Stato delle prenotazioni non modificato", "Attenzione");
+                    return;
+                }
+                var thiz = this;
+                bootbox.confirm({
+                    message: "Stato di " + thiz.statoAggiornato.length + " modificato. Salvare?",
+                    locale: "it",
+                    callback: function (confirmed) {
+                        if (confirmed) {
+                            var oldPrenots = thiz.prenotazioni;
+                            var newState = thiz.statoAggiornato;
+                            var ops = [];
+                            var sendPrenots = [];
+                            for (var i = 0; i < oldPrenots.length; i++) {
+                                var oldState = oldPrenots[i].stato;
+                                if (oldState !== newState[i]) {
+                                    ops.push(newState[i] === "EFFETTUATA" ? "effettuare" : "disdire");
+                                    sendPrenots.push(oldPrenots[i]);
+                                    oldPrenots[i].stato = newState[i];
+                                } //end if
+                            } //end for
+                            $.ajax({
+                                type: 'POST',
+                                url: "/progetto_ium_tweb2/OpSuPrenotazioni",
+                                data: {
+                                    "ops": JSON.stringify(ops),
+                                    "prenotazioni": JSON.stringify(sendPrenots),
+                                },
+                                success: function (res) {
+                                    if (res)
+                                        toastr.success("Stato delle prenotazioni salvato", "Successo");
+                                    else
+                                        toastr.error("Operazione fallita: riprova più tardi", "Errore");
+                                },
+                                error: function () {
+                                    toastr.error("Operazione fallita: riprova più tardi", "Errore")
+                                },
+                                async: true,
+                            });
+                        }
+                    }
+                });
+            }, //end func
+            updateSearch: function () {
+                this.prenotVisibile = this.prenotazioni.map((rip) => {
+                        return (this.nomeDocente === "" || (rip.docente.nome !== undefined && rip.docente.nome.toLocaleLowerCase().includes(this.nomeDocente.toLocaleLowerCase()))) &&
+                            (this.cognomeDocente === "" || (rip.docente.cognome !== undefined && rip.docente.cognome.toLocaleLowerCase().includes(this.cognomeDocente.toLocaleLowerCase()))) &&
+                            (this.corso === "" || rip.corso.titolo.toLocaleLowerCase().includes(this.corso.toLocaleLowerCase())) &&
+                            (this.giorno === "" || this.giorno === rip.giorno) &&
+                            (this.ora === "" || this.ora === rip.slot) &&
+                            (this.utente === "" || rip.utente.account.toLocaleLowerCase().includes(this.utente.toLocaleLowerCase())) &&
+                            (this.stato === "" || this.stato === rip.stato);
+                    }
+                );
+            },
+        },
+        watch: {
+            nomeDocente: function () {
+                this.updateSearch()
+            },
+            cognomeDocente: function () {
+                this.updateSearch()
+            },
+            corso: function () {
+                this.updateSearch()
+            },
+            giorno: function () {
+                this.updateSearch()
+            },
+            ora: function () {
+                this.updateSearch()
+            },
+            utente: function () {
+                this.updateSearch()
+            },
+            stato: function () {
+                this.updateSearch()
             }
-         },
-         slotEsteso(slot) {
-            switch (slot) {
-               case "SLOT1":
-                  return "15-16";
-               case "SLOT2":
-                  return "16-17";
-               case "SLOT3":
-                  return "17-18";
-               case "SLOT4":
-                  return "18-19";
-               default:
-                  return "";
-            }
-         }
-      },
-      methods: {
-         getPrenot: function () {
-            var self = this;
-            $.get(self.link, function(data) {
-               console.log(data);
-               self.prenotazioni = data ;
-               for(var i=0; i<data.length; i++) {
-                  self.statoAggiornato.push(data[i].stato);
-                  self.prenotVisibile.push(true);
-               }
-            });
-         },
-         salvaPrenotazioni: function () {
-            var thiz = this;
-            var oldPrenots= this.prenotazioni;
-            var newState = this.statoAggiornato;
-            var ops = [];
-            var sendPrenots = [];
-            for(var i=0; i<oldPrenots.length; i++) {
-               var oldState = oldPrenots[i].stato;
-               if(oldState !== newState[i]) {
-                  ops.push(newState[i]==="EFFETTUATA" ? "effettuare" : "disdire");
-                  sendPrenots.push(oldPrenots[i]);
-                  oldPrenots[i].stato = newState[i];
-               } //end if
-            } //end for
-            $.ajax({
-               type: 'POST',
-               url: "/progetto_ium_tweb2/OpSuPrenotazioni",
-               data: {
-                  "ops": JSON.stringify(ops),
-                  "prenotazioni": JSON.stringify(sendPrenots),
-               },
-               success: function (res) {
-                  if(res)
-                     makeToast("text-success","Operazione riuscita!","");
-                  else
-                     makeToast("text-danger","Operazione fallita!","");
-               },
-               async:true,
-            });
-         }, //end func
-         updateSearch: function () {
-            this.prenotVisibile = this.prenotazioni.map( (rip) => {
-                  return (this.nomeDocente === "" || (rip.docente.nome!==undefined &&  rip.docente.nome.toLocaleLowerCase().includes(this.nomeDocente.toLocaleLowerCase()))) &&
-                     (this.cognomeDocente === "" || (rip.docente.cognome!==undefined &&  rip.docente.cognome.toLocaleLowerCase().includes(this.cognomeDocente.toLocaleLowerCase()))) &&
-                     (this.corso === "" || rip.corso.titolo.toLocaleLowerCase().includes(this.corso.toLocaleLowerCase())) &&
-                     (this.giorno === "" || this.giorno === rip.giorno) &&
-                     (this.ora === "" || this.ora === rip.slot) &&
-                     (this.utente === "" || rip.utente.account.toLocaleLowerCase().includes(this.utente.toLocaleLowerCase())) &&
-                     (this.stato === "" || this.stato === rip.stato);
-               }
-            );
-         },
-      },
-      watch: {
-         nomeDocente: function () {
-            this.updateSearch()
-         },
-         cognomeDocente: function () {
-            this.updateSearch()
-         },
-         corso: function () {
-            this.updateSearch()
-         },
-         giorno: function () {
-            this.updateSearch()
-         },
-         ora: function () {
-            this.updateSearch()
-         },
-         utente: function () {
-            this.updateSearch()
-         },
-         stato: function () {
-            this.updateSearch()
-         }
-      }
-   })
+        }
+    })
 </script>
 
 
