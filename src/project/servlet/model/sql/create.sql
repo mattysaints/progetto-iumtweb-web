@@ -62,7 +62,6 @@ CREATE TABLE ripetizioni.prenotazione (
     CONSTRAINT pk_prenotazione PRIMARY KEY (id),
     CONSTRAINT fk_prenotazione_docente FOREIGN KEY (docente) REFERENCES docente(id) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_prenotazione_corso FOREIGN KEY (corso) REFERENCES corso(titolo) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT fk_prenotazione_insegnamento FOREIGN KEY (docente, corso) REFERENCES insegnamento (docente, corso) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_prenotazione_utente FOREIGN KEY (utente) REFERENCES utente(account) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT fk_prenotazione_ora FOREIGN KEY (ora) REFERENCES slot(ora) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT fk_prenotazione_giorno FOREIGN KEY (giorno) REFERENCES giorno(giorno) ON DELETE NO ACTION ON UPDATE NO ACTION

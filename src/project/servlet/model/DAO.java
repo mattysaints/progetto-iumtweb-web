@@ -473,7 +473,7 @@ public class DAO {
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement statement = connection.prepareStatement("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
-                  "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
+                  "FROM ripetizioni.prenotazione left join ripetizioni.docente ON prenotazione.docente = docente.id " +
                     "WHERE utente=?;");
             statement.setString(1, utente.getAccount());
             ResultSet rs = statement.executeQuery();
@@ -512,7 +512,7 @@ public class DAO {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
-                  "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id;");
+                  "FROM ripetizioni.prenotazione left join ripetizioni.docente ON prenotazione.docente = docente.id;");
 
             while (rs.next()){
                 Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
@@ -522,40 +522,6 @@ public class DAO {
                 Giorno giorno = Giorno.fromString(rs.getString("giorno"));
                 Stato stato = Stato.fromString(rs.getString("stato"));
 
-                result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-
-    public static List<Prenotazione> listRipStato(String state){
-        Connection connection = null;
-        List<Prenotazione> result = new ArrayList<>();
-        try {
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            PreparedStatement statement = connection.prepareStatement("SELECT docente.nome, docente.cognome, corso, utente, giorno, ora, stato " +
-                    "FROM ripetizioni.prenotazione JOIN ripetizioni.docente ON prenotazione.docente = docente.id " +
-                    "WHERE stato=?;");
-            statement.setString(1, state);
-            ResultSet rs = statement.executeQuery();
-
-            while (rs.next()){
-                Docente docente = new Docente(rs.getString("nome"), rs.getString("cognome"));
-                Corso corso = new Corso(rs.getString("corso"));
-                Slot ora = Slot.fromInt(rs.getInt("ora"));
-                Stato stato = Stato.fromString(state);
-                Giorno giorno = Giorno.fromString(rs.getString("giorno"));
-                Utente utente = new Utente(rs.getString("utente"),null,null);
                 result.add(new Prenotazione(docente, corso, utente, ora, giorno, stato));
             }
 

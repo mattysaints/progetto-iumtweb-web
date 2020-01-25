@@ -139,9 +139,9 @@
                                     v-model="stato">
                                 <option value="">Qualsiasi stato</option>
                                 <optgroup label="Stato">
-                                    <option value="attiva">attiva</option>
-                                    <option value="disdetta">disdetta</option>
-                                    <option value="effettuata">effettuata</option>
+                                    <option value="attiva">Attiva</option>
+                                    <option value="disdetta">Disdetta</option>
+                                    <option value="effettuata">Effettuata</option>
                                 </optgroup>
                             </select>
                         </div>
@@ -223,7 +223,7 @@
                     return "Docente Eliminato";
             },
             corsoNotNull: function (titolo) {
-                if (titolo === null)
+                if (!titolo)
                     return "Corso Eliminato";
                 else return titolo;
             },
