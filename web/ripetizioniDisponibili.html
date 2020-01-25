@@ -13,6 +13,9 @@
    <!-- development version, includes helpful console warnings -->
    <script src="vue/vue.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.js"></script>
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
    <link href="ripetizioniDisponibili.css" rel="stylesheet">
 
@@ -179,8 +182,20 @@
       },
       mounted() {
          this.getRipetizioniDisponibili();
+          this.initLibraries();
       },
       methods: {
+          initLibraries: function () {
+              toastr.options.closeButton = true;
+              toastr.options.positionClass = "toast-bottom-right";
+              toastr.options.newestOnTop = false;
+              var it = {
+                  OK: 'Ok',
+                  CONFIRM: 'Ok',
+                  CANCEL: 'Cancella'
+              };
+              bootbox.addLocale("it", it);
+          },
          getRipetizioniDisponibili: function () {
             var self = this;
             $.get(this.linkRipetizioniDisponibili, {account: self.account}, data => {
@@ -205,11 +220,11 @@
                },
                success => {
                   if (success) {
-                     makeToast("text-success", "Prenotazione avvenuta con successo", "");
+                      toastr.success("Prenotazione registrata correttamente", "Successo");
                      self.ripetizioni.splice(index, 1);
                      self.ripetizioniVisibili.splice(index, 1)
                   } else
-                     makeToast("text-danger", "Errore nella prenotazione", "");
+                      toastr.error("C'è stato un errore nella prenotazione", "Errore");
                }
             );
          },

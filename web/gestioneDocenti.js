@@ -11,17 +11,20 @@ var listDoc = new Vue({
     },
     mounted() {
         this.getDocenti();
-        toastr.options.closeButton = true;
-        toastr.options.positionClass = "toast-bottom-right";
-        toastr.options.newestOnTop = false;
-        var it = {
-            OK: 'Ok',
-            CONFIRM: 'Ok',
-            CANCEL: 'Cancella'
-        };
-        bootbox.addLocale("it", it);
+        this.initLibraries();
     },
     methods: {
+        initLibraries: function () {
+            toastr.options.closeButton = true;
+            toastr.options.positionClass = "toast-bottom-right";
+            toastr.options.newestOnTop = false;
+            var it = {
+                OK: 'Ok',
+                CONFIRM: 'Ok',
+                CANCEL: 'Cancella'
+            };
+            bootbox.addLocale("it", it);
+        },
         getDocenti: function () {
             var thiz = this;
             $.ajax({
