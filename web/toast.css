@@ -1,8 +1,0 @@
-/* per evitare errori di click */
-#toast-container {
-    pointer-events: none;
-}
-
-#toast {
-    pointer-events: auto;
-}
