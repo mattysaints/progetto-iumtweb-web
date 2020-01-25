@@ -14,6 +14,9 @@
    <script src="vue/vue.js"></script>
    <script src="toast-loader.js" ></script>
 
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.js"></script>
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
    <link href="gestioneDocenti.css" rel="stylesheet">
     <link href="toast.css" rel="stylesheet">
@@ -24,59 +27,44 @@
 
 <div id="navbar" id-active-page="admin"></div>
 
-<div class="container-fluid card w-50 mx-auto mt-5 py-3" id="listDoc">
-   <h1 class="text-center my-4">Gestione docenti</h1>
+<div class="card w-50 mx-auto mt-5">
+   <h1 class="card-title text-center mt-4">Gestione docenti <span class="badge badge-info">Admin</span></h1>
    <hr>
-      <div class="card m-2">
-         <!-- aggiungi docenti -->
-         <div class="card-header align-items-center" id="aggiungi" data-toggle="collapse" data-target="#collapseAggiungi">
-            <button class="btn btn-link btn-block">
-               Aggiungi un nuovo docente
-            </button>
-         </div>
-         <div class="collapse m-2" id="collapseAggiungi" data-parent="#listDoc">
-            <div class="card-body mx-auto w-75">
-               <div class="container">
-                  <form action="javascript:listDoc.aggiungiDocente()">
-                     <div class="row my-2">
-                        <div class="col text-right">
-                           <label class="text-primary" for="cognome">Cognome: </label>
-                        </div>
-                        <div class="col text-left">
-                           <input aria-required="true" id="cognome" placeholder="Cognome docente" required type="text"
-                                  v-model="docente.cognome"/>
-                        </div>
-                     </div>
-                     <div class="row my-2">
-                        <div class="col text-right">
-                           <label class="text-primary" for="nome">Nome: </label>
-                        </div>
-                        <div class="col text-left">
-                           <input aria-required="true" id="nome" placeholder="Nome docente" required type="text"
-                                  v-model="docente.nome"/>
-                        </div>
-                     </div>
-                     <div class="row my-2">
-                        <div class="col"></div>
-                        <div class="col w-100">
-                           <button type="submit" class="btn btn-primary w-100" title="Inserisci un nuovo docente">Inserisci
-                           </button>
-                        </div>
-                     </div>
-                  </form>
-               </div>
-            </div>
-         </div>
-      </div>
-   <hr>
-
-   <p class="mx-2 text-primary">Lista docenti:</p>
-
-   <!-- lista docenti -->
-   <div id="lista">
-      <box-docente v-if="docenti.length!==0" :i="index" :key="index" id="docente" v-bind.sync="doc" v-for="(doc, index) in docenti"></box-docente>
+   <div class="card-body">
+      <p>Sei un amministratore. Qui potrai gestire i docenti, in particolare:</p>
+      <ul>
+         <li>Inserire un nuovo docente</li>
+         <li>Aggiungere dei corsi all'insieme delle materie di ripetizioni di un docente</li>
+         <li>Eliminare dei corsi associati ad un docente</li>
+         <li>Eliminare un docente</li>
+      </ul>
+      <p>Clicca su un docente per visualizzare il suo stato o aggiungi un nuovo docente per iniziare</p>
    </div>
-   <p v-else class="pt-2">Nessun docente da visualizzare</p>
+</div>
+
+<div class="card w-50 mx-auto mt-5" id="listDoc">
+   <div class="card-header">Gestione docenti</div>
+   <div class="card-body pb-0">
+      <p class="text-primary">Nuovo docente:</p>
+      <form action="javascript:listDoc.aggiungiDocente()" class="form-inline mx-auto">
+         <input aria-required="true" class="m-1" id="cognome" placeholder="Cognome docente" required type="text"
+                v-model="docente.cognome"/>
+         <input aria-required="true" class="m-1" id="nome" placeholder="Nome docente" required type="text"
+                v-model="docente.nome"/>
+         <button class="btn btn-primary m-1" title="Inserisci un nuovo docente" type="submit">Inserisci
+         </button>
+      </form>
+   </div>
+   <hr>
+   <div class="card-body pt-0">
+      <p class="mx-2 text-primary">Lista docenti:</p>
+      <!-- lista docenti -->
+      <div id="lista">
+         <box-docente :i="index" :key="index" id="docente" v-bind.sync="doc" v-for="(doc, index) in docenti"
+                      v-if="docenti.length!==0"></box-docente>
+         <p class="pt-2" v-else>Nessun docente da visualizzare</p>
+      </div>
+   </div>
 </div>
 
 <div id="footer"></div>
