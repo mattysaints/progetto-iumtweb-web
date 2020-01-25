@@ -10,13 +10,12 @@
     <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-    <link href="gestioneCorsi.css" rel="stylesheet">
     <!-- <link href="toast.css" rel="stylesheet"> -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.js"></script>
-
+    <link href="gestioneCorsi.css" rel="stylesheet">
     <script src="vue/vue.min.js" ></script>
 
     <title>Gestione Corsi</title>
@@ -26,47 +25,52 @@
 <div id="navbar" id-active-page="admin"></div>
 
 <div id="appCorso">
-    <div class="container-fluid card w-50 mx-auto mt-5">
-        <h1 class="text-center my-4">Gestione corsi</h1>
+    <div class="card w-50 mt-5 mx-auto">
+        <h1 class="text-center card-title mt-4">Gestione corsi <span class="badge badge-info">Admin</span></h1>
         <hr>
-        <form action="javascript:appCorso.addCorso()">
-            <div class="mx-auto text-center">
-                <p class="text-primary">
-                    Nuovo corso:
-                    <input aria-required="true" class="ml-2" id="inputCorso" placeholder="Corso" required type="text"
-                           v-model="corso"/>
-                    <button class="btn btn-primary ml-5 w-auto" title="Inserisci un nuovo corso" type="submit">
-                        Inserisci
-                    </button>
-                </p>
-            </div>
-        </form>
+        <div class="card-body">
+            Sei un amministratore: qui potrai gestire i corsi, eliminando quelli esistenti o aggiungendone di nuovi.
+        </div>
     </div>
 
-    <div class="container-fluid card w-50 mx-auto mt-5">
-        <p class="text-primary my-3">Lista corsi esistenti: </p>
-        <p v-if="data.length === 0" class="border-top pt-2">Nessun corso da visualizzare</p>
-        <table v-else class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Corso</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(c, index) in data" :key="index">
-                <td>{{index+1}}</td>
-                <td class="col-5">{{c.titolo}}</td>
-                <td class="text-right">
-                    <button class="btn btn-secondary btn-sm" title="Cancella il corso corrispondente"
-                            v-on:click="delCorso(c.titolo, index)">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="card w-50 mx-auto mt-5">
+        <div class="card-header text-dark">Gestione corsi</div>
+        <div class="card-body pb-0">
+            <form action="javascript:appCorso.addCorso()" class="text-center">
+                <div class="form-group mb-0">
+                    <label class="text-primary mr-5" for="inputCorso">Nuovo corso:</label>
+                    <input aria-required="true" id="inputCorso" placeholder="Corso" required type="text"
+                           v-model="corso"/>
+                    <button class="btn btn-primary" title="Inserisci un nuovo corso" type="submit">Inserisci</button>
+                </div>
+            </form>
+        </div>
+        <hr>
+        <div class="card-body pt-0">
+            <p class="text-secondary mb-3">Lista corsi esistenti: </p>
+            <p class="text-info border-top pt-2" v-if="data.length === 0">Nessun corso da visualizzare</p>
+            <table class="table table-hover" v-else>
+                <thead class="thead-light">
+                <tr>
+                    <th class="text-center" scope="col">#</th>
+                    <th scope="col">Corso</th>
+                    <th class="text-center" scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr :key="index" v-for="(c, index) in data">
+                    <td class="col col-auto text-center">{{index+1}}</td>
+                    <td class="col col-auto">{{c.titolo}}</td>
+                    <td class="col col-auto text-center">
+                        <button class="btn btn-danger btn-sm" title="Cancella il corso corrispondente"
+                                v-on:click="delCorso(c.titolo, index)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -90,57 +94,42 @@
                 });
             },
             addCorso: function () {
+                var $inputCorso = $("#inputCorso");
+                if (this.data.map(c => c.titolo).includes(this.corso)) {
+                    toastr.error("Il corso inserito è gia presente", "Errore");
+                    $inputCorso.val("");
+                    return;
+                }
                 var self = this;
                 $.post(this.link, {op: "inserire", corso: this.corso}, data => {
                     self.result = data.result;
-                    $("#inputCorso").val("");
                     if (self.result === "success") {
                         self.data.push({titolo: self.corso});
-                        // makeToast("text-success", "Successo", "Corso inserito correttamente")
                         toastr.success("Corso inserito correttamente", "Successo")
                     } else {
-                        // makeToast("text-danger", "Errore", "Impossibile inserire il corso");
                         toastr.error("Impossibile inserire il corso", "Errore");
+                        $inputCorso.val("");
                     }
                 })
             },
             delCorso: function (corso, index) {
                 var self = this;
                 bootbox.confirm({
-                    message: "Sei sicuro di voler eliminare il corso selezionato?",
+                    message: "Sei sicuro di voler eliminare '" + corso + "'?",
                     locale: "it",
                     callback: function (confirmed) {
                         if (confirmed) {
                             $.post(self.link, {op: "eliminare", corso: corso}, function (data) {
                                 self.result = data.result;
-                                $("#inputCorso").val("");
                                 if (self.result === "success") {
                                     self.data.splice(index, 1);
-                                    // makeToast("text-success", "Successo", "Corso eliminato correttamente")
                                     toastr.success("Corso eliminato correttamente", "Successo")
                                 } else
-                                // makeToast("text-danger", "Errore", "Impossibile eliminare: ci sono docenti che offrono ripetizioni del corso selezionato")
                                     toastr.error("Errore nell'eliminazione del corso", "Errore")
                             })
                         }
                     }
                 });
-                /*
-                if (confirm("Sei sicuro di voler eliminare il corso selezionato?")) {
-                    var self = this;
-                    $.post(this.link, {op: "eliminare", corso: corso}, function (data) {
-                        self.result = data.result;
-                        $("#inputCorso").val("");
-                        if (self.result === "success") {
-                            self.data.splice(index, 1);
-                            // makeToast("text-success", "Successo", "Corso eliminato correttamente")
-                            toastr["success"]("Corso eliminato correttamente", "Successo")
-                        } else
-                            // makeToast("text-danger", "Errore", "Impossibile eliminare: ci sono docenti che offrono ripetizioni del corso selezionato")
-                            toastr["error"]("Errore nell'eliminazione del corso", "Errore")
-                    })
-                }
-                 */
             }
         },
         mounted() {

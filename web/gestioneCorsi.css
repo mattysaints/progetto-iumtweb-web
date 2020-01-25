@@ -5,3 +5,7 @@
     background-position: center;
     background-attachment: fixed;
 }
+
+.w-50.card {
+    min-width: 300px;
+}
