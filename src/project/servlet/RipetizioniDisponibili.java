@@ -26,7 +26,7 @@ import java.util.List;
  */
 @WebServlet(name = "RipetizioniDisponibili", urlPatterns = {"/RipetizioniDisponibili"})
 public class RipetizioniDisponibili extends HttpServlet {
-
+    private static final Gson gson = new Gson();
     @Override
     public void init() throws ServletException {
         super.init();
@@ -53,7 +53,6 @@ public class RipetizioniDisponibili extends HttpServlet {
         }
         String account = request.getParameter("account");
         List<Prenotazione> disponibili = DAO.getRipetizioniDisponibili(new Utente(account, null, null));
-        Gson gson = new Gson();
         Type type = new TypeToken<List<Prenotazione>>(){}.getType();
         String jsonObject = gson.toJson(disponibili, type);
 

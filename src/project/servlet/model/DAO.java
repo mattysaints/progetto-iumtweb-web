@@ -272,7 +272,7 @@ public class DAO {
 
             Statement st = connection.createStatement();
             ResultSet rs;
-            if(utente!=null) {
+            if(utente.getAccount()!=null) {
                 //aggiunta per evitare che l'utente prenoti per se stesso due pren lo stesso giorno e ora
                 String queryPlusUtente = "AND ((s.ora, g.giorno) NOT IN (" +
                       "    SELECT ora, giorno " +
