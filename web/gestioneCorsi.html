@@ -110,9 +110,9 @@
                     self.result = data.result;
                     if (self.result === "success") {
                         self.data.push({titolo: self.corso});
-                        toastr.success("Corso inserito correttamente", "Successo")
+                        toastr.success("Corso <span class='font-weight-bold'>" + self.corso + "</span> inserito correttamente", "Successo")
                     } else {
-                        toastr.error("Impossibile inserire il corso", "Errore");
+                        toastr.error("Impossibile inserire il corso: riprova più tardi", "Errore");
                         $inputCorso.val("");
                     }
                 })
@@ -120,7 +120,7 @@
             delCorso: function (corso, index) {
                 var self = this;
                 bootbox.confirm({
-                    message: "Sei sicuro di voler eliminare '" + corso + "'?",
+                    message: "Sei sicuro di voler eliminare <span class='font-weight-bold'>" + corso + "</span>?",
                     locale: "it",
                     callback: function (confirmed) {
                         if (confirmed) {

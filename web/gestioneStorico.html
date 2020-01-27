@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-   <!-- librerie jquery -->
-   <script src="jquery/jquery.js"></script>
-   <!-- librerie bootstrap -->
-   <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
-   <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
-   <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-   <!-- development version, includes helpful console warnings -->
-   <script src="vue/vue.js"></script>
+    <!-- librerie jquery -->
+    <script src="jquery/jquery.js"></script>
+    <!-- librerie bootstrap -->
+    <script src="bootstrap-4.4.1-dist/js/popper.min.js"></script>
+    <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- development version, includes helpful console warnings -->
+    <script src="vue/vue.js"></script>
 
-   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-   <style>
-      body {
-         min-width: 700px;
-      }
-   </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.js"></script>
+    <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+    <link href="stilePagineTabelle.css" rel="stylesheet">
+    <link href="sfondiPagine.css" rel="stylesheet">
+    <style>
+        body {
+            min-width: 700px;
+        }
+    </style>
     <title>Gestione Storico</title>
 
 </head>
@@ -29,193 +34,305 @@
 <!-- Storico Ripetizioni -->
 <div id="listR">
 
-   <div class="container-fluid card w-75 mt-5">
-      <h1 class="text-center my-4">Storico ripetizioni</h1>
-   </div>
+    <div class="card w-75 mt-5 mx-auto">
+        <h1 class="card-title text-center mt-4">Storico ripetizioni</h1>
+        <hr>
+        <div class="card-body">
+            <p>Qui puoi visualizzare il tuo storico prenotazioni. Nel caso avessi molte ripetizioni, usa i filtri per
+                restringere il campo.</p>
+            <p>Se hai prenotazioni attive, puoi:</p>
+            <ul>
+                <li>Contrassegnare una prenotazione come effettuata, se hai già usufruito di quella ripetizione</li>
+                <li>Disdire una ripetizione, se non puoi più partecipare</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card w-75 mx-auto my-5">
+        <div class="card-header">Storico ripetizioni</div>
+        <div class="card-body">
 
 
-   <div class="container-fluid card w-75 mx-auto my-5">
-      <p class="text-primary my-3">Storico Ripetizioni: </p>
-      <table class="table table-striped">
-         <thead>
-         <tr>
-            <th scope="col">#</th>
-            <th scope="col">Docente</th>
-            <th scope="col">Corso</th>
-            <th scope="col">Giorno</th>
-            <th scope="col">Ora</th>
-            <th scope="col">Stato</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr v-for="(r, index) in ripetizioni" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ r.docente | docenteNotNull}}</td>
-            <td>{{ r.corso.titolo | corsoNotNull}}</td>
-            <td>{{ r.giorno | giornoEsteso }}</td>
-            <td>{{ r.slot | slotEsteso }}</td>
-            <td class="col-3">
-               <p v-if="r.stato !== 'ATTIVA'">{{ r.stato.charAt(0).toUpperCase() + r.stato.substring(1).toLowerCase() }}</p>
-               <div class="form-inline" v-else>
-                  <select :id="'select-' + index" aria-label="StatoPrenotazione" class="form-control"
-                          v-model="select[index]" autocomplete="off">
-                     <option selected value="attiva">Attiva</option>
-                     <option value="effettuata">Effettuata</option>
-                     <option value="disdetta">Disdetta</option>
-                  </select>
-                  <button :id="'salva-' + index" class="btn btn-secondary btn-sm mx-1" disabled
-                          title="Salva lo stato della ripetizione" type="button"
-                          v-on:click="salvaStato(r, index)">
-                     <i class="fas fa-save"></i> Salva
-                  </button>
-               </div>
-            </td>
-         </tbody>
-      </table>
-   </div>
+            <button aria-controls="collapseExample" aria-expanded="false" class="btn btn-primary"
+                    data-target="#collapseExample" data-toggle="collapse" type="button">
+                <i class="fas fa-filter"></i> Filtro
+            </button>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+
+                    <div class="row">
+                        <div class="col">
+                            <label class="text-secondary" for="nomeDocente">Nome docente:</label>
+                            <input class="form-control" id="nomeDocente" placeholder="Cerca nome"
+                                   type="text" v-model="nomeDocente"></div>
+                        <div class="col">
+                            <label class="text-secondary" for="cognomeDocente">Cognome:</label>
+                            <input class="form-control" id="cognomeDocente" placeholder="Cerca cognome"
+                                   type="text" v-model="cognomeDocente">
+                        </div>
+                        <div class="col">
+                            <label class="text-secondary" for="corso">Corso:</label>
+                            <input class="form-control" id="corso" placeholder="Cerca corso" type="text"
+                                   v-model="corso">
+                        </div>
+                        <div class="col">
+                            <label class="text-secondary" for="giorno">Giorno:</label>
+                            <select class="form-control" data-col="4" id="giorno" title="Scegli un giorno"
+                                    v-model="giorno">
+                                <option selected value="">Qualsiasi</option>
+                                <optgroup label="Giorno">
+                                    <option value="LUN">Lunedì</option>
+                                    <option value="MAR">Martedì</option>
+                                    <option value="MER">Mercoledì</option>
+                                    <option value="GIO">Gioveì</option>
+                                    <option value="VEN">Venerdì</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label class="text-secondary" for="ora">Ora:</label>
+                            <select class="form-control" data-col="5" id="ora" title="Scegli un'ora" v-model="ora">
+                                <option value="">Qualsiasi</option>
+                                <optgroup label="Ora">
+                                    <option value="SLOT1">15 - 16</option>
+                                    <option value="SLOT2">16 - 17</option>
+                                    <option value="SLOT3">17 - 18</option>
+                                    <option value="SLOT4">18 - 19</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label class="text-secondary" for="ora">Stato:</label>
+                            <select class="form-control" data-col="5" id="stato" title="Scegli uno stato"
+                                    v-model="stato">
+                                <option value="">Qualsiasi</option>
+                                <optgroup label="Stato">
+                                    <option value="ATTIVA">Attiva</option>
+                                    <option value="EFFETTUATA">Effettuata</option>
+                                    <option value="DISDETTA">Disdetta</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <table class="table table-hover mt-3">
+                <thead class="thead-light">
+                <tr>
+                    <!-- <th scope="col">#</th> -->
+                    <th class="col col-auto" scope="col">Docente</th>
+                    <th class="col col-auto" scope="col">Corso</th>
+                    <th class="col col-auto" scope="col">Giorno</th>
+                    <th class="col col-auto" scope="col">Ora</th>
+                    <th class="col col-auto" scope="col">Stato</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr :key="index" v-for="(r, index) in prenotazioni" v-show="prenotVisibile[index]">
+                    <!-- <td>{{ index + 1 }}</td> -->
+                    <td>{{ r.docente | docenteNotNull}}</td>
+                    <td>{{ r.corso.titolo | corsoNotNull}}</td>
+                    <td>{{ r.giorno | giornoEsteso }}</td>
+                    <td>{{ r.slot | slotEsteso }}</td>
+                    <td>
+                        <p v-if="r.stato !== 'ATTIVA'">{{ r.stato | formatStato }}</p>
+                        <div class="form-inline" v-else>
+                            <select :id="'select-' + index" aria-label="StatoPrenotazione" autocomplete="off"
+                                    class="form-control-sm">
+                                <option selected value="ATTIVA">Attiva</option>
+                                <option value="EFFETTUATA">Effettuata</option>
+                                <option value="DISDETTA">Disdetta</option>
+                            </select>
+                            <button :id="'salva-' + index" class="btn btn-success btn-sm mx-1"
+                                    title="Salva lo stato della ripetizione" type="button"
+                                    v-on:click="salvaStato(r, index)">
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <div id="footer"></div>
 
 <script>
-   var listR = new Vue({
-      el: '#listR',
-      data: {
-         ripetizioni: [],
-         select: [],
-         username: null,
-         link: "/progetto_ium_tweb2/OpSuPrenotazioni"
-      },
-      filters : {
-         docenteNotNull : function (docente) {
-            if(docente.cognome && docente.nome) {
-               return docente.cognome + " " + docente.nome;
-            } else
-               return "Docente Eliminato";
-         },
-         corsoNotNull(titolo) {
-            if(!titolo)
-               return "Corso Eliminato";
-            else return titolo;
-         },
-         giornoEsteso(giorno) {
-            switch(giorno) {
-               case "LUN":
-                  return "Lunedì";
-               case "MAR":
-                  return "Martedì";
-               case "MER":
-                  return "Mercoledì";
-               case "GIO":
-                  return "Giovedì";
-               case "VEN":
-                  return "Venerdì";
-               default:
-                  return "";
-            }
-         },
-         slotEsteso(slot) {
-            switch (slot) {
-               case "SLOT1":
-                  return "15-16";
-               case "SLOT2":
-                  return "16-17";
-               case "SLOT3":
-                  return "17-18";
-               case "SLOT4":
-                  return "18-19";
-               default:
-                  return "";
-            }
-         }
-      },
-      methods: {
-         getRipetizioni: function (utente) {
-            var self = this;
-            var ut = {account: utente, password: null, admin:null};
-            $.post(
-               "/progetto_ium_tweb2/StoricoPrenotazioni",
-               {utente: JSON.stringify(ut)},
-               function(data) {
-                  console.log(data);
-                  self.ripetizioni = data;
-               }
-            );
-         },
-         salvaStato: function (prenotazione, index) {
-            var self = this;
-            var nuovoStato = $("#select-" + index).val();
-            var operazione = "";
-            switch (nuovoStato) {
-               case "attiva":
-                  return;
-               case "disdetta":
-                  operazione = "disdire";
-                  break;
-               case "effettuata":
-                  operazione = "effettuare";
-                  break;
-               default:
-                  alert("Errore");
-            }
+    var listR = new Vue({
+        el: '#listR',
+        data: {
+            prenotazioni: [],
+            username: null,
+            linkOpSuPrenotazioni: "/progetto_ium_tweb2/OpSuPrenotazioni",
+            linkStorico: "/progetto_ium_tweb2/StoricoPrenotazioni",
 
-            $.post(this.link, {
-               ops: JSON.stringify([operazione]),
-               prenotazioni: JSON.stringify([prenotazione])
-            }, corretto => {
-               if (corretto) {
-                  //non serve alert, vue cambia già la visualizzazione
-                  prenotazione.stato = nuovoStato;
-                  this.ripetizioni.splice(index, 1, prenotazione)
-               } else
-                  alert("Errore nel salvataggio dello stato della ripetizione");
-            });
-         },
-         slotLabel: function (slot) {
-            switch (slot) {
-               case "SLOT1":
-                  return "15 - 16";
-               case "SLOT2":
-                  return "16 - 17";
-               case "SLOT3":
-                  return "17 - 18";
-               case "SLOT4":
-                  return "18 - 19";
-               default:
-                  return "ERRORE";
+            prenotVisibile: [], // bool
+
+            // filtri
+            nomeDocente: "",
+            cognomeDocente: "",
+            giorno: "",
+            corso: "",
+            ora: "",
+            stato: ""
+        },
+        filters: {
+            docenteNotNull: function (docente) {
+                if (docente && docente.cognome && docente.nome) {
+                    return docente.cognome + " " + docente.nome;
+                } else
+                    return "Docente eliminato";
+            },
+            corsoNotNull(titolo) {
+                if (!titolo)
+                    return "Corso eliminato";
+                else return titolo;
+            },
+            giornoEsteso(giorno) {
+                switch (giorno) {
+                    case "LUN":
+                        return "Lunedì";
+                    case "MAR":
+                        return "Martedì";
+                    case "MER":
+                        return "Mercoledì";
+                    case "GIO":
+                        return "Giovedì";
+                    case "VEN":
+                        return "Venerdì";
+                    default:
+                        return "";
+                }
+            },
+            slotEsteso(slot) {
+                switch (slot) {
+                    case "SLOT1":
+                        return "15 - 16";
+                    case "SLOT2":
+                        return "16 - 17";
+                    case "SLOT3":
+                        return "17 - 18";
+                    case "SLOT4":
+                        return "18 - 19";
+                    default:
+                        return "";
+                }
+            },
+            formatStato(stato) {
+                switch (stato) {
+                    case "ATTIVA":
+                        return "Attiva";
+
+                    case "EFFETTUATA":
+                        return "Effettuata";
+
+                    case "DISDETTA":
+                        return "Disdetta";
+                    default:
+                        return ""
+                }
             }
-         },
-         giornoLabel: function (giorno) {
-            switch (giorno) {
-               case "LUN":
-                  return "Lunedì";
-               case "MAR":
-                  return "Martedì";
-               case "MER":
-                  return "Mercoledì";
-               case "GIO":
-                  return "Giovedì";
-               case "VEN":
-                  return "Venerdì";
-               default:
-                  return "ERRORE";
+        },
+        methods: {
+            getRipetizioni: function (utente) {
+                var self = this;
+                var ut = {account: utente, password: null, admin: null};
+                $.post(this.linkStorico,
+                    {utente: JSON.stringify(ut)},
+                    function (data) {
+                        console.log(data);
+                        self.prenotazioni = data;
+                        for (var p in self.prenotazioni)
+                            self.prenotVisibile.push(true);
+                    }
+                );
+            },
+            salvaStato: function (prenotazione, index) {
+                var self = this;
+                var nuovoStato = $("#select-" + index).val();
+                var operazione = "";
+                switch (nuovoStato) {
+                    case "ATTIVA":
+                        toastr.warning("La prenotazione è già attiva", "Attenzione");
+                        return;
+                    case "DISDETTA":
+                        operazione = "disdire";
+                        break;
+                    case "EFFETTUATA":
+                        operazione = "effettuare";
+                        break;
+                    default:
+                        toastr.error("Lo stato selezionato non è valido", "Errore");
+                }
+
+                $.post(
+                    self.linkOpSuPrenotazioni,
+                    {ops: JSON.stringify([operazione]), prenotazioni: JSON.stringify([prenotazione])},
+                    function (corretto) {
+                        if (corretto) {
+                            prenotazione.stato = nuovoStato;
+                            self.prenotazioni.splice(index, 1, prenotazione);
+                            toastr.success("Stato della prenotazione modificato correttamente", "Successo")
+                        } else
+                            toastr.error("C'è stato un errore nel salvataggio: riprova più tardi", "Errore");
+                        self.updateSearch();
+                    }
+                );
+            },
+            initLibraries: function () {
+                toastr.options.closeButton = true;
+                toastr.options.positionClass = "toast-bottom-right";
+                toastr.options.newestOnTop = false;
+                var it = {
+                    OK: 'Ok',
+                    CONFIRM: 'Ok',
+                    CANCEL: 'Cancella'
+                };
+                bootbox.addLocale("it", it);
+            },
+            updateSearch: function () {
+                this.prenotVisibile = this.prenotazioni.map((rip) => {
+                        return (this.nomeDocente === "" || (rip.docente.nome !== undefined && rip.docente.nome.toLocaleLowerCase().includes(this.nomeDocente.toLocaleLowerCase()))) &&
+                            (this.cognomeDocente === "" || (rip.docente.cognome !== undefined && rip.docente.cognome.toLocaleLowerCase().includes(this.cognomeDocente.toLocaleLowerCase()))) &&
+                            (this.corso === "" || rip.corso.titolo.toLocaleLowerCase().includes(this.corso.toLocaleLowerCase())) &&
+                            (this.giorno === "" || this.giorno === rip.giorno) &&
+                            (this.ora === "" || this.ora === rip.slot) &&
+                            (this.stato === "" || this.stato === rip.stato);
+                    }
+                );
+            },
+        },
+        watch: {
+            nomeDocente: function () {
+                this.updateSearch()
+            },
+            cognomeDocente: function () {
+                this.updateSearch()
+            },
+            corso: function () {
+                this.updateSearch()
+            },
+            giorno: function () {
+                this.updateSearch()
+            },
+            ora: function () {
+                this.updateSearch()
+            },
+            utente: function () {
+                this.updateSearch()
+            },
+            stato: function () {
+                this.updateSearch()
             }
-         }
-      },
-      mounted() {
-         this.getRipetizioni(sessionStorage.getItem("username"));
-      },
-      watch: {
-         select: function () {
-            for (var i = 0; i < this.select.length; i++) {
-               if (this.select[i] !== "attiva")
-                  $("#salva-" + i).prop("disabled", false);
-               else
-                  $("#salva-" + i).prop("disabled", true);
-            }
-         }
-      }
-   })
+        },
+        mounted() {
+            this.getRipetizioni(sessionStorage.getItem("username"));
+            this.initLibraries();
+        }
+    })
 </script>
 
 <script src="navbar-loader.js"></script>

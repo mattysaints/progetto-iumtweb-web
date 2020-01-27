@@ -20,7 +20,10 @@
 
             <!-- link prenotazioni -->
             <li class="nav-item">
-                <a id="prenota" class="nav-link" href="/progetto_ium_tweb2/Redirect?redirect=ripetizioniDisponibili">Prenota una ripetizione</a>
+                <a class="nav-link" href="/progetto_ium_tweb2/Redirect?redirect=ripetizioniDisponibili" id="prenota">
+                    <span v-if="!ospite">Prenota una ripetizione</span>
+                    <span v-else>Visualizza le ripetizioni disponibili</span>
+                </a>
             </li>
 
             <!-- link storico-->

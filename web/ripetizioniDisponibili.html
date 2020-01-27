@@ -28,17 +28,22 @@
 <div id="listR">
 
    <div class="card shadow-lg w-75 mt-5 mx-auto">
-      <h1 class="text-center card-title mt-4">Prenota una ripetizione</h1>
+      <h1 class="text-center card-title mt-4" v-if="!ospite">Prenota una ripetizione</h1>
+      <h1 class="text-center card-title mt-4" v-else>Ripetizioni disponibili</h1>
       <hr>
-      <div class="card-body">
+      <div class="card-body" v-if="!ospite">
          <p>Qui puoi fissare un appuntamento con un docente per delle ripetizioni. Usa i filtri per restringere il campo
-            e, una volta scelto premi <span class="font-weight-bold">prenota</span></p>
+            e, una volta scelto premi <span class="font-weight-bold">prenota.</span></p>
+      </div>
+      <div class="card-body" v-else>
+         <p>Qui puoi visualizzare le ripetizioni disponibili. Siccome hai fatto accesso come ospite, non puoi prenotare
+            un appuntamento.</p>
       </div>
    </div>
 
    <div class="card shadow-lg w-75 mx-auto my-5">
       <div class="card-header text-dark">
-         Ripetizioni disponibili:
+         Ripetizioni disponibili
       </div>
       <div class="card-body">
          <button aria-controls="collapseExample" aria-expanded="false" class="btn btn-primary"
@@ -129,6 +134,7 @@
    var listR = new Vue({
       el: '#listR',
       data: {
+         // link
          linkRipetizioniDisponibili: "/progetto_ium_tweb2/RipetizioniDisponibili",
          linkOpSuPrenotazioni: "/progetto_ium_tweb2/OpSuPrenotazioni",
 
@@ -137,12 +143,15 @@
 
          // lista completa di ripetizioni disponibili
          ripetizioniVisibili: [],
-         //filtri
+
+         // filtri
          nomeDocente: "",
          cognomeDocente: "",
          corso: "",
          giorno: "",
          ora: "",
+
+         // dati
          ospite: sessionStorage.getItem("ospite") === "true",
          account: sessionStorage.getItem("username"),
       },
