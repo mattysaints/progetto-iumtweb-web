@@ -19,7 +19,8 @@
     <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
 
     <!-- script e css nostri -->
-    <link href="gestioneCorsi.css" rel="stylesheet">
+    <link href="stilePagineTabelle.css" rel="stylesheet" >
+    <link href="sfondiPagine.css" rel="stylesheet">
     <style>
         #listStor {
             min-width: 850px;
@@ -35,159 +36,157 @@
 
 <!-- lista storico prenotazioni -->
 <div id="listStor" class="container-fluid">
-    <div class="container-fluid card w-75 mx-auto mt-5">
-        <h1 class="text-center my-4">Gestione storico prenotazioni</h1>
-        <hr/>
-        <!-- FILTRI -->
-        <div class="accordion mb-3" id="filtri">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="mb-0">
-                        <button aria-controls="collapse" aria-expanded="false" class="btn btn-link btn-block"
-                                data-target="#collapse" data-toggle="collapse" type="button">
-                            Filtri di ricerca
-                        </button>
-                    </h2>
-                </div>
 
-                <div aria-labelledby="Filtri" class="collapse" data-parent="#filtri" id="collapse">
-                    <div class="card-body">
-
-                        <label class="text-secondary" for="nomeDocente">Nome docente: </label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                                </div>
-                            </div>
-                            <input class="form-control" id="nomeDocente" placeholder="Cerca per nome docente.."
-                                   type="text" v-model="nomeDocente">
-                        </div>
-
-                        <label class="text-secondary" for="cognomeDocente">Cognome docente: </label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                                </div>
-                            </div>
-                            <input class="form-control" id="cognomeDocente" placeholder="Cerca per cognome docente.."
-                                   type="text" v-model="cognomeDocente">
-                        </div>
-
-                        <label class="text-secondary" for="corso">Corso: </label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                                </div>
-                            </div>
-                            <input class="form-control" id="corso" placeholder="Cerca per corso.." type="text"
-                                   v-model="corso">
-                        </div>
-
-                        <label class="text-secondary" for="utente">Utente: </label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
-                                </div>
-                            </div>
-                            <input class="form-control" id="utente" placeholder="Cerca per utente.." type="text"
-                                   v-model="utente">
-                        </div>
-
-                        <label class="text-secondary" for="giorno">Giorno: </label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
-                                </div>
-                            </div>
-                            <select class="form-control" data-col="4" id="giorno" title="Scegli un giorno"
-                                    v-model="giorno">
-                                <option selected value="">Qualsiasi giorno</option>
-                                <optgroup label="Giorno">
-                                    <option value="LUN">Lunedì</option>
-                                    <option value="MAR">Martedì</option>
-                                    <option value="MER">Mercoledì</option>
-                                    <option value="GIO">Gioveì</option>
-                                    <option value="VEN">Venerdì</option>
-                                </optgroup>
-                            </select>
-                        </div>
-
-                        <label class="text-secondary" for="ora">Ora: </label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
-                                </div>
-                            </div>
-                            <select class="form-control" data-col="5" id="ora" title="Scegli un'ora" v-model="ora">
-                                <option value="">A qualsiasi ora</option>
-                                <optgroup label="Ora">
-                                    <option value="SLOT1">15 - 16</option>
-                                    <option value="SLOT2">16 - 17</option>
-                                    <option value="SLOT3">17 - 18</option>
-                                    <option value="SLOT4">18 - 19</option>
-                                </optgroup>
-                            </select>
-                        </div>
-
-                        <label class="text-secondary" for="stato">Stato: </label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
-                                </div>
-                            </div>
-                            <select class="form-control" data-col="5" id="stato" title="Scegli uno stato"
-                                    v-model="stato">
-                                <option value="">Qualsiasi stato</option>
-                                <optgroup label="Stato">
-                                    <option value="attiva">Attiva</option>
-                                    <option value="disdetta">Disdetta</option>
-                                    <option value="effettuata">Effettuata</option>
-                                </optgroup>
-                            </select>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+    <div class="card shadow-lg w-75 mt-5 mx-auto">
+        <h1 class="text-center card-title mt-4">Storico Generale Prenotazioni</h1>
+        <hr>
+        <div class="card-body">
+            <p>Qui puoi rivedere i tuoi appuntamenti con un docente per delle ripetizioni. Puoi usare i filtri per restringere la lista, modificare lo stato delle prenotazioni e infine salvare con il pulsante al fondo <span class="font-weight-bold">Salva</span></p>
         </div>
     </div>
 
-
-    <div class="container-fluid card w-75 mx-auto mt-5">
-        <div id="listaPrenotazioni" v-if="prenotazioni.length!==0">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Docente</th>
-                    <th scope="col">Corso</th>
-                    <th scope="col">Utente</th>
-                    <th scope="col">Giorno</th>
-                    <th scope="col">Ora</th>
-                    <th scope="col">Stato</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(prenot, index) in prenotazioni" v-show="prenotVisibile[index]">
-                    <td>{{prenot.docente | docenteNotNull}}</td>
-                    <td>{{prenot.corso.titolo | corsoNotNull}}</td>
-                    <td>{{prenot.utente.account}}</td>
-                    <td>{{prenot.giorno | giornoEsteso}}</td>
-                    <td>{{prenot.slot | slotEsteso }}</td>
-                    <td>
-                        <span v-if="prenot.stato!=='ATTIVA'">{{prenot.stato | filterStato}} </span>
-                        <select aria-label="StatoPrenotazione" class="form-control-sm" v-else
-                                v-model="statoAggiornato[index]">
-                            <option selected value="ATTIVA">Attiva</option>
-                            <option value="EFFETTUATA">Effettuata</option>
-                            <option value="DISDETTA">Disdetta</option>
-                        </select>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <button class="btn btn-success btn-lg align-self-end px-5" v-on:click="salvaPrenotazioni()">Salva</button>
+    <div class="card shadow-lg w-75 mx-auto my-5">
+        <div class="card-header text-dark">
+            Storico Prenotazioni:
         </div>
-        <p class="border-top pt-2" v-else>Nessun corso da visualizzare</p>
+        <div class="card-body">
+            <button aria-controls="collapseExample" aria-expanded="false" class="btn btn-primary"
+                    data-target="#collapseExample" data-toggle="collapse" type="button">
+                <i class="fas fa-filter"></i> Filtro
+            </button>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <label class="text-secondary" for="nomeDocente">Nome docente: </label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                            </div>
+                        </div>
+                        <input class="form-control" id="nomeDocente" placeholder="Cerca per nome docente.."
+                               type="text" v-model="nomeDocente">
+                    </div>
+
+                    <label class="text-secondary" for="cognomeDocente">Cognome docente: </label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                            </div>
+                        </div>
+                        <input class="form-control" id="cognomeDocente" placeholder="Cerca per cognome docente.."
+                               type="text" v-model="cognomeDocente">
+                    </div>
+
+                    <label class="text-secondary" for="corso">Corso: </label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                            </div>
+                        </div>
+                        <input class="form-control" id="corso" placeholder="Cerca per corso.." type="text"
+                               v-model="corso">
+                    </div>
+
+                    <label class="text-secondary" for="utente">Utente: </label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i aria-hidden="true" class="fas fa-search text-grey"></i>
+                            </div>
+                        </div>
+                        <input class="form-control" id="utente" placeholder="Cerca per utente.." type="text"
+                               v-model="utente">
+                    </div>
+
+                    <label class="text-secondary" for="giorno">Giorno: </label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
+                            </div>
+                        </div>
+                        <select class="form-control" data-col="4" id="giorno" title="Scegli un giorno"
+                                v-model="giorno">
+                            <option selected value="">Qualsiasi giorno</option>
+                            <optgroup label="Giorno">
+                                <option value="LUN">Lunedì</option>
+                                <option value="MAR">Martedì</option>
+                                <option value="MER">Mercoledì</option>
+                                <option value="GIO">Gioveì</option>
+                                <option value="VEN">Venerdì</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <label class="text-secondary" for="ora">Ora: </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
+                            </div>
+                        </div>
+                        <select class="form-control" data-col="5" id="ora" title="Scegli un'ora" v-model="ora">
+                            <option value="">A qualsiasi ora</option>
+                            <optgroup label="Ora">
+                                <option value="SLOT1">15 - 16</option>
+                                <option value="SLOT2">16 - 17</option>
+                                <option value="SLOT3">17 - 18</option>
+                                <option value="SLOT4">18 - 19</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <label class="text-secondary" for="stato">Stato: </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i aria-hidden="true" class="fas fa-filter text-grey"></i>
+                            </div>
+                        </div>
+                        <select class="form-control" data-col="5" id="stato" title="Scegli uno stato"
+                                v-model="stato">
+                            <option value="">Qualsiasi stato</option>
+                            <optgroup label="Stato">
+                                <option value="attiva">Attiva</option>
+                                <option value="disdetta">Disdetta</option>
+                                <option value="effettuata">Effettuata</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- lista storico generale prenotazioni -->
+            <div id="listaPrenotazioni" v-if="prenotazioni.length!==0">
+                <table class="table table-striped table-hover mt-3">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Docente</th>
+                        <th scope="col">Corso</th>
+                        <th scope="col">Utente</th>
+                        <th scope="col">Giorno</th>
+                        <th scope="col">Ora</th>
+                        <th scope="col">Stato</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(prenot, index) in prenotazioni" v-show="prenotVisibile[index]">
+                        <td>{{prenot.docente | docenteNotNull}}</td>
+                        <td>{{prenot.corso.titolo | corsoNotNull}}</td>
+                        <td>{{prenot.utente.account}}</td>
+                        <td>{{prenot.giorno | giornoEsteso}}</td>
+                        <td>{{prenot.slot | slotEsteso }}</td>
+                        <td>
+                            <span v-if="prenot.stato!=='ATTIVA'">{{prenot.stato | filterStato}} </span>
+                            <select aria-label="StatoPrenotazione" class="form-control-sm" v-else
+                                    v-model="statoAggiornato[index]">
+                                <option selected value="ATTIVA">Attiva</option>
+                                <option value="EFFETTUATA">Effettuata</option>
+                                <option value="DISDETTA">Disdetta</option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-success btn-lg align-self-end px-5" v-on:click="salvaPrenotazioni()">Salva</button>
+            </div>
+            <p class="border-top pt-2" v-else>Nessun corso da visualizzare</p>
+        </div>
     </div>
 </div>
 

@@ -118,8 +118,9 @@
             var $label = $("#label");
             $.ajax({
                url:this.link,
-               data:
-                  {username: self.username, password: self.password, ospite: "false"},
+               data: {username: self.username, password: self.password, ospite: "false"},
+               method: "post",
+               async: true,
                success: data => {
                   if (!data.result) {
                      $label.text("Nome utente o password inseriti non corretti");
@@ -139,8 +140,10 @@
             });
          },
          ospite: function () {
-            $.post({
+            $.ajax({
                url:this.link,
+               method: "post",
+               async: true,
                data: {ospite: "true"},
                success: data => {
                   if (data.result) {
