@@ -21,11 +21,7 @@
     <!-- script e css nostri -->
     <link href="stilePagineTabelle.css" rel="stylesheet" >
     <link href="sfondiPagine.css" rel="stylesheet">
-    <style>
-        #listStor {
-            min-width: 850px;
-        }
-    </style>
+
     <title>
         Prenotazioni Utenti
     </title>
@@ -53,8 +49,6 @@
     <div class="card shadow-lg w-75 mx-auto my-5">
         <div class="card-header text-dark">Storico generale prenotazioni</div>
         <div class="card-body">
-
-
             <button aria-controls="collapseExample" aria-expanded="false" class="btn btn-primary"
                     data-target="#collapseExample" data-toggle="collapse" type="button">
                 <i class="fas fa-filter"></i> Filtro
@@ -116,7 +110,6 @@
                             </select>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -276,7 +269,7 @@
                 }
                 var thiz = this;
                 bootbox.confirm({
-                    message: "Stato di " + countModificate + " modificato. Salvare?",
+                    message: "Stato di " + countModificate + " prenotazioni modificato. Salvare?",
                     locale: "it",
                     callback: function (confirmed) {
                         if (confirmed) {
@@ -353,6 +346,7 @@
         }
     })
 </script>
+
 
 <script src="navbar-loader.js"></script>
 <script src="footer-loader.js"></script>
