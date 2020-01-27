@@ -18,57 +18,54 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.js"></script>
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
    <link href="sfondiPagine.css" rel="stylesheet">
-   <style>
-      body {
-         min-width: 700px;
-      }
-   </style>
+
    <title>Gestione Docenti</title>
 </head>
 <body class="bg">
 
 <div id="navbar" id-active-page="admin"></div>
 
-<div class="card w-50 mx-auto mt-5">
-   <h1 class="card-title text-center mt-4">Gestione docenti <span class="badge badge-info">Admin</span></h1>
-   <hr>
-   <div class="card-body">
-      <p>Sei un amministratore. Qui potrai gestire i docenti, in particolare:</p>
-      <ul>
-         <li>Inserire un nuovo docente</li>
-         <li>Aggiungere dei corsi all'insieme delle materie di ripetizioni di un docente</li>
-         <li>Eliminare dei corsi associati ad un docente</li>
-         <li>Eliminare un docente</li>
-      </ul>
-      <p>Clicca su un docente per visualizzare il suo stato o aggiungi un nuovo docente per iniziare</p>
+<div class="container-fluid">
+   <div class="card w-50 mx-auto mt-5">
+      <h1 class="card-title text-center mt-4">Gestione docenti <span class="badge badge-info">Admin</span></h1>
+      <hr>
+      <div class="card-body">
+         <p>Sei un amministratore. Qui potrai gestire i docenti, in particolare:</p>
+         <ul>
+            <li>Inserire un nuovo docente</li>
+            <li>Aggiungere dei corsi all'insieme delle materie di ripetizioni di un docente</li>
+            <li>Eliminare dei corsi associati ad un docente</li>
+            <li>Eliminare un docente</li>
+         </ul>
+         <p>Clicca su un docente per visualizzare il suo stato o aggiungi un nuovo docente per iniziare</p>
+      </div>
    </div>
-</div>
 
-<div class="card w-50 mx-auto mt-5" id="listDoc">
-   <div class="card-header">Gestione docenti</div>
-   <div class="card-body pb-0">
-      <p class="text-primary">Nuovo docente:</p>
-      <form action="javascript:listDoc.aggiungiDocente()" class="form-inline mx-auto">
-         <input aria-required="true" class="m-1" id="cognome" placeholder="Cognome docente" required type="text"
-                v-model="docente.cognome"/>
-         <input aria-required="true" class="m-1" id="nome" placeholder="Nome docente" required type="text"
-                v-model="docente.nome"/>
-         <button class="btn btn-primary m-1" title="Inserisci un nuovo docente" type="submit">Inserisci
-         </button>
-      </form>
-   </div>
-   <hr>
-   <div class="card-body pt-0">
-      <p class="mx-2 text-primary">Lista docenti:</p>
-      <!-- lista docenti -->
-      <div id="lista">
-         <box-docente :i="index" :key="index" id="docente" v-bind.sync="doc" v-for="(doc, index) in docenti"
-                      v-if="docenti.length!==0"></box-docente>
-         <p class="pt-2" v-else>Nessun docente da visualizzare</p>
+   <div class="card w-50 mx-auto mt-5" id="listDoc">
+      <div class="card-header">Gestione docenti</div>
+      <div class="card-body pb-0">
+         <p class="text-primary">Nuovo docente:</p>
+         <form action="javascript:listDoc.aggiungiDocente()" class="form-inline mx-auto">
+            <input aria-required="true" class="m-1" id="cognome" placeholder="Cognome docente" required type="text"
+                   v-model="docente.cognome"/>
+            <input aria-required="true" class="m-1" id="nome" placeholder="Nome docente" required type="text"
+                   v-model="docente.nome"/>
+            <button class="btn btn-primary m-1" title="Inserisci un nuovo docente" type="submit">Inserisci
+            </button>
+         </form>
+      </div>
+      <hr>
+      <div class="card-body pt-0">
+         <p class="mx-2 text-primary">Lista docenti:</p>
+         <!-- lista docenti -->
+         <div id="lista">
+            <box-docente :i="index" :key="index" id="docente" v-bind.sync="doc" v-for="(doc, index) in docenti"
+                         v-if="docenti.length!==0"></box-docente>
+            <p class="pt-2" v-else>Nessun docente da visualizzare</p>
+         </div>
       </div>
    </div>
 </div>
-
 <div id="footer"></div>
 
 <script src="gestioneDocenti.js"></script>

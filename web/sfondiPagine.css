@@ -1,4 +1,4 @@
-.bg {
+body {
     background-image: url("img/corsi.jpg");
     background-size: cover;
     background-repeat: no-repeat;
@@ -6,7 +6,10 @@
     background-attachment: fixed;
 }
 
-/*
 .w-50.card {
     min-width: 300px;
-}*/
+}
+
+.w-75.card {
+    min-width: 700px;
+}

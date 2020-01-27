@@ -21,11 +21,7 @@
     <!-- script e css nostri -->
     <link href="stilePagineTabelle.css" rel="stylesheet" >
     <link href="sfondiPagine.css" rel="stylesheet">
-    <style>
-        #listStor {
-            min-width: 850px;
-        }
-    </style>
+
     <title>
         Prenotazioni Utenti
     </title>
@@ -172,7 +168,7 @@
                         <td>{{prenot.giorno | giornoEsteso}}</td>
                         <td>{{prenot.slot | slotEsteso }}</td>
                         <td>
-                            <span v-if="prenot.stato!=='ATTIVA'">{{prenot.stato | filterStato}} </span>
+                            <p v-if="prenot.stato!=='ATTIVA'">{{prenot.stato | filterStato}} </p>
                             <select aria-label="StatoPrenotazione" class="form-control-sm" v-else
                                     v-model="statoAggiornato[index]">
                                 <option selected value="ATTIVA">Attiva</option>

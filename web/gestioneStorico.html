@@ -14,12 +14,9 @@
    <script src="vue/vue.js"></script>
 
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-   <style>
-      body {
-         min-width: 700px;
-      }
-   </style>
-    <title>Gestione Storico</title>
+   <link href="sfondiPagine.css" rel="stylesheet">
+
+   <title>Gestione Storico</title>
 
 </head>
 <body>
@@ -27,51 +24,58 @@
 <div id="navbar" id-active-page="storico"></div>
 
 <!-- Storico Ripetizioni -->
-<div id="listR">
+<div id="listR" class="container-fluid">
 
-   <div class="container-fluid card w-75 mt-5">
-      <h1 class="text-center my-4">Storico ripetizioni</h1>
+   <div class="card shadow-lg w-75 mt-5 mx-auto">
+      <h1 class="text-center card-title mt-4">Storico Prenotazioni</h1>
+      <hr>
+      <div class="card-body">
+         <p>Qui puoi rivedere i tuoi appuntamenti con un docente per delle ripetizioni. Puoi usare i filtri per restringere la lista, modificare lo stato delle prenotazioni e infine salvare con il pulsante <span class="font-weight-bold">Salva</span></p>
+      </div>
    </div>
 
-
-   <div class="container-fluid card w-75 mx-auto my-5">
-      <p class="text-primary my-3">Storico Ripetizioni: </p>
-      <table class="table table-striped">
-         <thead>
-         <tr>
-            <th scope="col">#</th>
-            <th scope="col">Docente</th>
-            <th scope="col">Corso</th>
-            <th scope="col">Giorno</th>
-            <th scope="col">Ora</th>
-            <th scope="col">Stato</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr v-for="(r, index) in ripetizioni" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ r.docente | docenteNotNull}}</td>
-            <td>{{ r.corso.titolo | corsoNotNull}}</td>
-            <td>{{ r.giorno | giornoEsteso }}</td>
-            <td>{{ r.slot | slotEsteso }}</td>
-            <td class="col-3">
-               <p v-if="r.stato !== 'ATTIVA'">{{ r.stato.charAt(0).toUpperCase() + r.stato.substring(1).toLowerCase() }}</p>
-               <div class="form-inline" v-else>
-                  <select :id="'select-' + index" aria-label="StatoPrenotazione" class="form-control"
-                          v-model="select[index]" autocomplete="off">
-                     <option selected value="attiva">Attiva</option>
-                     <option value="effettuata">Effettuata</option>
-                     <option value="disdetta">Disdetta</option>
-                  </select>
-                  <button :id="'salva-' + index" class="btn btn-secondary btn-sm mx-1" disabled
-                          title="Salva lo stato della ripetizione" type="button"
-                          v-on:click="salvaStato(r, index)">
-                     <i class="fas fa-save"></i> Salva
-                  </button>
-               </div>
-            </td>
-         </tbody>
-      </table>
+   <div class="card shadow-lg w-75 mx-auto my-5">
+      <div class="card-header text-dark">
+         Storico Prenotazioni:
+      </div>
+      <div class="card-body">
+         <table class="table table-striped table-hover mt-3">
+            <thead class="thead-light">
+            <tr>
+               <th scope="col">#</th>
+               <th scope="col">Docente</th>
+               <th scope="col">Corso</th>
+               <th scope="col">Giorno</th>
+               <th scope="col">Ora</th>
+               <th scope="col">Stato</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(r, index) in ripetizioni" :key="index">
+               <td>{{ index + 1 }}</td>
+               <td>{{ r.docente | docenteNotNull}}</td>
+               <td>{{ r.corso.titolo | corsoNotNull}}</td>
+               <td>{{ r.giorno | giornoEsteso }}</td>
+               <td>{{ r.slot | slotEsteso }}</td>
+               <td class="col-3">
+                  <p v-if="r.stato !== 'ATTIVA'">{{r.stato | filterStato}}</p>
+                  <div class="form-inline" v-else>
+                     <select :id="'select-' + index" aria-label="StatoPrenotazione" class="form-control"
+                             v-model="select[index]">
+                        <option selected value="attiva">Attiva</option>
+                        <option value="effettuata">Effettuata</option>
+                        <option value="disdetta">Disdetta</option>
+                     </select>
+                     <button :id="'salva-' + index" class="btn btn-secondary btn-sm mx-1" disabled
+                             title="Salva lo stato della ripetizione" type="button"
+                             v-on:click="salvaStato(r, index)">
+                        <i class="fas fa-save"></i> Salva
+                     </button>
+                  </div>
+               </td>
+            </tbody>
+         </table>
+      </div>
    </div>
 </div>
 
@@ -84,7 +88,8 @@
          ripetizioni: [],
          select: [],
          username: null,
-         link: "/progetto_ium_tweb2/OpSuPrenotazioni"
+         link: "/progetto_ium_tweb2/OpSuPrenotazioni",
+         linkStorico: "/progetto_ium_tweb2/StoricoPrenotazioni",
       },
       filters : {
          docenteNotNull : function (docente) {
@@ -127,14 +132,26 @@
                default:
                   return "";
             }
-         }
+         },
+         filterStato(stato) {
+            switch (stato) {
+               case "ATTIVA":
+                  return "Attiva";
+               case "EFFETTUATA":
+                  return "Effettuata";
+               case "DISDETTA":
+                  return "Disdetta";
+               default:
+                  return "";
+            }
+         },
       },
       methods: {
          getRipetizioni: function (utente) {
             var self = this;
             var ut = {account: utente, password: null, admin:null};
             $.post(
-               "/progetto_ium_tweb2/StoricoPrenotazioni",
+               self.linkStorico,
                {utente: JSON.stringify(ut)},
                function(data) {
                   console.log(data);
@@ -160,11 +177,11 @@
             }
 
             $.post(this.link, {
-               ops: JSON.stringify([operazione]),
-               prenotazioni: JSON.stringify([prenotazione])
-            }, corretto => {
+                  ops: JSON.stringify([operazione]),
+                  prenotazioni: JSON.stringify([prenotazione])
+               },
+               corretto => {
                if (corretto) {
-                  //non serve alert, vue cambia già la visualizzazione
                   prenotazione.stato = nuovoStato;
                   this.ripetizioni.splice(index, 1, prenotazione)
                } else
