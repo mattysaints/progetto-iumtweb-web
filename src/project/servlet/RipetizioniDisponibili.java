@@ -6,7 +6,6 @@ import project.servlet.model.DAO;
 import project.servlet.model.Prenotazione;
 import project.servlet.model.Utente;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,10 +46,6 @@ public class RipetizioniDisponibili extends HttpServlet {
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("Login");
-            requestDispatcher.include(request, response);
-        }
         String account = request.getParameter("account");
         List<Prenotazione> disponibili = DAO.getRipetizioniDisponibili(new Utente(account, null, null));
         Type type = new TypeToken<List<Prenotazione>>(){}.getType();

@@ -40,9 +40,6 @@ public class OpSuPrenotazioni extends HttpServlet {
     * @throws IOException
     */
    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      // HttpSession session = request.getSession(false);
-      // if (session == null)
-      // return;
 
       String tmp = request.getParameter("ops");
       String tmp2 = request.getParameter("prenotazioni");

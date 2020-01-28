@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken;
 import project.servlet.model.Corso;
 import project.servlet.model.DAO;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,10 +35,6 @@ public class GestioneCorsi extends HttpServlet {
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/loginPage.html");
-            requestDispatcher.forward(request, response);
-        }
 
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
