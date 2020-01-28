@@ -211,8 +211,8 @@
                 this.prenotazioni.sort(comparator);
 
                 var prossimePrenotazioni = this.prenotazioni.filter(p =>
-                    p.stato === "ATTIVA" && this.valueOfGiorno(p.giorno) > currentGiorno
-                    || this.valueOfGiorno(p.giorno) === currentGiorno && this.valueOfSlot(p.slot) > currentOra);
+                    p.stato === "ATTIVA" && (this.valueOfGiorno(p.giorno) > currentGiorno
+                    || this.valueOfGiorno(p.giorno) === currentGiorno && this.valueOfSlot(p.slot) > currentOra));
 
                 if (prossimePrenotazioni.length === 0)
                     return this.prenotazioni.filter(p => p.stato === "ATTIVA")[0];
